@@ -131,3 +131,6 @@ Chronological. Newest at the bottom. Each entry: what was tried / decided, why, 
 - tau-scan of the split-or-menu LP: any tau > (1+eps)/2 lowers the value and produces large
   continuum IC violations (types in [(1+eps)/2, tau) prefer the split they cannot trigger).
   tau = (1+eps)/2 is forced; no further action.
+- Probabilistic split for moderately opposed profiles is not IC (type 1/2+ flips sides to dodge
+  the split); documented in theory/04. The LP-optimal mechanisms therefore need a different
+  structure (type-dependent lotteries that compensate moderate types) — left open.

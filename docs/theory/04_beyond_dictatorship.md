@@ -63,3 +63,16 @@ Values: 0.729 (ε = 0.1), 0.806 (0.25), 0.867 (0.4), **0.900 (0.5)**, 0.914 (0.6
   ε ≲ 0.45 (0.857 at ε = ¼, 0.885 at 0.4, N = 80); for ε ≥ ½ the closed-form SMD is at least
   as good, and at ε = 0.6 it is optimal within the split-or-menu class (LP value = ρ_SMD).
 - For ε < 0.366 fixed menus (nested LIP / the SD-LP menus) remain the best known mechanisms.
+
+## Why SMD is rigid (negative results)
+
+- *Probabilistic split for moderately opposed profiles.* Let the split happen with probability
+  p when the agents are on opposite sides but not both strong. Against a strongly opposed
+  opponent a type x = ½⁺ gets p·x + (1−p)·[x s + ½(1−s)(1+ε)] from truth-telling, but
+  ½[1 + ε(1−s)] from claiming the opponent's side (which switches the outcome to the pure
+  fallback); the latter is larger for every p > 0. So p = 0 is forced: moderate types must be
+  spared the split entirely.
+- *Larger thresholds.* τ > (1+ε)/2 makes types in [(1+ε)/2, τ) prefer a split they cannot
+  trigger, breaking IC, and lowers the ratio (scan in docs/log.md).
+- *Richer fallbacks.* Nested LIP as fallback violates IC at the threshold (its fallback utility
+  at τ exceeds τ). LP-optimised fallbacks help only for ε ≲ 0.45.
