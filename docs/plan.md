@@ -49,7 +49,7 @@ is common knowledge.
 - [x] WP7  Naive-rule manipulation analysis. Notebook 05.
 - [x] WP8  Theory write-up `docs/theory/*.md` (claims, proofs, what is proved vs numerical).
 - [x] WP9  Stretch items as time allows.
-- [ ] WP10 Final pass: README, state.md, consistency check of all numbers.
+- [x] WP10 Final pass: README, state.md, consistency check of all numbers.
 
 ## Conventions
 

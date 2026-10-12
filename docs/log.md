@@ -134,3 +134,12 @@ Chronological. Newest at the bottom. Each entry: what was tried / decided, why, 
 - Probabilistic split for moderately opposed profiles is not IC (type 1/2+ flips sides to dodge
   the split); documented in theory/04. The LP-optimal mechanisms therefore need a different
   structure (type-dependent lotteries that compensate moderate types) — left open.
+
+### End of session 1 — summary
+
+Delivered: notebooks 00–06 (all executed, no errors), 27 tests passing, theory notes 01–04,
+LaTeX draft of the Part B section, numbers index. Still running in the background when the
+session ended: the SP-LP at N=80 for eps >= 0.8 (marginal; notebooks fall back to N=40 there).
+Open questions are listed in state.md. Biggest lessons: (i) compute before claiming (two
+hand-waved mechanism ratios were wrong), (ii) grid-optimal objects need exact continuum
+evaluation (SD menus, split-menu LP), (iii) keep foreground jobs small and chunk memory.
