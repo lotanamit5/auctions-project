@@ -38,8 +38,8 @@ on the type set {0, ½, 1}, e.g. by the menu {(1,0), (½,½), (0,1)}.
 
 - Every increasing-price mechanism (linear or not), every swap-dictatorial mechanism and every
   mixture of two one-sided rules is at most 5/6 ≈ 0.8333-competitive.
-- LIP(a*) achieves 0.82939 (certified). Hence the best menu mechanism lies in
-  [0.8294, 0.8333]: LIP is within 0.004 of the best possible dictatorial rule.
+- LIP(a*) achieves 0.82939 (certified), and the best menu mechanism is exactly 5/6
+  (Theorem C): LIP is within 0.004 of the best possible dictatorial rule.
 - The LP over *all* strategy-proof mechanisms gives ≤ 0.8368 (N = 150; extrapolating to
   ≈ 0.8346), strictly above 5/6. So the LP-optimal mechanisms must genuinely use both reports
   jointly; any further improvement over LIP of more than 0.004 has to come from non-dictatorial
@@ -70,7 +70,13 @@ and the other agent has type y:
 1+ε) and (1,0) (first best 2): write m(1) = (a1, a2, a12), m(0) = (c1, c2, c12).
 W(1,1) = (1+ε) − ε(a1 + a2) + 2ε a12 ≤ (1+ε) − ε|a1 − a2|, similarly W(0,0), and
 W(1,0) = ½[B(1,0,m(1)) + B(0,1,m(0))] = (1+ε) + ½(1−ε)(a1 + c2) − ½(1+ε)(a2 + c1) + ε(a12 + c12).
-With s := the dictator's net share of her preferred item, the best trade-off between
+Using m12 ≤ min(m1, m2) in W(1,0) — a12 ≤ a2 and c12 ≤ c1 — and writing p = a1 − a2,
+q = c2 − c1 for the extreme types' net shares of their preferred items,
+
+    W(1,1) ≤ (1+ε) − ε|p|,   W(0,0) ≤ (1+ε) − ε|q|,   W(1,0) ≤ (1+ε) + ½(1−ε)(p + q),
+
+so the three ratios are bounded by functions of (p, q) alone; the minimum of the three is
+concave and symmetric in (p, q), hence maximised at p = q =: s. The best trade-off between
 W(1,1) = (1+ε) − εs and W(1,0) = (1+ε) + (1−ε)s is at
 
     s* = (1 − ε²)/(1 + 2ε − ε²),      ratio  ρ_B(ε) = (1+ε)/(1 + 2ε − ε²).
