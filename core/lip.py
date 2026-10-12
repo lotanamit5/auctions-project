@@ -37,7 +37,7 @@ __all__ = [
 
 def b_of(a: float) -> float:
     """Intercept b fixed by the normalisation int_0^1 dt/(a t + b) = 1."""
-    return a / math.expm1(a)
+    return a / np.expm1(a)
 
 
 def Q(t, a: float):
