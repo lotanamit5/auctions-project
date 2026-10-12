@@ -123,11 +123,12 @@ hist_df
 """)
 
 nb.md(r"""
-So a dozen hand-picked types already beat the paper's 51-type grid, and the greedy sets have
-a recognisable structure: types cluster around the Claim-5 regime switches ($\approx0.12$,
-$\approx0.88$), near $0.4/0.6$ (the edge worst case of LIP) and at the extremes. A
-human-checkable certificate is therefore realistic: the LP with ~8 types has ~130 variables and
-its dual can be printed in full.
+A dozen greedily chosen types give $\approx0.86$ — not as sharp as the paper's 51-type grid
+($0.841$), but already most of the way down from the trivial bound, with LPs of a few dozen
+variables. The greedy sets have a recognisable structure: types cluster around the Claim-5
+regime switches ($\approx0.12$, $\approx0.88$), near $0.4/0.6$ (the edge worst case of LIP) and at
+the extremes. A human-checkable certificate of a bound like $0.87$ is therefore realistic: the LP
+with 8 types has 128 variables and its dual (printed below) fits on half a page.
 
 ## 4. A fully explicit certificate for a small type set
 
@@ -152,8 +153,9 @@ nb.md(r"""
 * The LP-optimal mechanism looks like a smoothed dictatorship with LIP-like plateaus.
 * Binding profiles form a one-dimensional family; the heavy ones sit on the edge $y=0$ / $x=1$
   and near the anti-diagonal — the same two branches that govern LIP's worst case (notebook 01).
-* Small, explicit type sets give upper bounds close to the large-grid LP, which is the practical
-  answer to the paper's "no human-verifiable proof" caveat.
+* Small, explicit type sets give upper bounds within a few percent of the large-grid LP
+  ($0.873$ with 8 types), which is a practical partial answer to the paper's "no human-verifiable
+  proof" caveat; the sharp bound still needs a large LP.
 """)
 
 nb.save(execute=True)

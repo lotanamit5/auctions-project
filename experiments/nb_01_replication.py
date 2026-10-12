@@ -142,7 +142,9 @@ scan[["a", "alpha_lower", "alpha_upper", "x_worst", "y_worst", "theta_upper"]].q
 
 nb.md(r"""
 Note how the worst-case profile `(x_worst, y_worst)` jumps from the edge $y=0$ to the
-anti-diagonal ($x+y=1$) at $a^\star$, and that `alpha_upper == theta_upper` beyond it.
+anti-diagonal ($x+y=1$) at $a^\star$, and that `alpha_upper == theta_upper` beyond it. (Rows
+with `x_worst = 1`, e.g. $a=1.6$, are the same edge branch seen through the item-swap symmetry
+$(x,y)\mapsto(1-y,1-x)$: $(1,0.635)$ is the mirror image of $(0.365,0)$.)
 """)
 
 nb.md(r"""
