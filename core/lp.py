@@ -237,6 +237,8 @@ class SDResult:
     welfare: np.ndarray       # (N+1, N+1) welfare at each profile
     opt: np.ndarray
     status: str
+    dual_welfare: np.ndarray = None   # (N+1, N+1) multipliers of the competitiveness rows (j >= k)
+    dual_ic: np.ndarray = None        # (N+1, N+1) multipliers of IC rows: [true type, deviation]
 
     @property
     def ratio(self):
@@ -274,6 +276,7 @@ def solve_sd_lp(N: int, eps: float = 0.0, types=None, item_symmetric: bool = Fal
     J, K = np.meshgrid(np.arange(T), np.arange(T), indexing="ij")
     msk = J != K
     J, K = J[msk], K[msk]
+    J_ic, K_ic = J, K
     x = g[J]
     cols = np.stack([idx(0, K), idx(1, K), idx(2, K), idx(0, J), idx(1, J), idx(2, J)], -1)
     coefs = np.stack([x, 1 - x, np.full_like(x, eps), -x, -(1 - x), np.full_like(x, -eps)], -1)
@@ -319,4 +322,7 @@ def solve_sd_lp(N: int, eps: float = 0.0, types=None, item_symmetric: bool = Fal
         return (1 + eps) + (xd - yo - eps) * a1 + (yo - xd - eps) * a2 + 2 * eps * a12
 
     W = 0.5 * (B(X, Y, m1[:, None], m2[:, None], m12[:, None]) + B(Y, X, m1[None, :], m2[None, :], m12[None, :]))
-    return SDResult(N, eps, float(z[A]), g, m1, m2, m12, W, first_best_eps(X, Y, eps), res.message)
+    marg = -np.asarray(res.ineqlin.marginals)
+    dual_w = np.zeros((T, T)); dual_w[J, K] = marg[welfare_row0:welfare_row0 + n_w]
+    dual_ic = np.zeros((T, T)); dual_ic[J_ic, K_ic] = marg[:J_ic.size]
+    return SDResult(N, eps, float(z[A]), g, m1, m2, m12, W, first_best_eps(X, Y, eps), res.message, dual_w, dual_ic)

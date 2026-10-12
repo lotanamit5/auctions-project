@@ -176,3 +176,91 @@ class MenuMechanism:
 
     def bracket(self, tol=1e-4, lam: float = 1.0, **kw):
         return adaptive_bracket(self._cell_lower(lam), lambda x, y: self.ratio(x, y, lam), tol=tol, **kw)
+
+
+# ---------------------------------------------------------------------------------------
+# Finite menus: exact competitive ratio on the continuous type space
+# ---------------------------------------------------------------------------------------
+
+class FiniteMenuMechanism:
+    """Fair-coin dictator chooses her favourite of finitely many lotteries (m1, m2, m12).
+
+    Exact evaluation: type x's utility from item i is affine in x, so the type line splits
+    into intervals on which the choice is constant (upper envelope of lines).  On a rectangle
+    I_j x I_k of such intervals the welfare is affine in (x, y) and OPT = 1 + max(eps, |x-y|)
+    is piecewise affine, so the ratio is linear-fractional on each piece and its minimum over
+    the piece is attained at a vertex.  We enumerate the vertices of all pieces.
+    """
+
+    def __init__(self, items, eps: float):
+        it = np.array([(float(a), float(b), float(c)) for a, b, c in items])
+        self.items = it
+        self.eps = eps
+        self.breaks, self.choice = self._envelope()
+
+    def _utility_lines(self):
+        m1, m2, m12 = self.items.T
+        # u_x(item) = x m1 + (1-x) m2 + eps m12 = (m2 + eps m12) + x (m1 - m2)
+        return m2 + self.eps * m12, m1 - m2
+
+    def _envelope(self, tol=1e-12):
+        """Intervals [breaks[i], breaks[i+1]] with the index of the chosen item on each."""
+        c, s = self._utility_lines()
+        xs = [0.0, 1.0]
+        n = len(c)
+        for i in range(n):
+            for j in range(i + 1, n):
+                if abs(s[i] - s[j]) > tol:
+                    x = (c[j] - c[i]) / (s[i] - s[j])
+                    if 0 < x < 1:
+                        xs.append(float(x))
+        xs = np.unique(np.round(xs, 12))
+        choice = []
+        for a, b in zip(xs[:-1], xs[1:]):
+            mid = 0.5 * (a + b)
+            choice.append(int(np.argmax(c + mid * s)))
+        return xs, np.array(choice)
+
+    def chosen(self, x):
+        x = np.asarray(x, float)
+        idx = np.clip(np.searchsorted(self.breaks, x, side="right") - 1, 0, len(self.choice) - 1)
+        return self.items[self.choice[idx]]
+
+    def welfare(self, x, y):
+        eps = self.eps
+        x = np.asarray(x, float); y = np.asarray(y, float)
+        mx, my = self.chosen(x), self.chosen(y)
+
+        def B(xd, yo, m):
+            return (1 + eps) + (xd - yo - eps) * m[..., 0] + (yo - xd - eps) * m[..., 1] + 2 * eps * m[..., 2]
+        return 0.5 * (B(x, y, mx) + B(y, x, my))
+
+    def ratio(self, x, y):
+        return self.welfare(x, y) / first_best(x, y, self.eps)
+
+    def exact_ratio(self):
+        """Exact infimum of the ratio over the triangle x >= y, and the point attaining it."""
+        eps = self.eps
+        br = self.breaks
+        cuts = sorted(set(np.concatenate([br, np.clip(br + eps, 0, 1), np.clip(br - eps, 0, 1), [0.0, 1.0]])))
+        best = (np.inf, None)
+        for ia in range(len(cuts) - 1):
+            for ib in range(len(cuts) - 1):
+                xa, xb, ya, yb = cuts[ia], cuts[ia + 1], cuts[ib], cuts[ib + 1]
+                if xb <= ya + 1e-15:
+                    continue
+                # vertices of the rectangle clipped to x >= y; add crossings with x - y = eps
+                pts = [(xa, ya), (xb, ya), (xa, yb), (xb, yb)]
+                for (p, q) in [(xa, ya), (xb, ya), (xa, yb), (xb, yb)]:
+                    pts.append((min(max(q + eps, xa), xb), q))   # x = y + eps at fixed y
+                    pts.append((p, min(max(p - eps, ya), yb)))   # y = x - eps at fixed x
+                pts = [(p, q) for (p, q) in pts if p >= q - 1e-15]
+                # evaluate just inside the cell (choices are constant on open intervals)
+                for (p, q) in pts:
+                    pp = min(max(p, xa + 1e-12), xb - 1e-12); qq = min(max(q, ya + 1e-12), yb - 1e-12)
+                    if pp < qq:
+                        continue
+                    r = float(self.ratio(pp, qq))
+                    if r < best[0]:
+                        best = (r, (float(p), float(q)))
+        return best
