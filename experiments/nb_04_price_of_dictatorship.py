@@ -160,10 +160,10 @@ anything — the mechanism is closer to equal split than to a dictatorship.
 nb.code(r"""
 sd100 = pd.read_csv(DATA / "sd_lp_curve.csv")
 sd = sd100[sd100.N == sd100.N.max()].sort_values("eps")
-lpc = pd.read_csv(DATA / "lp_eps_curve.csv"); lpN = lpc[lpc.N == lpc.N.max()].sort_values("eps")
+lpc = pd.read_csv(DATA / "lp_eps_curve.csv"); lpN = lpc.sort_values("N").groupby("eps", as_index=False).last().sort_values("eps")   # largest N available per eps
 det = pd.read_csv(DATA / "eps_lip_best.csv").drop_duplicates("eps", keep="last").sort_values("eps"); nes = pd.read_csv(DATA / "eps_lip_best_nested.csv").drop_duplicates("eps", keep="last").sort_values("eps")
 fig, ax = plt.subplots(figsize=(8.5, 5))
-ax.plot(lpN.eps, lpN.alpha, "k-", lw=2, label=f"all SP mechanisms (LP, N={lpc.N.max()})")
+ax.plot(lpN.eps, lpN.alpha, "k-", lw=2, label=f"all SP mechanisms (LP, N<={lpc.N.max()})")
 ax.plot(sd.eps, sd.alpha_sd, "r--", lw=2, label=f"fixed-menu mechanisms (SD-LP, N={sd100.N.max()})")
 ax.plot(det.eps, det.lower, "o-", ms=4, label="eps-aware LIP(a*)"); ax.plot(nes.eps, nes.lower, "s-", ms=4, label="nested LIP(a*)")
 ax.fill_between(sd.eps, sd.alpha_sd, np.interp(sd.eps, lpN.eps, lpN.alpha), color="gray", alpha=0.2, label="price of dictatorship")
@@ -212,6 +212,52 @@ plt.suptitle(f"LP-optimal strategy-proof mechanism at eps={e} (value {r.alpha:.4
 """)
 
 nb.md(r"""
+## 4. Beyond dictatorship: "split if strongly opposed, else modest dictator" (SMD)
+
+Theorem A's obstruction is that a dictatorial rule cannot react to *agreement*. The simplest
+rule that can: with $\tau=(1+\varepsilon)/2$, if $x\ge\tau$ and $y\le1-\tau$ (or the mirror image)
+**split** — each gets her preferred item; otherwise a fair-coin dictator takes a share $s$ of her
+preferred item. A strong type ($x\ge\tau$) prefers the split and a moderate one the fallback
+*exactly* at the threshold, so the rule is strategy-proof for every $s$ (Proposition D,
+`docs/theory/04_beyond_dictatorship.md`; brute-force check below). Its ratio has the closed form
+
+$$\rho_{SMD}(\varepsilon)=\begin{cases}2(1+\varepsilon)^2/(3+3\varepsilon+2\varepsilon^2) & \varepsilon\le\tfrac12\\ (1+\varepsilon)^2/(1+3\varepsilon) & \varepsilon\ge\tfrac12\end{cases}$$
+
+which beats every fixed-menu mechanism for $\varepsilon>0.366$ (0.900 vs $6/7$ at $\varepsilon=\tfrac12$).
+The fallback menu can itself be optimised by an LP given the split region (`lp.solve_split_menu_lp`).
+""")
+
+nb.code(r"""
+from core import split
+e_grid = np.linspace(0.01, 0.99, 99)
+fig, ax = plt.subplots(figsize=(8.5, 5))
+ax.plot(lpN.eps, lpN.alpha, "k-", lw=2, label="all SP mechanisms (LP upper bound)")
+ax.plot(e_grid, np.minimum((5 + 2 * e_grid) / 6, (1 + e_grid) / (1 + 2 * e_grid - e_grid**2)), "r--", lw=2, label="fixed-menu mechanisms (Theorem B bound)")
+ax.plot(e_grid, split.ratio_closed_form(e_grid), "g-", lw=2, label="SMD: split if strongly opposed, else modest dictator (closed form)")
+ax.plot(e_grid, split.ratio_closed_form(e_grid, s=0.0), "g:", label="pool unless strongly opposed (s = 0)")
+rows = []
+for e in (0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9):
+    r = lp.solve_split_menu_lp(40, e); tau = (1 + e) / 2
+    items = np.unique(np.round(np.c_[r.m1, r.m2, r.m12], 9), axis=0)
+    f = FiniteMenuMechanism(items, e, split_tau=tau)
+    rows.append({"eps": e, "SMD closed form": float(split.ratio_closed_form(e)), "SMD grid min": split.ratio(X[X >= Y], Y[X >= Y], e).min() if False else np.nan,
+                 "SMD IC violation": split.ic_violation(e, n=81), "split + LP-optimal menu (grid N=40)": r.alpha,
+                 "same, exact on continuum": f.exact_ratio()[0], "its IC violation (continuum grid)": f.ic_violation(201), "menu items": len(items)})
+sm = pd.DataFrame(rows)
+ax.plot(sm.eps, sm["same, exact on continuum"], "g^", ms=7, label="split + LP-optimised fallback menu (exact)")
+ax.plot(nes.eps, nes.lower, "s-", c="C1", ms=4, label="nested LIP(a*)")
+ax.set(xlabel=r"$\varepsilon$", ylabel="competitive ratio", xlim=(0, 1), ylim=(0.7, 1.01)); ax.legend(loc="lower right", fontsize=8)
+plt.tight_layout(); plt.savefig(FIG / "04_beyond_dictatorship.png"); plt.show()
+sm.drop(columns=["SMD grid min"]).round(4)
+""")
+
+nb.md(r"""
+The brute-force incentive checks are zero for SMD and (numerically) for the LP-optimised
+fallbacks as well. Note that the LP's *grid* value overstates what its menu achieves on the
+continuum: for $\varepsilon\ge\tfrac12$ the closed-form SMD is at least as good on the continuum
+(and at $\varepsilon=0.6$ it is optimal within the split-or-menu class: all three numbers coincide),
+while for $\varepsilon\approx0.25$–$0.45$ the optimised fallback adds about $0.02$–$0.05$.
+
 ## Summary
 
 * New theorem: the best swap-dictatorial mechanism (indeed any mixture of two one-sided rules)
@@ -219,9 +265,11 @@ nb.md(r"""
   attained by an explicit closed-form menu. LIP($a^\star$) is within $0.004$ of it.
 * The best fixed-menu mechanism for any $\varepsilon$ is computable by an LP; for
   $\varepsilon=\tfrac12$ it is a 3-item menu with exact ratio $6/7$.
-* Under complementarities the right design is *not* dictatorial; the LP-optimal mechanism
-  conditions pooling on agreement between the reports. Designing a clean closed-form
-  mechanism of that type is the natural next step (open).
+* Under complementarities the right design is *not* dictatorial. The simple SMD rule
+  ("split if strongly opposed, else modest dictator") is strategy-proof with closed-form ratio
+  $(1+\varepsilon)^2/(1+3\varepsilon)$ for $\varepsilon\ge\tfrac12$ and beats every menu for
+  $\varepsilon>0.366$; optimising its fallback by an LP helps for $\varepsilon\lesssim0.45$. Closing the
+  remaining gap to the LP bound (0.900 vs 0.951 at $\varepsilon=\tfrac12$) is open.
 """)
 
 nb.save(execute=True)

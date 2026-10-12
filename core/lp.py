@@ -326,3 +326,95 @@ def solve_sd_lp(N: int, eps: float = 0.0, types=None, item_symmetric: bool = Fal
     dual_w = np.zeros((T, T)); dual_w[J, K] = marg[welfare_row0:welfare_row0 + n_w]
     dual_ic = np.zeros((T, T)); dual_ic[J_ic, K_ic] = marg[:J_ic.size]
     return SDResult(N, eps, float(z[A]), g, m1, m2, m12, W, first_best_eps(X, Y, eps), res.message, dual_w, dual_ic)
+
+
+# ---------------------------------------------------------------------------------------
+# Split-or-menu mechanisms: best fallback menu given the split region (LP)
+# ---------------------------------------------------------------------------------------
+
+def solve_split_menu_lp(N: int, eps: float, tau: float | None = None) -> SDResult:
+    """Mechanism: if (x >= tau and y <= 1 - tau) or the mirror image, split (each agent gets
+    her preferred item); otherwise a fair-coin dictator picks from a fixed menu.  The menu is
+    optimised by an LP: variables m_j (moments of type j's menu item), constraints
+
+      * menu IC:            u_j(m_j) >= u_j(m_r)                           for all j, r;
+      * split IC (strong):  x_j >= 1/2 u_j(m_j) + 1/2 u_j(1 - m_k)         for x_j >= tau,
+                            x_k <= 1 - tau  (a strong type must not prefer the fallback; by
+                            menu IC her best fallback item is m_j);
+      * split IC (moderate): 1/2 u_j(m_j) + 1/2 u_j(1 - m_k) >= x_j         for 1/2 <= x_j < tau,
+                            x_k <= 1 - tau  (claiming to be strong would yield item 1);
+      * the mirror constraints for agent 1 preferring item 2 against x_k >= tau;
+      * competitiveness only on non-split profiles.
+    Default tau = (1 + eps)/2."""
+    if tau is None:
+        tau = (1 + eps) / 2
+    g = np.arange(N + 1) / N
+    T = N + 1
+    nv = 3 * T + 1
+    A = nv - 1
+
+    def idx(var, j):
+        return var * T + j
+
+    rows = _Rows()
+
+    def u_coefs(x):               # coefficients of u_x(m) on (m1, m2, m12)
+        return x, 1 - x, eps
+
+    # menu IC
+    J, R = np.meshgrid(np.arange(T), np.arange(T), indexing="ij"); msk = J != R; J, R = J[msk], R[msk]
+    x = g[J]
+    rows.add_block(np.stack([idx(0, R), idx(1, R), idx(2, R), idx(0, J), idx(1, J), idx(2, J)], -1),
+                   np.stack([x, 1 - x, np.full_like(x, eps), -x, -(1 - x), np.full_like(x, -eps)], -1), np.zeros(J.size))
+    # split IC.  u_j(1 - m_k) = x(1-m1) + (1-x)(1-m2) + eps(1 - m1 - m2 + m12)
+    #   = (1+eps) - (x+eps) m1 - (1-x+eps) m2 + eps m12
+    strong1 = np.flatnonzero(g >= tau); strong2 = np.flatnonzero(g <= 1 - tau)
+    mod1 = np.flatnonzero((g >= 0.5) & (g < tau)); mod2 = np.flatnonzero((g <= 0.5) & (g > 1 - tau))
+
+    def fallback_rows(js, ks, sign, split_util):
+        """sign=+1: fallback <= split_util(x_j)  (strong);  sign=-1: fallback >= split_util."""
+        Jj, Kk = np.meshgrid(js, ks, indexing="ij"); Jj, Kk = Jj.ravel(), Kk.ravel()
+        if Jj.size == 0:
+            return
+        x = g[Jj]
+        cols = np.stack([idx(0, Jj), idx(1, Jj), idx(2, Jj), idx(0, Kk), idx(1, Kk), idx(2, Kk)], -1)
+        coefs = np.stack([0.5 * x, 0.5 * (1 - x), np.full_like(x, 0.5 * eps),
+                          -0.5 * (x + eps), -0.5 * (1 - x + eps), np.full_like(x, 0.5 * eps)], -1)
+        rhs = split_util(x) - 0.5 * (1 + eps)
+        rows.add_block(sign * cols * 0 + cols, sign * coefs, sign * rhs)
+
+    fallback_rows(strong1, strong2, +1, lambda x: x)            # strong-1 vs strong-2: prefer split (item 1)
+    fallback_rows(mod1, strong2, -1, lambda x: x)               # moderate-1 vs strong-2: prefer fallback
+    fallback_rows(strong2, strong1, +1, lambda x: 1 - x)        # strong-2 vs strong-1: prefer split (item 2)
+    fallback_rows(mod2, strong1, -1, lambda x: 1 - x)           # moderate-2 vs strong-1: prefer fallback
+    # competitiveness on non-split profiles (j >= k)
+    J, K = np.meshgrid(np.arange(T), np.arange(T), indexing="ij"); msk = J >= K; J, K = J[msk], K[msk]
+    xj, xk = g[J], g[K]
+    split = ((xj >= tau) & (xk <= 1 - tau)) | ((xk >= tau) & (xj <= 1 - tau))
+    J, K, xj, xk = J[~split], K[~split], xj[~split], xk[~split]
+    opt = first_best_eps(xj, xk, eps)
+    cols = np.stack([idx(0, J), idx(1, J), idx(2, J), idx(0, K), idx(1, K), idx(2, K), np.full(J.size, A)], -1)
+    coefs = np.stack([-0.5 * (xj - xk - eps), -0.5 * (xk - xj - eps), np.full(J.size, -eps),
+                      -0.5 * (xk - xj - eps), -0.5 * (xj - xk - eps), np.full(J.size, -eps), opt], -1)
+    rows.add_block(cols, coefs, np.full(J.size, 1 + eps))
+    # McCormick
+    j = np.arange(T); one = np.ones(T)
+    rows.add_block(np.stack([idx(2, j), idx(0, j)], -1), np.stack([one, -one], -1), np.zeros(T))
+    rows.add_block(np.stack([idx(2, j), idx(1, j)], -1), np.stack([one, -one], -1), np.zeros(T))
+    rows.add_block(np.stack([idx(0, j), idx(1, j), idx(2, j)], -1), np.stack([one, one, -one], -1), np.ones(T))
+    A_ub, b_ub = rows.matrix(nv)
+    c = np.zeros(nv); c[A] = -1.0
+    res = linprog(c, A_ub=A_ub, b_ub=b_ub, bounds=[(0, 1)] * (nv - 1) + [(0, None)], method="highs")
+    if res.status != 0:
+        raise RuntimeError(f"split-menu LP failed: {res.message}")
+    z = res.x
+    m1, m2, m12 = z[idx(0, j)], z[idx(1, j)], z[idx(2, j)]
+    X, Y = g[:, None], g[None, :]
+
+    def B(xd, yo, a1, a2, a12):
+        return (1 + eps) + (xd - yo - eps) * a1 + (yo - xd - eps) * a2 + 2 * eps * a12
+
+    W = 0.5 * (B(X, Y, m1[:, None], m2[:, None], m12[:, None]) + B(Y, X, m1[None, :], m2[None, :], m12[None, :]))
+    sp = ((X >= tau) & (Y <= 1 - tau)) | ((Y >= tau) & (X <= 1 - tau))
+    W = np.where(sp, 1 + np.abs(X - Y), W)
+    return SDResult(N, eps, float(z[A]), g, m1, m2, m12, W, first_best_eps(X, Y, eps), res.message)

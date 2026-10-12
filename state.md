@@ -1,35 +1,47 @@
 # Project state (short)
 
-Last updated: 2026-10-12 (session 1, mid-way)
+Last updated: 2026-10-12 (end of session 1)
 
-**Goal.** Course project on Guo & Conitzer (2010). Part B extends the model with a
-complementarity term `eps z1 z2` (common knowledge eps >= 0). See `docs/plan.md` for the todo
-list and `docs/log.md` for decisions, mistakes and dead ends.
+**Goal.** Course project on Guo & Conitzer (2010), *Strategy-proof allocation of multiple items
+between two agents without payments or priors*. Part A (reading report) is `proposal/main.tex`.
+Part B replicates the paper and extends the model with a complementarity term `eps z1 z2`.
+Plan/todo: `docs/plan.md`. Decisions, mistakes, dead ends: `docs/log.md`. Proofs: `docs/theory/`.
+Start reading at `notebooks/00_overview.ipynb`.
 
-**Results so far** (all reproducible from `notebooks/` and `tests/`):
+## Results
 
-Additive model (replication + sharpening)
-- LP of Theorem 1 reproduced (0.841225 at N=50) but the bound *decreases* with N:
-  0.8368 at N=150, extrapolating to ~0.8346. The paper's 0.841 is an N=50 artefact.
-- LIP(2) certified in [0.8281462, 0.8281472] (adaptive refinement, 20 ms).
-- a = 2 is not optimal: a* = 2.1013, alpha* = 0.82939; alpha(a) = min(theta(a), beta(a)) with
-  theta = the paper's intrinsic value and beta a closed-form edge branch (docs/theory/01).
-- NEW: the best *swap-dictatorial* (fixed-menu) mechanism is at most 5/6 = 0.8333, certified
-  by an LP with only three types {0, 1/2, 1}. So LIP(a*) is within 0.004 of the best possible
-  menu mechanism; the remaining gap to all SP mechanisms is <= 0.0075.
+Additive model (eps = 0)
+- Replication: LP N=50 → 0.841225 (paper 0.841); LIP(2) ∈ [0.8281462, 0.8281472]; Figure 1.
+- The LP bound decreases with N (0.8368 at N=150, →≈0.8346): 0.841 is an N=50 artefact.
+- a = 2 is not optimal: a* = 2.1013, alpha* = 0.82939; alpha(a) = min(theta(a), beta(a)),
+  beta in closed form (theory/01).
+- **Theorem A**: any fixed-menu (swap-dictatorial, incl. all increasing-price) mechanism — in
+  fact any mixture of two one-sided rules — is at most 5/6-competitive (four-profile proof).
+- **Theorem C**: 5/6 is attained by an explicit menu (steepest-chain construction, closed
+  form; discretised menus reach 0.83328). So: LIP 0.8294 < menus = 0.8333 < all SP ≲ 0.835.
 
-Complementarity model
-- First best = 1 + max(eps, |x-y|); take-all is optimal (ratio 1) for eps >= 1.
-- eps-aware LIP(a) (dictator picks her favourite menu point) is strategy-proof; its ratio
-  equals the chatbot draft's "strategic LIP" (same reachable set). Certified brackets.
-- Nested (comonotone) lotteries dominate deterministic bundles; nested LIP reaches ratio 1
-  for eps >= 1.
-- LP upper bound over all SP mechanisms via McCormick moments: 0.843 (eps=0) -> ~0.95 (0.5) -> 1.
-- Best swap-dictatorial mechanism is an LP too: 20/23 (eps=.25), 6/7 (.5), 28/31 (.75), with
-  tiny menus (3 items at eps=.5, exact on the continuum). Dictatorship costs ~0.1 vs SP bound.
+Complementarity model (eps > 0), theory/02–04
+- First best = 1 + max(eps, |x−y|); take-all is first best for eps ≥ 1.
+- eps-aware LIP (fixed menu) is strategy-proof; equals the chatbot draft's "strategic LIP".
+  Certified brackets (P3–P4). Nested (comonotone) lotteries: free improvement, ratio 1 at eps ≥ 1.
+- Upper bound on all SP mechanisms: McCormick-moment LP (P7): 0.84 (eps=0) → 0.95 (0.5) → 1.
+- **Theorem B**: menus ≤ min{(5+2eps)/6, (1+eps)/(1+2eps−eps²)}, exact for eps ≥ 0.3,
+  attained for eps ≥ ½ by the "modest dictator" (share s* = (1−eps²)/(1+2eps−eps²)).
+  Nested LIP(a*) essentially attains it for eps ≥ 0.5.
+- **Propositions D/E**: "split if strongly opposed (x ≥ (1+eps)/2, y ≤ (1−eps)/2), else
+  modest dictator" is strategy-proof with ratio 2(1+eps)²/(3+3eps+2eps²) (eps ≤ ½) and
+  (1+eps)²/(1+3eps) (eps ≥ ½): beats every menu for eps > 0.366 (0.900 vs 6/7 at eps = ½).
+  LP-optimised fallback menus (`lp.solve_split_menu_lp`) add ~0.02–0.05 for eps in [0.25, 0.45].
+- Naive additive rule under eps > 0: not SP, gains ≤ eps Q(½)²/2, strategic play = eps-aware LIP.
+- Substitutes (eps < 0): sketch only (notebook 06).
 
-**Running / next.** Background scans: LP convergence N=200, LP eps curve N=80, eps LIP scans
-(det + nested), SD curve; finite-menu optimiser for eps=0. Notebooks 01-02 done; 03 (eps
-model), 04 (menus & price of dictatorship), 05 (naive rule), 00 (overview) to write.
+## Open
+1. Closed-form SP mechanism approaching the LP bound for 0 < eps < 1 (gap 0.90 vs 0.95 at ½).
+2. Analytic proof that LIP's worst case lies on the edge or anti-diagonal.
+3. Limit of the Theorem-1 LP as N → ∞ (≈ 0.8346) in closed form.
 
-**How to run.** `.venv/bin/pytest`; `.venv/bin/python experiments/nb_01_replication.py` etc.
+## Code map
+`core/lip.py` (LIP, brackets), `core/lp.py` (SP-LP, SD-LP, split-menu LP), `core/eps.py`
+(eps model, nested), `core/menu.py` (general menus, exact evaluation, Theorem C menu),
+`core/split.py` (SMD), `core/bracket.py`. Tests: `.venv/bin/pytest` (25+ tests).
+Notebooks are built by `experiments/nb_*.py`; scans by the other `experiments/*.py`.

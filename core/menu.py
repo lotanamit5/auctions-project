@@ -192,10 +192,13 @@ class FiniteMenuMechanism:
     the piece is attained at a vertex.  We enumerate the vertices of all pieces.
     """
 
-    def __init__(self, items, eps: float):
+    def __init__(self, items, eps: float, split_tau: float | None = None):
+        """split_tau: if given, profiles with (x >= tau and y <= 1 - tau) or the mirror image
+        are split (each agent gets her preferred item) instead of using the menu."""
         it = np.array([(float(a), float(b), float(c)) for a, b, c in items])
         self.items = it
         self.eps = eps
+        self.split_tau = split_tau
         self.breaks, self.choice = self._envelope()
 
     def _utility_lines(self):
@@ -240,7 +243,12 @@ class FiniteMenuMechanism:
 
         def B(xd, yo, m):
             return (1 + eps) + (xd - yo - eps) * m[..., 0] + (yo - xd - eps) * m[..., 1] + 2 * eps * m[..., 2]
-        return 0.5 * (B(x, y, mx) + B(y, x, my))
+        W = 0.5 * (B(x, y, mx) + B(y, x, my))
+        if self.split_tau is not None:
+            t = self.split_tau
+            sp = ((x >= t) & (y <= 1 - t)) | ((y >= t) & (x <= 1 - t))
+            W = np.where(sp, 1 + np.abs(x - y), W)
+        return W
 
     def ratio(self, x, y):
         return self.welfare(x, y) / first_best(x, y, self.eps)
@@ -254,7 +262,8 @@ class FiniteMenuMechanism:
         vertex).  Processed in row chunks to keep memory O(chunk * cuts)."""
         eps = self.eps
         br = self.breaks
-        cuts = np.unique(np.clip(np.concatenate([br, br + eps, br - eps, [0.0, 1.0]]), 0, 1))
+        extra = [0.0, 1.0] if self.split_tau is None else [0.0, 1.0, self.split_tau, 1 - self.split_tau]
+        cuts = np.unique(np.clip(np.concatenate([br, br + eps, br - eps, extra]), 0, 1))
         xa_all, xb_all = cuts[:-1], cuts[1:]
         best = (np.inf, (np.nan, np.nan))
         for s0 in range(0, len(xa_all), chunk_rows):
@@ -277,6 +286,35 @@ class FiniteMenuMechanism:
             if R[i] < best[0]:
                 best = (float(R[i]), (float(P[ok][i]), float(Q[ok][i])))
         return best
+
+
+    def ic_violation(self, n: int = 401):
+        """Max gain of agent 1 from any misreport on an n-grid of (true type, opponent); the
+        report ranges over all menu items (and, with a split region, the split)."""
+        eps, t = self.eps, self.split_tau
+        xs = np.linspace(0, 1, n)
+        m = self.items                                               # all items she could get
+        u_items = xs[:, None] * m[None, :, 0] + (1 - xs[:, None]) * m[None, :, 1] + eps * m[None, :, 2]
+        best_item = u_items.max(axis=1)                              # (n,)  best menu item
+        worst = 0.0
+        for y in xs:
+            my = self.chosen(np.array([y]))[0]
+            u_o = xs * (1 - my[0]) + (1 - xs) * (1 - my[1]) + eps * (1 - my[0] - my[1] + my[2])
+            truthful_fb = 0.5 * (xs * self.chosen(xs)[:, 0] + (1 - xs) * self.chosen(xs)[:, 1] + eps * self.chosen(xs)[:, 2]) + 0.5 * u_o
+            dev_fb = 0.5 * best_item + 0.5 * u_o
+            if t is None:
+                worst = max(worst, float((dev_fb - truthful_fb).max()))
+                continue
+            split_avail1 = y <= 1 - t          # reporting >= t yields split with item 1
+            split_avail2 = y >= t              # reporting <= 1 - t yields split with item 2
+            truthful = np.where((xs >= t) & split_avail1, xs, np.where((xs <= 1 - t) & split_avail2, 1 - xs, truthful_fb))
+            options = [dev_fb]
+            if split_avail1: options.append(xs)
+            if split_avail2: options.append(1 - xs)
+            # the fallback is reachable only by a report outside the split-triggering range;
+            # with a menu item for every such report it is always reachable
+            worst = max(worst, float((np.max(options, axis=0) - truthful).max()))
+        return worst
 
 
 # ---------------------------------------------------------------------------------------
@@ -316,3 +354,4 @@ def optimal_sd_menu(n_items: int = 2001):
     xs = np.linspace(0, 1, n_items)
     m1, m2 = optimal_sd_choice(xs)
     return np.unique(np.round(np.c_[m1, m2, np.minimum(m1, m2)], 10), axis=0)
+

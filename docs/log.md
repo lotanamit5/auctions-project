@@ -109,3 +109,7 @@ Chronological. Newest at the bottom. Each entry: what was tried / decided, why, 
 - Notebook 06 narrative corrected after reading the table: the LP-LIP gap widens on both
   sides of eps = 0 (substitutes too); the additive case is where LIP is near-optimal.
 - Session killed a 4th time: exact_ratio with 8001 items (cuts^2 memory). Now chunked.
+- **Dead end:** adaptive type grids for the SP-LP (`experiments/lp_adaptive_types.py`,
+  midpoints around heavy-dual types) are *not* better than uniform grids at equal size
+  (115 types: 0.83876 vs 101 uniform: 0.83797). The dual mass is spread along whole curves,
+  so uniform refinement is the right thing. Not pursued further.
