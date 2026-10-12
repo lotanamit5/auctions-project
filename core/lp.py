@@ -219,3 +219,104 @@ def solve_sp_lp(N: int, eps: float = 0.0, full_ic: bool = False, symmetric: bool
     W = 1 + (g[jj] - g[kk]) * (m1 - m2) + eps * (1 - m1 - m2 + 2 * m12)
     duals = -np.asarray(res.ineqlin.marginals)[welfare_row0:welfare_row0 + n_welfare_rows]
     return LPResult(N, eps, float(z[A]), m1, m2, m12, W, opt, duals.reshape(T, T), res.message)
+
+
+# ---------------------------------------------------------------------------------------
+# Best swap-dictatorial (fixed-menu) mechanism on a grid: also an LP
+# ---------------------------------------------------------------------------------------
+
+@dataclass
+class SDResult:
+    N: int
+    eps: float
+    alpha: float
+    types: np.ndarray
+    m1: np.ndarray            # menu item chosen by each type (dictator's marginals)
+    m2: np.ndarray
+    m12: np.ndarray
+    welfare: np.ndarray       # (N+1, N+1) welfare at each profile
+    opt: np.ndarray
+    status: str
+
+    @property
+    def ratio(self):
+        return self.welfare / self.opt
+
+
+def solve_sd_lp(N: int, eps: float = 0.0, types=None, item_symmetric: bool = False) -> SDResult:
+    """Best swap-dictatorial mechanism on the type grid, as an LP.
+
+    A swap-dictatorial mechanism is a fixed menu; type j's choice is a lottery with moments
+    m_j = (m1_j, m2_j, m12_j) in the McCormick hull.  Strategy-proofness = every type prefers
+    its own item to every other type's item (full pairwise IC, O(N^2) rows).  With a fair
+    coin, welfare at profile (j, k) is
+
+        W(j,k) = 1/2 [ B(x_j, x_k, m_j) + B(x_k, x_j, m_k) ],
+        B(x, y, m) = (1+eps) + (x - y - eps) m1 + (y - x - eps) m2 + 2 eps m12,
+
+    linear in the menu.  So max alpha s.t. W >= alpha OPT is an LP.  Its value upper-bounds
+    every swap-dictatorial mechanism (types restricted to the grid), and its menu is a concrete
+    strategy-proof mechanism for all types (dictator picks her favourite of finitely many
+    lotteries).  item_symmetric imposes m(1 - x) = swap(m(x))."""
+    if types is not None:
+        g = np.sort(np.asarray(types, dtype=float)); N = len(g) - 1
+    else:
+        g = np.arange(N + 1) / N
+    T = N + 1
+    nv = 3 * T + 1
+    A = nv - 1
+
+    def idx(var, j):
+        return var * T + j
+
+    rows = _Rows()
+    # IC: u_j(m_k) - u_j(m_j) <= 0 for all j != k, u_j(m) = x_j m1 + (1-x_j) m2 + eps m12
+    J, K = np.meshgrid(np.arange(T), np.arange(T), indexing="ij")
+    msk = J != K
+    J, K = J[msk], K[msk]
+    x = g[J]
+    cols = np.stack([idx(0, K), idx(1, K), idx(2, K), idx(0, J), idx(1, J), idx(2, J)], -1)
+    coefs = np.stack([x, 1 - x, np.full_like(x, eps), -x, -(1 - x), np.full_like(x, -eps)], -1)
+    rows.add_block(cols, coefs, np.zeros(J.size))
+    # competitiveness: alpha OPT(j,k) - W(j,k) <= 0 for j >= k
+    J, K = np.meshgrid(np.arange(T), np.arange(T), indexing="ij")
+    msk = J >= K
+    J, K = J[msk], K[msk]
+    xj, xk = g[J], g[K]
+    opt = first_best_eps(xj, xk, eps)
+    cols = np.stack([idx(0, J), idx(1, J), idx(2, J), idx(0, K), idx(1, K), idx(2, K), np.full(J.size, A)], -1)
+    coefs = np.stack([-0.5 * (xj - xk - eps), -0.5 * (xk - xj - eps), np.full(J.size, -eps),
+                      -0.5 * (xk - xj - eps), -0.5 * (xj - xk - eps), np.full(J.size, -eps), opt], -1)
+    rows.add_block(cols, coefs, np.full(J.size, 1 + eps))
+    welfare_row0, n_w = rows.n - J.size, J.size
+    # McCormick
+    j = np.arange(T); one = np.ones(T)
+    rows.add_block(np.stack([idx(2, j), idx(0, j)], -1), np.stack([one, -one], -1), np.zeros(T))
+    rows.add_block(np.stack([idx(2, j), idx(1, j)], -1), np.stack([one, -one], -1), np.zeros(T))
+    rows.add_block(np.stack([idx(0, j), idx(1, j), idx(2, j)], -1), np.stack([one, one, -one], -1), np.ones(T))
+    A_ub, b_ub = rows.matrix(nv)
+    A_eq = b_eq = None
+    if item_symmetric:
+        eq = _Rows()
+        for jj in range(T):
+            kk = N - jj
+            if kk < jj:
+                break
+            eq.add([idx(0, jj), idx(1, kk)], [1, -1], 0.0)
+            eq.add([idx(1, jj), idx(0, kk)], [1, -1], 0.0)
+            eq.add([idx(2, jj), idx(2, kk)], [1, -1], 0.0)
+        A_eq, b_eq = eq.matrix(nv)
+    c = np.zeros(nv); c[A] = -1.0
+    bounds = [(0, 1)] * (nv - 1) + [(0, None)]
+    res = linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method="highs")
+    if res.status != 0:
+        raise RuntimeError(f"SD LP failed: {res.message}")
+    z = res.x
+    m1, m2, m12 = z[idx(0, j)], z[idx(1, j)], z[idx(2, j)]
+    X, Y = g[:, None], g[None, :]
+
+    def B(xd, yo, a1, a2, a12):
+        return (1 + eps) + (xd - yo - eps) * a1 + (yo - xd - eps) * a2 + 2 * eps * a12
+
+    W = 0.5 * (B(X, Y, m1[:, None], m2[:, None], m12[:, None]) + B(Y, X, m1[None, :], m2[None, :], m12[None, :]))
+    return SDResult(N, eps, float(z[A]), g, m1, m2, m12, W, first_best_eps(X, Y, eps), res.message)

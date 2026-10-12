@@ -52,3 +52,28 @@ Chronological. Newest at the bottom. Each entry: what was tried / decided, why, 
   Proving that the minimum over the triangle always lies on one of these two lines is open
   (TODO: try; at least the 1-D restrictions have clean formulas).
 - Memory guard added to `sandwich_adaptive` after an OOM at tol = 1e-7 (cells ~ 1/tol^2).
+
+### Session 1, eps model (WP5-6)
+
+- **eps-aware LIP(2) reproduces the chatbot draft's 'strategic LIP' column** (0.83082, 0.84028,
+  0.81002, 0.76515, 0.71528) now with certified brackets: strategic play against the naive
+  rule == the eps-aware fixed-menu mechanism (same reachable set). Documented in theory/02.
+- **LP upper bound rises fast with eps** (N=40: 0.843 at 0, 0.877 at 0.1, 0.953 at 0.5, 1 at
+  >= 0.95 which is a grid artefact; continuous bound < 1 for eps < 1).
+- **Nested (comonotone) lotteries.** Read off the LP solution (m12 = m2 in the disagreement
+  region): give the dictator item j iff U < m_j with a single uniform U. Raises both agents'
+  eps-terms, keeps the menu fixed (so strategy-proof), reaches ratio 1 for eps >= 1 with any a.
+  At intermediate eps the dictator over-buys the cheap "pooling lottery" so the best a changes.
+- **Mistake caught.** I claimed a threshold/linear-menu mechanism gives 2(1+eps)/(3+eps)
+  (0.857 at eps=0.5); computing it gives 0.667: when both agents are strong for the *same*
+  item, each dictator grabs it. Lesson: always compute.
+- **p-norm menus** (m1/c)^p + (m2/c)^p <= 1 scanned at eps=0.5: best ~0.854 (p=1.5, c=0.6),
+  far below the LP's ~0.95. Reason: a fixed-menu dictatorship cannot both pool when agents
+  agree and split when they disagree; the LP-optimal mechanism conditions on both reports.
+- **Certified brackets fail to close for menus with linear pieces** (dictator's choice jumps
+  -> the cell bound on the other agent's utility stays loose). Report grid minima there.
+- **New tool: the best swap-dictatorial mechanism on a grid is an LP** (`lp.solve_sd_lp`):
+  menu items are variables, IC and welfare are linear in them. Gives the 'price of
+  dictatorship' per eps, and at eps=0 tests whether any menu beats LIP(a*).
+- Session killed twice by OOM from foreground experiments (MenuMechanism.choose built an
+  80k x 2001 matrix; fixed by chunking). Scan scripts made resumable.
