@@ -32,3 +32,23 @@ Chronological. Newest at the bottom. Each entry: what was tried / decided, why, 
   strategy-proofness is equivalent to adjacent-type constraints plus monotonicity of
   (m1 - m2) in x. This cuts constraints from O(N^3) to O(N^2); to be validated against the
   full LP on small N before relying on it.
+
+### Findings so far (session 1, WP1-2)
+
+- **Replication OK.** LP N=50 gives alpha = 0.841225 (paper: 0.841). Theorem 2 bracket for
+  LIP(2): adaptive refinement certifies alpha(2) in [0.8281462, 0.8281472] in 20 ms (the
+  uniform grid of the paper needs N ~ 20000 to certify the lower bound 0.828).
+- **The 0.841 is an N=50 artefact.** The LP value decreases with the grid: 0.8429 (N=40),
+  0.8412 (50), 0.8402 (60), 0.8388 (80), 0.8380 (100). Running larger N in the background
+  (`results/data/lp_convergence_eps0.csv`). Extrapolation TBD; the true upper bound on
+  strategy-proof mechanisms is strictly below 0.841.
+- **a = 2 is not the best LIP parameter.** alpha(2.1) = 0.82938 > alpha(2) = 0.82815.
+  Optimum a* ~ 2.1013 with alpha* ~ 0.829393.
+- **Structure of alpha(a).** Two competing worst-case branches: (i) the edge y = 0 (agent 2
+  all-in on item 2, agent 1 at x ~ 0.41-0.42), binding for a < a*; (ii) the anti-diagonal
+  x + y = 1, binding for a > a*. Branch (ii) is exactly the profile family of Claim 8, so there
+  alpha(a) = theta(a) (checked to 6 digits at a = 2.11, 2.2, 3.0). Hence
+  alpha(a) = min(theta(a), beta(a)) numerically, and a* solves theta(a) = beta(a).
+  Proving that the minimum over the triangle always lies on one of these two lines is open
+  (TODO: try; at least the 1-D restrictions have clean formulas).
+- Memory guard added to `sandwich_adaptive` after an OOM at tol = 1e-7 (cells ~ 1/tol^2).

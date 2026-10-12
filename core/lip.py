@@ -151,47 +151,29 @@ def sandwich(a: float, N: int, bundle=bundle_additive) -> tuple[float, float, tu
 
 
 def sandwich_adaptive(a: float, tol: float = 1e-4, N0: int = 64, max_depth: int = 20,
-                      bundle=bundle_additive) -> tuple[float, float, int]:
-    """Same bracket as :func:`sandwich` but with adaptive cell refinement.
+                      bundle=bundle_additive, max_cells: int = 2_000_000):
+    """Same bracket as :func:`sandwich` with adaptive cell refinement (see ``core.bracket``).
 
-    A cell is subdivided (2 x 2) only while its lower bound is below ``upper - tol``, where
-    ``upper`` is the best exact ratio seen so far at any visited corner.  Returns
-    (lower, upper, number_of_leaf_cells); on success ``upper - lower <= tol``.
-    The lower bound is a rigorous bound over the whole triangle, exactly as in Theorem 2:
-    every point of the triangle lies in some leaf cell."""
-    h = 1.0 / N0
-    I, J = np.meshgrid(np.arange(N0), np.arange(N0), indexing="ij")
-    keep = I >= J
-    x0, y0 = I[keep] * h, J[keep] * h
-    pruned_min = np.inf
-    upper = np.inf
-    for _ in range(max_depth + 1):
-        qx0 = bundle(x0, a); qxh = bundle(x0 + h, a)
-        qy0 = bundle(y0, a); qyh = bundle(y0 + h, a)
+    Returns (lower, upper, (x, y) attaining the upper bound, number of cells at the last
+    level).  On success ``upper - lower <= tol``.  The lower bound is rigorous over the whole
+    triangle exactly as in Theorem 2.  Its error is O(h), so the cell count grows like
+    1/tol^2 near the minimiser; ``max_cells`` stops refinement (bracket wider but valid)."""
+    from core.bracket import adaptive_bracket
 
-        def p(qx, qy):      # (p1, p2) at a point given both dictators' purchases
-            return 0.5 * qx[0] + 0.5 * (1 - qy[0]), 0.5 * qx[1] + 0.5 * (1 - qy[1])
+    def p(qx, qy):      # (p1, p2) at a point, from both dictators' purchases
+        return 0.5 * qx[0] + 0.5 * (1 - qy[0]), 0.5 * qx[1] + 0.5 * (1 - qy[1])
 
-        p1_a, p2_a = p(qx0, qyh)        # (x0,   y0+h)
-        p1_b, p2_b = p(qxh, qy0)        # (x0+h, y0)
-        num = (x0 * p1_a + (1 - x0 - h) * p2_b + y0 * (1 - p1_b) + (1 - y0 - h) * (1 - p2_a))
-        L = num / (x0 + h + 1 - y0)
-        # exact ratios at the two corners that lie in the triangle for every kept cell
-        for (xx, yy, (pp1, pp2)) in ((x0, y0, p(qx0, qy0)), (x0 + h, y0, (p1_b, p2_b))):
-            S = xx * pp1 + (1 - xx) * pp2 + yy * (1 - pp1) + (1 - yy) * (1 - pp2)
-            upper = min(upper, float(np.min(S / (xx + 1 - yy))))
-        need = L < upper - tol
-        if not need.any():
-            return float(min(pruned_min, L.min())), upper, int(L.size)
-        pruned_min = min(pruned_min, float(L[~need].min())) if (~need).any() else pruned_min
-        # refine
-        h /= 2
-        bx, by = x0[need], y0[need]
-        xs = np.concatenate([bx, bx + h, bx, bx + h])
-        ys = np.concatenate([by, by, by + h, by + h])
-        ok = xs + h > ys + 1e-15                 # subcell touches the triangle x >= y
-        x0, y0 = xs[ok], ys[ok]
-    return float(min(pruned_min, L.min())), upper, int(L.size)
+    def cell_lower(x0, y0, h):
+        p1_a, p2_a = p(bundle(x0, a), bundle(y0 + h, a))        # (x0,   y0+h)
+        p1_b, p2_b = p(bundle(x0 + h, a), bundle(y0, a))        # (x0+h, y0)
+        num = x0 * p1_a + (1 - x0 - h) * p2_b + y0 * (1 - p1_b) + (1 - y0 - h) * (1 - p2_a)
+        return num / (x0 + h + 1 - y0)
+
+    def point_ratio(x, y):
+        return ratio(x, y, a, bundle)
+
+    return adaptive_bracket(cell_lower, point_ratio, tol=tol, N0=N0, max_depth=max_depth,
+                            max_cells=max_cells)
 
 
 # ---------------------------------------------------------------------------------------

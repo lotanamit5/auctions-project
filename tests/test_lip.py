@@ -41,7 +41,7 @@ def test_monotonicity_of_shares():
 
 
 def test_theorem2_bracket():
-    lo, up, _ = lip.sandwich_adaptive(2.0, tol=1e-5)
+    lo, up, _, _ = lip.sandwich_adaptive(2.0, tol=1e-5)
     assert 0.828 <= lo <= up <= 0.829            # the paper's statement
     assert up - lo <= 1e-5
     lo_u, up_u, _, _ = lip.sandwich(2.0, 400)
