@@ -171,7 +171,7 @@ ax.fill_between(sd.eps, sd.alpha_sd, np.interp(sd.eps, lpN.eps, lpN.alpha), colo
 ax.set(xlabel=r"$\varepsilon$", ylabel="competitive ratio", xlim=(0, 1.2), ylim=(0.8, 1.01)); ax.legend(loc="lower right")
 plt.tight_layout(); plt.savefig(FIG / "04_price_of_dictatorship.png"); plt.show()
 tab = sd[["eps", "alpha_sd"]].copy(); tab["fraction"] = [str(Fraction(v).limit_denominator(2000)) for v in tab.alpha_sd]
-tab["rho_A=(5+2e)/6"] = (5 + 2 * tab.eps) / 6; tab["rho_B=(1+e)/(1+2e-e^2)"] = (1 + tab.eps) / (1 + 2 * tab.eps - tab.eps**2)
+tab["rho_A=(5+2e)/6 (eps<=1/2)"] = np.where(tab.eps <= 0.5, (5 + 2 * tab.eps) / 6, np.nan); tab["rho_B=(1+e)/(1+2e-e^2)"] = (1 + tab.eps) / (1 + 2 * tab.eps - tab.eps**2)
 tab = tab.merge(lpN[["eps", "alpha"]].rename(columns={"alpha": "SP-LP"}), on="eps", how="left"); tab.round(5)
 """)
 
@@ -253,8 +253,10 @@ sm.drop(columns=["SMD grid min"]).round(4)
 """)
 
 nb.md(r"""
-The brute-force incentive checks are zero for SMD and (numerically) for the LP-optimised
-fallbacks as well. Note that the LP's *grid* value overstates what its menu achieves on the
+The brute-force incentive checks are zero for SMD, and for the LP-optimised fallbacks at
+$\varepsilon\ge0.25$ (at $\varepsilon=0.1$ the grid-optimised fallback violates incentive
+compatibility between grid types by about $0.012$ — the split-IC constraints were imposed at
+grid types only — so that point is not a valid mechanism). Note that the LP's *grid* value overstates what its menu achieves on the
 continuum: for $\varepsilon\ge\tfrac12$ the closed-form SMD is at least as good on the continuum
 (and at $\varepsilon=0.6$ it is optimal within the split-or-menu class: all three numbers coincide),
 while for $\varepsilon\approx0.25$–$0.45$ the optimised fallback adds about $0.02$–$0.05$.
