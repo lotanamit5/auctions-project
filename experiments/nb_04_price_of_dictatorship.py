@@ -66,7 +66,29 @@ $\mathrm{LIP}(a^\star)$ achieves $0.82939$; the SD bound is $0.83333$; the SP bo
 about $0.835$–$0.837$. So **LIP is within $0.004$ of the best possible menu mechanism**, and the
 best non-dictatorial mechanism can gain at most $\approx0.007$ more.
 
-Using a grid-optimal SD menu for *all* types does not transfer well (it exploits the grid):
+Using a grid-optimal SD menu for *all* types does not transfer automatically (the menu exploits
+the grid), but finer grids give better continuum menus, and from $N=200$ on **they beat LIP**:
+""")
+
+nb.code(r"""
+sdc = pd.read_csv(DATA / "sd_continuum.csv"); sdc0 = sdc[sdc.eps == 0].sort_values("N")
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(sdc0.N, sdc0.exact_continuum, "o-", label="grid-optimal menu, exact ratio on the continuum")
+ax.axhline(5/6, c="k", ls="--", label="5/6: upper bound on all menu mechanisms")
+ax.axhline(json.loads((DATA / "lip_alpha_opt.json").read_text())["alpha_upper"], c="r", ls=":", label="LIP(a*) = 0.82939")
+ax.set(xlabel="grid size N used to compute the menu", ylabel="competitive ratio", title="Menu mechanisms in the additive model"); ax.legend()
+plt.tight_layout(); plt.savefig(FIG / "04_sd_continuum.png"); plt.show()
+sdc0[["N", "n_items", "sd_lp_grid", "exact_continuum", "x", "y"]].round(5)
+""")
+
+nb.md(r"""
+So there *are* menu mechanisms better than every LIP mechanism (the $N=200$ menu already gives
+$0.8299>0.8294$), and the sequence approaches $5/6$ from below; whether $5/6$ is attained on the
+continuum remains open. A direct Nelder–Mead search over small menus was a dead end (0.816).
+""")
+
+nb.md(r"""
+For comparison, the $N=100$ menu alone:
 """)
 
 nb.code(r"""
@@ -116,6 +138,7 @@ ax.fill_between(sd.eps, sd.alpha_sd, np.interp(sd.eps, lpN.eps, lpN.alpha), colo
 ax.set(xlabel=r"$\varepsilon$", ylabel="competitive ratio", xlim=(0, 1.2), ylim=(0.8, 1.01)); ax.legend(loc="lower right")
 plt.tight_layout(); plt.savefig(FIG / "04_price_of_dictatorship.png"); plt.show()
 tab = sd[["eps", "alpha_sd"]].copy(); tab["fraction"] = [str(Fraction(v).limit_denominator(2000)) for v in tab.alpha_sd]
+tab["rho_A=(5+2e)/6"] = (5 + 2 * tab.eps) / 6; tab["rho_B=(1+e)/(1+2e-e^2)"] = (1 + tab.eps) / (1 + 2 * tab.eps - tab.eps**2)
 tab = tab.merge(lpN[["eps", "alpha"]].rename(columns={"alpha": "SP-LP"}), on="eps", how="left"); tab.round(5)
 """)
 
@@ -132,7 +155,13 @@ pd.DataFrame(rows)
 
 nb.md(r"""
 For $\varepsilon=\tfrac12$ (and $\tfrac34$) the grid-optimal finite menu is optimal on the
-continuum as well, so the SD value is *exact*: $6/7$ and $28/31$. Compare with the SP-LP
+continuum as well, so the SD value is *exact*: $6/7$ and $28/31$ — these are the closed forms
+$\rho_B(\varepsilon)=(1+\varepsilon)/(1+2\varepsilon-\varepsilon^2)$ of Theorem B, attained by the
+"modest dictator" menu $\{(s^\star,0),(0,s^\star)\}$, $s^\star=(1-\varepsilon^2)/(1+2\varepsilon-\varepsilon^2)$.
+For small $\varepsilon$ the binding argument is the middle-type one, $\rho_A=(5+2\varepsilon)/6$.
+Note in the figure above that **nested LIP($a^\star$) tracks the SD bound almost exactly for
+$\varepsilon\ge0.5$**: within the menu class it is essentially optimal, and its whole shortfall
+against the SP-LP is the price of dictatorship. Compare with the SP-LP
 ($\approx0.95$ and $\approx0.98$): the price of dictatorship is about $0.1$ at
 $\varepsilon=\tfrac12$. The reason is structural — with complementarities the efficient rule
 pools when agents agree and splits when they disagree, which a rule that mixes two one-sided

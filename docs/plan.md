@@ -36,17 +36,17 @@ is common knowledge.
 
 ## Work packages / todo
 
-- [ ] WP0  Repo skeleton, venv, plan/log/state files.                       (this commit)
-- [ ] WP1  `core/lip.py`: LIP primitives (prices, Q, menu, additive dictator rule,
+- [x] WP0  Repo skeleton, venv, plan/log/state files.                       (this commit)
+- [x] WP1  `core/lip.py`: LIP primitives (prices, Q, menu, additive dictator rule,
           p1/p2, welfare, ratio, grid sandwich). Tests against paper numbers.
-- [ ] WP2  `core/lp.py`: Theorem-1 LP (full and reduced local-IC form), N-convergence,
+- [x] WP2  `core/lp.py`: Theorem-1 LP (full and reduced local-IC form), N-convergence,
           duals. Tests: N=50 gives 0.841.
-- [ ] WP3  Notebook 01 — replication (Theorems 1, 2, Figure 1; best a).
-- [ ] WP4  LP structure: binding profiles, small-support certificate, notebook 02.
-- [ ] WP5  `core/eps.py`: eps model (first best, eps-aware dictator problem, monotonicity,
+- [x] WP3  Notebook 01 — replication (Theorems 1, 2, Figure 1; best a).
+- [x] WP4  LP structure: binding profiles, small-support certificate, notebook 02.
+- [x] WP5  `core/eps.py`: eps model (first best, eps-aware dictator problem, monotonicity,
           sandwich bounds, competitors, mixtures). Notebook 03.
-- [ ] WP6  McCormick LP upper bound for the eps model. Notebook 04. Gap analysis vs LIP.
-- [ ] WP7  Naive-rule manipulation analysis. Notebook 05.
+- [x] WP6  McCormick LP upper bound for the eps model. Notebook 04. Gap analysis vs LIP.
+- [x] WP7  Naive-rule manipulation analysis. Notebook 05.
 - [ ] WP8  Theory write-up `docs/theory/*.md` (claims, proofs, what is proved vs numerical).
 - [ ] WP9  Stretch items as time allows.
 - [ ] WP10 Final pass: README, state.md, consistency check of all numbers.

@@ -77,3 +77,26 @@ Chronological. Newest at the bottom. Each entry: what was tried / decided, why, 
   dictatorship' per eps, and at eps=0 tests whether any menu beats LIP(a*).
 - Session killed twice by OOM from foreground experiments (MenuMechanism.choose built an
   80k x 2001 matrix; fixed by chunking). Scan scripts made resumable.
+
+### Session 1, price of dictatorship (WP6 cont.)
+
+- **SD-LP value at eps=0 is exactly 5/6 for every grid, certified by {0, 1/2, 1} with zero
+  IC duals** -> four-profile hand proof (Theorem A, docs/theory/03). Holds for any mixture of
+  two one-sided rules, lotteries included.
+- **Closed forms with eps** (Theorem B): rho_A = (5+2eps)/6 (middle-type argument, small eps)
+  and rho_B = (1+eps)/(1+2eps-eps^2) (three extreme profiles), exact on all grids for
+  eps >= 0.3; the 2-item 'modest dictator' menu with s* = (1-eps^2)/(1+2eps-eps^2) attains
+  rho_B on the continuum for eps >= 1/2.
+- **Grid-optimal menus do not transfer to the continuum automatically**: N=100 menu gives
+  0.8264 (< LIP), but the N=200 menu gives 0.82988 > LIP(a*) = 0.82939 — first menu mechanism
+  known to beat LIP. Running N up to 800 (`experiments/sd_continuum.py`).
+- **Bug/perf**: `FiniteMenuMechanism._envelope` enumerated all K^2 pairwise crossings as
+  breakpoints -> cells ~ K^4 -> OOM (killed the session a third time). Replaced by a proper
+  upper-envelope walk (<= K segments). Exact evaluation now ~10 ms.
+- **Dead end:** direct Nelder-Mead over K=6 symmetric menu items (`experiments/menu_opt.py`)
+  reaches only 0.816 (local optima; the exact ratio is piecewise and non-smooth). The SD-LP
+  menus evaluated on the continuum are far better and improve with N:
+  0.8197 (N=50), 0.8264 (100), 0.8299 (200), 0.8310 (300) -> approaching 5/6 from below.
+- **Observation from fig. 04:** nested LIP(a*) tracks the SD-LP upper bound almost exactly for
+  eps >= 0.5 (0.8568 vs 6/7 at 0.5; 0.9182 vs 45/49 at 0.8): among fixed-menu mechanisms,
+  nested LIP is essentially optimal there, and the whole shortfall is the price of dictatorship.

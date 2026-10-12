@@ -75,7 +75,8 @@ W(1,1) = (1+ε) − εs and W(1,0) = (1+ε) + (1−ε)s is at
 
     s* = (1 − ε²)/(1 + 2ε − ε²),      ratio  ρ_B(ε) = (1+ε)/(1 + 2ε − ε²).
 
-(A short LP-dual check: the weights on the three profiles are λ(0,0) = λ(1,1) = ε s*/..., no
+(Dual certificate: weights λ on (0,0) and (1,1) and μ = 2ελ/(1−ε) on (1,0) make the
+coefficient of s vanish, and 2λ(1+ε) + 2μ = 1 normalises; e.g. λ = 1/7, μ = 2/7 at ε = ½. No
 incentive constraint is used; `lp.solve_sd_lp(types=[0,1/2,1])` returns exactly ρ_B for
 ε ≥ 0.3.)  Values: 20/23 (ε = ¼), 6/7 (½), 28/31 (¾).
 
