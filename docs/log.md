@@ -100,3 +100,12 @@ Chronological. Newest at the bottom. Each entry: what was tried / decided, why, 
 - **Observation from fig. 04:** nested LIP(a*) tracks the SD-LP upper bound almost exactly for
   eps >= 0.5 (0.8568 vs 6/7 at 0.5; 0.9182 vs 45/49 at 0.8): among fixed-menu mechanisms,
   nested LIP is essentially optimal there, and the whole shortfall is the price of dictatorship.
+- **Theorem C (SD optimum = 5/6 exactly, attained).** Reduced the symmetric menu problem at
+  eps=0 to one monotone function d = m1 - m2 with increment constraints
+  d(x)-d(y) >= 5/3 - 1/(3(x-y)); the steepest-chain construction D(x) = max_k [5k/3 - k^2/(3x)]
+  reaches exactly 2 at x = 1 (2 or 3 equal jumps; AM-HM shows no partition does better); the
+  symmetrised d is implementable with shares in [0,1]. Discretised menus: 0.83258 (501 items),
+  0.83315 (2001), 0.83328 (8001). Closed form in docs/theory/03, code in core.menu.
+- Notebook 06 narrative corrected after reading the table: the LP-LIP gap widens on both
+  sides of eps = 0 (substitutes too); the additive case is where LIP is near-optimal.
+- Session killed a 4th time: exact_ratio with 8001 items (cuts^2 memory). Now chunked.

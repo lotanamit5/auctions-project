@@ -35,12 +35,12 @@ pd.DataFrame(rows).round(4)
 """)
 
 nb.md(r"""
-With substitutes the picture is the mirror image of complementarities: the first best never
-pools, the LP bound *falls* below the additive 0.84 (the designer cannot exploit any
-"agreement" between agents, and the dictator's complementarity-driven over-buying now hurts),
-and the deterministic $\varepsilon$-aware LIP keeps most of its performance — the menu class is
-less handicapped because splitting is what menus do well. We leave a proper treatment (with
-free disposal) as future work.
+With substitutes the first best never pools, and the LP bound *falls* below the additive
+value (there is no "agreement" to exploit, while the split must be done without money). The
+deterministic $\varepsilon$-aware LIP degrades faster than the bound: the LP–LIP gap widens on
+*both* sides of $\varepsilon=0$ (0.09 at $-\tfrac12$, 0.016 at 0, 0.07 at $+\tfrac14$), so the
+additive case is exactly where a dictatorial price mechanism is near-optimal. A proper
+treatment (with free disposal) is left as future work.
 """)
 
 nb.save(execute=True)

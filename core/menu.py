@@ -245,25 +245,74 @@ class FiniteMenuMechanism:
     def ratio(self, x, y):
         return self.welfare(x, y) / first_best(x, y, self.eps)
 
-    def exact_ratio(self):
+    def exact_ratio(self, chunk_rows: int = 256):
         """Exact infimum of the ratio over the triangle x >= y, and the point attaining it.
 
-        Vectorised: all cells (I_j x I_k of the choice intervals, further cut by the OPT kinks
-        x - y = +-eps) are enumerated at once; candidate points are the cell corners and the
-        crossings with x - y = eps, evaluated just inside the cell."""
+        Cells are I_j x I_k of the choice intervals, further cut by the OPT kinks x - y = +-eps;
+        candidate points are the cell corners and the crossings with x - y = eps, evaluated just
+        inside the cell (the ratio is linear-fractional on each piece, so the infimum is at a
+        vertex).  Processed in row chunks to keep memory O(chunk * cuts)."""
         eps = self.eps
         br = self.breaks
         cuts = np.unique(np.clip(np.concatenate([br, br + eps, br - eps, [0.0, 1.0]]), 0, 1))
-        xa, xb = cuts[:-1], cuts[1:]
-        XA, YA = np.meshgrid(xa, xa, indexing="ij"); XB, YB = np.meshgrid(xb, xb, indexing="ij")
-        keep = (XB > YA + 1e-15).ravel()
-        XA, XB, YA, YB = XA.ravel()[keep], XB.ravel()[keep], YA.ravel()[keep], YB.ravel()[keep]
-        P, Q = [], []
-        for (p, q) in ((XA, YA), (XB, YA), (XA, YB), (XB, YB)):
-            P += [p, np.clip(q + eps, XA, XB), p]; Q += [q, q, np.clip(p - eps, YA, YB)]
-        P = np.concatenate(P); Q = np.concatenate(Q)
-        XA6 = np.tile(XA, 12); XB6 = np.tile(XB, 12); YA6 = np.tile(YA, 12); YB6 = np.tile(YB, 12)
-        pp = np.clip(P, XA6 + 1e-12, XB6 - 1e-12); qq = np.clip(Q, YA6 + 1e-12, YB6 - 1e-12)
-        ok = pp >= qq
-        R = self.ratio(pp[ok], qq[ok]); i = int(np.argmin(R))
-        return float(R[i]), (float(P[ok][i]), float(Q[ok][i]))
+        xa_all, xb_all = cuts[:-1], cuts[1:]
+        best = (np.inf, (np.nan, np.nan))
+        for s0 in range(0, len(xa_all), chunk_rows):
+            xa, xb = xa_all[s0:s0 + chunk_rows], xb_all[s0:s0 + chunk_rows]
+            XA, YA = np.meshgrid(xa, xa_all, indexing="ij"); XB, YB = np.meshgrid(xb, xb_all, indexing="ij")
+            keep = (XB > YA + 1e-15).ravel()
+            if not keep.any():
+                continue
+            XA, XB, YA, YB = XA.ravel()[keep], XB.ravel()[keep], YA.ravel()[keep], YB.ravel()[keep]
+            P, Q = [], []
+            for (p, q) in ((XA, YA), (XB, YA), (XA, YB), (XB, YB)):
+                P += [p, np.clip(q + eps, XA, XB), p]; Q += [q, q, np.clip(p - eps, YA, YB)]
+            P = np.concatenate(P); Q = np.concatenate(Q)
+            XA6 = np.tile(XA, 12); XB6 = np.tile(XB, 12); YA6 = np.tile(YA, 12); YB6 = np.tile(YB, 12)
+            pp = np.clip(P, XA6 + 1e-12, XB6 - 1e-12); qq = np.clip(Q, YA6 + 1e-12, YB6 - 1e-12)
+            ok = pp >= qq
+            if not ok.any():
+                continue
+            R = self.ratio(pp[ok], qq[ok]); i = int(np.argmin(R))
+            if R[i] < best[0]:
+                best = (float(R[i]), (float(P[ok][i]), float(Q[ok][i])))
+        return best
+
+
+# ---------------------------------------------------------------------------------------
+# The optimal swap-dictatorial mechanism for additive valuations (ratio exactly 5/6)
+# ---------------------------------------------------------------------------------------
+
+def steepest_chain_D(x):
+    """D(x) = max_k [5k/3 - k^2/(3x)] over k with x/k >= 1/5: the smallest non-decreasing
+    function with increments D(x) - D(y) >= h(x - y) := 5/3 - 1/(3(x-y)) and D(0) = 0.
+    Piecewise: 0 on [0, 1/5], 5/3 - 1/(3x) on [1/5, 3/5], 10/3 - 4/(3x) on [3/5, 1]; D(1) = 2."""
+    x = np.asarray(x, float)
+    with np.errstate(divide="ignore"):
+        k1 = np.where(x >= 0.2, 5 / 3 - 1 / (3 * np.maximum(x, 1e-300)), 0.0)
+        k2 = np.where(x >= 0.4, 10 / 3 - 4 / (3 * np.maximum(x, 1e-300)), 0.0)
+        k3 = np.where(x >= 0.6, 5 - 3 / np.maximum(x, 1e-300), 0.0)
+    return np.maximum.reduce([np.zeros_like(x), k1, k2, k3])
+
+
+def optimal_sd_choice(x):
+    """Choice function (m1(x), m2(x)) of the 5/6-competitive menu mechanism.
+
+    d(x) = m1 - m2 = (D(x) - D(1-x))/2 is antisymmetric, non-decreasing, d(0) = -1, d(1) = 1,
+    and satisfies d(x) - d(y) >= 5/3 - 1/(3(x-y)) for all x > y, which is exactly the
+    condition ratio(x, y) >= 5/6 (Theorem C).  Shares come from the envelope formula
+    U(x) = 1 + int_0^x d, m2 = U - x d, m1 = U + (1-x) d (truthful choice from a fixed menu)."""
+    x = np.asarray(x, float)
+    grid = np.linspace(0, 1, 20001)
+    d = 0.5 * (steepest_chain_D(grid) - steepest_chain_D(1 - grid))
+    U = 1 + np.concatenate([[0], np.cumsum(0.5 * (d[1:] + d[:-1]) * np.diff(grid))])
+    dx = np.interp(x, grid, d); Ux = np.interp(x, grid, U)
+    m2 = Ux - x * dx; m1 = Ux + (1 - x) * dx
+    return np.clip(m1, 0, 1), np.clip(m2, 0, 1)
+
+
+def optimal_sd_menu(n_items: int = 2001):
+    """Finite menu approximating the optimal mechanism (nested lotteries irrelevant at eps=0)."""
+    xs = np.linspace(0, 1, n_items)
+    m1, m2 = optimal_sd_choice(xs)
+    return np.unique(np.round(np.c_[m1, m2, np.minimum(m1, m2)], 10), axis=0)

@@ -43,3 +43,18 @@ def test_menu_mechanism_reproduces_lip():
     m = MenuMechanism(LIPMenu(2.0), 0.0, nested=False, grid=1001)
     val, x, y = m.grid_min(200)
     assert abs(val - 0.8281) < 2e-3
+
+
+def test_optimal_sd_menu_approaches_five_sixths():
+    from core.menu import optimal_sd_menu, optimal_sd_choice, steepest_chain_D
+    assert abs(steepest_chain_D(1.0) - 2.0) < 1e-12
+    x = np.linspace(0, 1, 2001)
+    m1, m2 = optimal_sd_choice(x)
+    d = m1 - m2
+    assert np.all(np.diff(d) >= -1e-9) and abs(d[0] + 1) < 1e-6 and abs(d[-1] - 1) < 1e-6
+    # increment condition on a subsample
+    sub = x[::50]; dd = d[::50]
+    S = sub[:, None] - sub[None, :]; mask = S > 0.2
+    assert np.all((dd[:, None] - dd[None, :])[mask] >= (5 / 3 - 1 / (3 * S[mask])) - 1e-6)
+    vals = [FiniteMenuMechanism(optimal_sd_menu(n), 0.0).exact_ratio()[0] for n in (501, 2001)]
+    assert vals[0] < vals[1] < 5 / 6 + 1e-9 and 5 / 6 - vals[1] < 3e-4

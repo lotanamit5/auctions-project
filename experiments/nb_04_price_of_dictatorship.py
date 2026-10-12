@@ -83,8 +83,40 @@ sdc0[["N", "n_items", "sd_lp_grid", "exact_continuum", "x", "y"]].round(5)
 
 nb.md(r"""
 So there *are* menu mechanisms better than every LIP mechanism (the $N=200$ menu already gives
-$0.8299>0.8294$), and the sequence approaches $5/6$ from below; whether $5/6$ is attained on the
-continuum remains open. A direct Nelder–Mead search over small menus was a dead end (0.816).
+$0.8299>0.8294$), and the sequence approaches $5/6$ from below. A direct Nelder–Mead search over
+small menus was a dead end (0.816). The question is settled analytically:
+
+### Theorem C — the optimal menu in closed form attains exactly $5/6$
+
+Write $d(x)=m_1(x)-m_2(x)$ for the dictator's net share. For $x>y$,
+$W(x,y)=1+\tfrac12(x-y)[d(x)-d(y)]$ and $\mathrm{OPT}=1+(x-y)$, so the ratio is $\ge5/6$ everywhere
+iff $d(x)-d(y)\ge h(x-y):=\tfrac53-\tfrac1{3(x-y)}$. Incentive compatibility just needs $d$
+non-decreasing (shares then follow from the envelope formula). The steepest admissible $d$ is
+built from $D(x)=\max_k[\tfrac{5k}3-\tfrac{k^2}{3x}]$ ($=0$ on $[0,\tfrac15]$, $\tfrac53-\tfrac1{3x}$ on
+$[\tfrac15,\tfrac35]$, $\tfrac{10}3-\tfrac4{3x}$ on $[\tfrac35,1]$), which reaches $D(1)=2$ exactly, so
+$d(x)=\tfrac12[D(x)-D(1-x)]$ fits in $[-1,1]$ and its shares lie in $[0,1]$. Full proof in
+`docs/theory/03_price_of_dictatorship.md`.
+""")
+
+nb.code(r"""
+from core.menu import optimal_sd_choice, optimal_sd_menu, steepest_chain_D
+x = np.linspace(0, 1, 1001)
+m1, m2 = optimal_sd_choice(x); q1, q2 = lip.bundle_additive(x, opt["a_star"])
+fig, ax = plt.subplots(1, 3, figsize=(15, 4.3))
+ax[0].plot(x, steepest_chain_D(x), label="D(x)"); ax[0].plot(x, m1 - m2, label="d(x) = m1 - m2 (symmetrised)"); ax[0].plot(x, q1 - q2, "--", label="LIP(a*): q1 - q2")
+ax[0].set(xlabel="type x", title="net share functions"); ax[0].legend()
+ax[1].plot(x, m1, label="m1(x)"); ax[1].plot(x, m2, label="m2(x)"); ax[1].plot(x, q1, "--", c="C0", label="LIP(a*) q1"); ax[1].plot(x, q2, "--", c="C1", label="LIP(a*) q2")
+ax[1].set(xlabel="type x", title="what the dictator gets"); ax[1].legend(fontsize=8)
+ax[2].plot(m1, m2, label="optimal menu (Theorem C)"); ax[2].plot(q1, q2, "--", label="LIP(a*) frontier"); ax[2].set(xlabel="$m_1$", ylabel="$m_2$", title="menus", aspect="equal"); ax[2].legend()
+plt.tight_layout(); plt.savefig(FIG / "04_optimal_menu.png"); plt.show()
+rows = [{"menu items": n, "exact ratio on the continuum": FiniteMenuMechanism(optimal_sd_menu(n), 0.0).exact_ratio()[0]} for n in (101, 501, 2001)]
+pd.DataFrame(rows).assign(**{"5/6": 5/6}).round(6)
+""")
+
+nb.md(r"""
+The discretised menus converge to $5/6$ (8001 items: 0.83328; the only loss is that off-grid
+types pick a neighbouring item). The optimal dictator is *less* greedy than LIP at the balanced
+type — $(0.70,0.70)$ instead of $(0.72,0.72)$ — and more decisive near the extremes.
 """)
 
 nb.md(r"""
@@ -182,8 +214,9 @@ plt.suptitle(f"LP-optimal strategy-proof mechanism at eps={e} (value {r.alpha:.4
 nb.md(r"""
 ## Summary
 
-* New, simple theorem: no swap-dictatorial mechanism (nor any mixture of two one-sided rules)
-  is better than $5/6$-competitive for two items; the LIP mechanism is within $0.004$ of this.
+* New theorem: the best swap-dictatorial mechanism (indeed any mixture of two one-sided rules)
+  is **exactly** $5/6$-competitive for two items — upper bound by a four-profile argument,
+  attained by an explicit closed-form menu. LIP($a^\star$) is within $0.004$ of it.
 * The best fixed-menu mechanism for any $\varepsilon$ is computable by an LP; for
   $\varepsilon=\tfrac12$ it is a 3-item menu with exact ratio $6/7$.
 * Under complementarities the right design is *not* dictatorial; the LP-optimal mechanism
