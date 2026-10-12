@@ -47,8 +47,8 @@ is common knowledge.
           sandwich bounds, competitors, mixtures). Notebook 03.
 - [x] WP6  McCormick LP upper bound for the eps model. Notebook 04. Gap analysis vs LIP.
 - [x] WP7  Naive-rule manipulation analysis. Notebook 05.
-- [ ] WP8  Theory write-up `docs/theory/*.md` (claims, proofs, what is proved vs numerical).
-- [ ] WP9  Stretch items as time allows.
+- [x] WP8  Theory write-up `docs/theory/*.md` (claims, proofs, what is proved vs numerical).
+- [x] WP9  Stretch items as time allows.
 - [ ] WP10 Final pass: README, state.md, consistency check of all numbers.
 
 ## Conventions

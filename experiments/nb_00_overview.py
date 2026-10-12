@@ -36,10 +36,10 @@ price schedule $f(t)=at+b$, and gives the loser what is left.
 |---|---|---|
 | LIP(2) | $\ge0.828$, $\le0.829$ | $\alpha(2)\in[0.8281462,0.8281472]$ (adaptive certified bracket) |
 | best LIP(a) | — | $a^\star=2.1013$, $\alpha^\star=0.82939$; $\alpha(a)=\min\{\theta(a),\beta(a)\}$ with $\beta$ in closed form |
-| any fixed-menu (swap-dictatorial, incl. all increasing-price) mechanism | — | **$\le5/6=0.8333$**, four-line proof (Theorem A); menus from the SD-LP reach $0.8316$ on the continuum, beating LIP |
+| any fixed-menu (swap-dictatorial, incl. all increasing-price) mechanism | — | **exactly $5/6=0.8333$**: four-line upper bound (Theorem A), attained by an explicit closed-form menu (Theorem C) |
 | any strategy-proof mechanism | $\le0.841$ (LP, $N=50$) | the LP value *decreases* with $N$: $\le0.8368$ ($N=150$), extrapolating to $\approx0.8346$; small explicit certificates |
 
-So the hierarchy is pinned down to within a percent: LIP $0.8294 <$ menus $\le 0.8333 <$ all SP $\lesssim 0.835$.
+So the hierarchy is pinned down to within a percent: LIP $0.8294 <$ menus $= 0.8333 \le$ all SP $\lesssim 0.835$.
 
 ### Complementarities ($\varepsilon>0$) — notebooks 03, 04, 05
 
@@ -60,6 +60,11 @@ So the hierarchy is pinned down to within a percent: LIP $0.8294 <$ menus $\le 0
 * **Price of dictatorship**: with complementarities the best mechanisms must pool when agents
   agree and split when they disagree, which no fixed-menu rule can do; the gap between the two
   bounds is $\approx0.1$ at $\varepsilon=\tfrac12$ (0.857 vs 0.951).
+* **A non-dictatorial mechanism** (Propositions D, E): "split if strongly opposed
+  ($x\ge\tfrac{1+\varepsilon}2$, $y\le\tfrac{1-\varepsilon}2$), else a modest dictator" is strategy-proof
+  with ratio $2(1+\varepsilon)^2/(3+3\varepsilon+2\varepsilon^2)$ ($\varepsilon\le\tfrac12$) and
+  $(1+\varepsilon)^2/(1+3\varepsilon)$ ($\varepsilon\ge\tfrac12$) — 0.900 at $\varepsilon=\tfrac12$ — beating every
+  menu for $\varepsilon>0.366$.
 
 ### The naive rule — notebook 05
 
@@ -73,7 +78,7 @@ fix is free.
 
 nb.code(r"""
 from IPython.display import Image, display
-for f in ("01_alpha_of_a.png", "02_binding_profiles.png", "03_eps_overview.png", "04_price_of_dictatorship.png", "04_sd_continuum.png"):
+for f in ("01_alpha_of_a.png", "02_binding_profiles.png", "03_eps_overview.png", "04_optimal_menu.png", "04_beyond_dictatorship.png"):
     p = FIG / f
     if p.exists():
         print(f); display(Image(filename=str(p), width=760))
@@ -88,18 +93,18 @@ nb.md(r"""
 | $\alpha(2)$ bracket, $a^\star$ | certified numerics (rigorous lower bounds + exact upper bounds) |
 | $\alpha(a)=\min\{\theta,\beta\}$ | both are proved upper bounds; equality verified numerically to $10^{-6}$ |
 | LP bound decreases with $N$ | computed; limit extrapolated, not proved |
-| Theorem A (menus $\le5/6$), Theorem B (closed forms with $\varepsilon$) | proved (`docs/theory/03`) |
-| Menus beating LIP on the continuum | exact evaluation of explicit finite menus |
+| Theorems A, C (menus $=5/6$), Theorem B (closed forms with $\varepsilon$) | proved (`docs/theory/03`); discretised Theorem-C menus evaluated exactly (0.83328 with 8001 items) |
+| Propositions D, E (SMD mechanism) | proved (`docs/theory/04`) + brute-force incentive checks |
 | P1–P7 of the $\varepsilon$ model | proved (`docs/theory/02`) |
 | Price-of-dictatorship gap | LP upper bound (rigorous for grid-restricted types) vs exact SD values |
 
 ## Open questions we would pursue next
 
-1. A closed-form menu attaining $5/6$ on the continuum (the SD-LP menus suggest a smooth curve
-   below the LIP frontier at the balanced type).
-2. A clean non-dictatorial mechanism for $0<\varepsilon<1$ approaching the SP-LP bound: the
-   LP-optimal mechanisms pool when the reports agree and split (with nested lotteries) when they
-   disagree, but off-grid incentive compatibility is delicate.
+1. A strategy-proof mechanism approaching the SP-LP bound for $0<\varepsilon<1$: SMD closes
+   part of the gap (0.900 vs 0.951 at $\varepsilon=\tfrac12$); the LP-optimal mechanisms use smooth,
+   type-dependent pooling probabilities whose off-grid incentive compatibility is delicate.
+2. The limit of the Theorem-1 LP as $N\to\infty$ ($\approx0.8346$) in closed form, and whether a
+   non-dictatorial mechanism beats $5/6$ in the additive model.
 3. Proving that LIP's worst case always lies on the edge or the anti-diagonal.
 4. Substitutes with free disposal (notebook 06 is only a sketch); three or more items with $\varepsilon$.
 """)

@@ -113,3 +113,21 @@ Chronological. Newest at the bottom. Each entry: what was tried / decided, why, 
   midpoints around heavy-dual types) are *not* better than uniform grids at equal size
   (115 types: 0.83876 vs 101 uniform: 0.83797). The dual mass is spread along whole curves,
   so uniform refinement is the right thing. Not pursued further.
+
+### Session 1, beyond dictatorship (WP9) and wrap-up
+
+- **SMD mechanism** ("split if strongly opposed, else modest dictator"): strategy-proof
+  (boundary IC holds with equality at tau = (1+eps)/2 for every s; brute-force checks zero),
+  closed-form ratio 2(1+e)^2/(3+3e+2e^2) for e <= 1/2 and (1+e)^2/(1+3e) for e >= 1/2.
+  Beats all menus for eps > 0.366. A nested-LIP fallback is NOT IC (violations up to 0.09).
+- **Split-or-menu LP** (best fallback given the split region): grid values overstate the
+  continuum; exact continuum evaluation shows gains only for eps in ~[0.25, 0.45]; at eps=0.6
+  the LP value equals the SMD closed form (SMD optimal in its class there). At eps=0.1 the LP
+  fallback violates IC between grid types (0.012) -> not a valid mechanism.
+- Multi-threshold variants with the modest fallback cannot be IC (utility affine in the split
+  probability with slope (1-s)(x - tau)); documented in theory/04.
+- Session was OOM-killed a 4th time (exact_ratio with 8001 items); now chunked. Lesson
+  recorded in memory: run heavy things detached, chunk, and keep foreground jobs small.
+- tau-scan of the split-or-menu LP: any tau > (1+eps)/2 lowers the value and produces large
+  continuum IC violations (types in [(1+eps)/2, tau) prefer the split they cannot trigger).
+  tau = (1+eps)/2 is forced; no further action.
