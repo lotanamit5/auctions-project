@@ -6,7 +6,7 @@ Last updated: 2026-10-12 (end of session 1)
 between two agents without payments or priors*. Part A (reading report) is `proposal/main.tex`.
 Part B replicates the paper and extends the model with a complementarity term `eps z1 z2`.
 Plan/todo: `docs/plan.md`. Decisions, mistakes, dead ends: `docs/log.md`. Proofs: `docs/theory/`.
-Start reading at `notebooks/00_overview.ipynb`.
+Start reading at `notebooks/00_overview.ipynb`; all headline numbers with their sources are in `docs/results_summary.md`.
 
 ## Results
 
