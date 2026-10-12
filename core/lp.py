@@ -103,7 +103,7 @@ class _Rows:
 
 
 def solve_sp_lp(N: int, eps: float = 0.0, full_ic: bool = False, symmetric: bool = False,
-                with_product: bool | None = None) -> LPResult:
+                with_product: bool | None = None, types=None) -> LPResult:
     """Max alpha s.t. some strategy-proof (randomised) mechanism on the grid {j/N} is
     alpha-competitive against the first best, in the model with complementarity ``eps``.
 
@@ -111,11 +111,17 @@ def solve_sp_lp(N: int, eps: float = 0.0, full_ic: bool = False, symmetric: bool
     m12(j,k) = 1 - m1(k,j) - m2(k,j) + m12(k,j)); by Claim 1 this does not change the optimum
     but produces a more structured solution.
     with_product: include the m12 variables (default: only if eps != 0).
+    types: optional sorted array of types in [0, 1] replacing the uniform grid {j/N} (N is then
+        ignored); both agents draw from the same set.  Local IC remains valid for any sorted
+        one-dimensional type set.
     """
     if with_product is None:
         with_product = eps != 0.0
+    if types is not None:
+        g = np.sort(np.asarray(types, dtype=float)); N = len(g) - 1
+    else:
+        g = np.arange(N + 1) / N
     T = N + 1
-    g = np.arange(T) / N
     P = T * T                                   # profiles
     nvar_per = 3 if with_product else 2
     nv = nvar_per * P + 1                       # + alpha
