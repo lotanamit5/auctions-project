@@ -239,28 +239,24 @@ class FiniteMenuMechanism:
         return self.welfare(x, y) / first_best(x, y, self.eps)
 
     def exact_ratio(self):
-        """Exact infimum of the ratio over the triangle x >= y, and the point attaining it."""
+        """Exact infimum of the ratio over the triangle x >= y, and the point attaining it.
+
+        Vectorised: all cells (I_j x I_k of the choice intervals, further cut by the OPT kinks
+        x - y = +-eps) are enumerated at once; candidate points are the cell corners and the
+        crossings with x - y = eps, evaluated just inside the cell."""
         eps = self.eps
         br = self.breaks
-        cuts = sorted(set(np.concatenate([br, np.clip(br + eps, 0, 1), np.clip(br - eps, 0, 1), [0.0, 1.0]])))
-        best = (np.inf, None)
-        for ia in range(len(cuts) - 1):
-            for ib in range(len(cuts) - 1):
-                xa, xb, ya, yb = cuts[ia], cuts[ia + 1], cuts[ib], cuts[ib + 1]
-                if xb <= ya + 1e-15:
-                    continue
-                # vertices of the rectangle clipped to x >= y; add crossings with x - y = eps
-                pts = [(xa, ya), (xb, ya), (xa, yb), (xb, yb)]
-                for (p, q) in [(xa, ya), (xb, ya), (xa, yb), (xb, yb)]:
-                    pts.append((min(max(q + eps, xa), xb), q))   # x = y + eps at fixed y
-                    pts.append((p, min(max(p - eps, ya), yb)))   # y = x - eps at fixed x
-                pts = [(p, q) for (p, q) in pts if p >= q - 1e-15]
-                # evaluate just inside the cell (choices are constant on open intervals)
-                for (p, q) in pts:
-                    pp = min(max(p, xa + 1e-12), xb - 1e-12); qq = min(max(q, ya + 1e-12), yb - 1e-12)
-                    if pp < qq:
-                        continue
-                    r = float(self.ratio(pp, qq))
-                    if r < best[0]:
-                        best = (r, (float(p), float(q)))
-        return best
+        cuts = np.unique(np.clip(np.concatenate([br, br + eps, br - eps, [0.0, 1.0]]), 0, 1))
+        xa, xb = cuts[:-1], cuts[1:]
+        XA, YA = np.meshgrid(xa, xa, indexing="ij"); XB, YB = np.meshgrid(xb, xb, indexing="ij")
+        keep = (XB > YA + 1e-15).ravel()
+        XA, XB, YA, YB = XA.ravel()[keep], XB.ravel()[keep], YA.ravel()[keep], YB.ravel()[keep]
+        P, Q = [], []
+        for (p, q) in ((XA, YA), (XB, YA), (XA, YB), (XB, YB)):
+            P += [p, np.clip(q + eps, XA, XB), p]; Q += [q, q, np.clip(p - eps, YA, YB)]
+        P = np.concatenate(P); Q = np.concatenate(Q)
+        XA6 = np.tile(XA, 12); XB6 = np.tile(XB, 12); YA6 = np.tile(YA, 12); YB6 = np.tile(YB, 12)
+        pp = np.clip(P, XA6 + 1e-12, XB6 - 1e-12); qq = np.clip(Q, YA6 + 1e-12, YB6 - 1e-12)
+        ok = pp >= qq
+        R = self.ratio(pp[ok], qq[ok]); i = int(np.argmin(R))
+        return float(R[i]), (float(P[ok][i]), float(Q[ok][i]))

@@ -115,8 +115,8 @@ the SD-LP (`experiments/sd_lp_curve.py`, notebook 04) bounds every fixed-menu me
 """)
 
 nb.code(r"""
-det = pd.read_csv(DATA / "eps_lip_best.csv").sort_values("eps")
-nes = pd.read_csv(DATA / "eps_lip_best_nested.csv").sort_values("eps")
+det = pd.read_csv(DATA / "eps_lip_best.csv").drop_duplicates("eps", keep="last").sort_values("eps")
+nes = pd.read_csv(DATA / "eps_lip_best_nested.csv").drop_duplicates("eps", keep="last").sort_values("eps")
 lpc = pd.read_csv(DATA / "lp_eps_curve.csv")
 sd = pd.read_csv(DATA / "sd_lp_curve.csv").sort_values("eps")
 Nmax = lpc.N.max(); lpN = lpc[lpc.N == Nmax].sort_values("eps")
@@ -146,8 +146,11 @@ nb.md(r"""
 * The LP upper bound rises quickly with $\varepsilon$ (complementarity makes pooling attractive,
   and pooling is easy to implement truthfully), reaching 1 at $\varepsilon=1$.
 * The best deterministic $\varepsilon$-aware LIP first *improves* (its optimal $a$ falls from
-  2.10 to about 1.3), then falls behind because it cannot pool. Nested LIP takes over for
-  larger $\varepsilon$ and is first best for $\varepsilon\ge1$.
+  2.10 to about 1.7 at $\varepsilon=0.15$), then falls behind because it cannot pool; from
+  $\varepsilon\approx0.7$ on the search hits its upper limit $a=40$, i.e. the LIP family wants
+  to degenerate into take-all (very steep prices $\Rightarrow$ the dictator gets almost
+  everything). Nested LIP takes over for larger $\varepsilon$ and is first best for
+  $\varepsilon\ge1$.
 * The fixed-menu upper bound (dashed) is far below the SP bound for intermediate $\varepsilon$:
   a menu mechanism cannot both pool when agents agree and split when they disagree. The LIP
   variants are close to the *dictatorial* optimum; the large remaining gap is the **price of
