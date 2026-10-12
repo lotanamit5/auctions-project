@@ -1,0 +1,13 @@
+numpy
+scipy
+matplotlib
+sympy
+pandas
+highspy
+jupyter
+nbformat
+nbconvert
+nbclient
+ipykernel
+pypdf
+pytest
