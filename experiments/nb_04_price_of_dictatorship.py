@@ -100,6 +100,7 @@ $d(x)=\tfrac12[D(x)-D(1-x)]$ fits in $[-1,1]$ and its shares lie in $[0,1]$. Ful
 
 nb.code(r"""
 from core.menu import optimal_sd_choice, optimal_sd_menu, steepest_chain_D
+opt = json.loads((DATA / "lip_alpha_opt.json").read_text())
 x = np.linspace(0, 1, 1001)
 m1, m2 = optimal_sd_choice(x); q1, q2 = lip.bundle_additive(x, opt["a_star"])
 fig, ax = plt.subplots(1, 3, figsize=(15, 4.3))
