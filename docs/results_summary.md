@@ -6,7 +6,7 @@
 |---|---|---|
 | LIP(2) bracket | [0.8281462, 0.8281472] | lip_alpha_opt.json, nb 01 |
 | a*, alpha* | 2.1013, 0.82939 | lip_alpha_opt.json, nb 01 |
-| SP-LP by N | 10: 0.86415, 20: 0.85017, 30: 0.84537, 40: 0.84285, 50: 0.84123, 60: 0.84015, 80: 0.83881, 100: 0.83797, 120: 0.83741, 150: 0.83685 | lp_convergence_eps0.csv, nb 01 |
+| SP-LP by N | 10: 0.86415, 20: 0.85017, 30: 0.84537, 40: 0.84285, 50: 0.84123, 60: 0.84015, 80: 0.83881, 100: 0.83797, 120: 0.83741, 150: 0.83685, 200: 0.83628 | lp_convergence_eps0.csv, nb 01 |
 | fixed-menu optimum | 5/6 exactly (Theorems A, C) | theory/03, nb 04 |
 | Theorem-C menu discretised | 50 grid-menu: 0.81967, 100 grid-menu: 0.82645, 200 grid-menu: 0.82988, 300 grid-menu: 0.83102, 400 grid-menu: 0.83163, 600 grid-menu: 0.83218; closed-form menu 8001 items: 0.83328 | sd_continuum.csv, nb 04 |
 

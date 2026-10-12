@@ -40,8 +40,8 @@ on the type set {0, ½, 1}, e.g. by the menu {(1,0), (½,½), (0,1)}.
   mixture of two one-sided rules is at most 5/6 ≈ 0.8333-competitive.
 - LIP(a*) achieves 0.82939 (certified), and the best menu mechanism is exactly 5/6
   (Theorem C): LIP is within 0.004 of the best possible dictatorial rule.
-- The LP over *all* strategy-proof mechanisms gives ≤ 0.8368 (N = 150; extrapolating to
-  ≈ 0.8346), strictly above 5/6. So the LP-optimal mechanisms must genuinely use both reports
+- The LP over *all* strategy-proof mechanisms gives ≤ 0.8363 (N = 200; extrapolating to
+  ≈ 0.8345), strictly above 5/6. So the LP-optimal mechanisms must genuinely use both reports
   jointly; any further improvement over LIP of more than 0.004 has to come from non-dictatorial
   designs.
 - 5/6 *is* attained on the continuous type space: see Theorem C below (closed-form menu). The

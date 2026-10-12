@@ -13,7 +13,7 @@ common complementarity parameter `eps`.
 
 Headline results (details and proofs in `docs/theory/`):
 
-* the paper's 0.841 upper bound is a grid artefact — the same LP gives ≤ 0.8368 at N = 150;
+* the paper's 0.841 upper bound is a grid artefact — the same LP gives ≤ 0.8363 at N = 200;
   LIP(2) is certified in [0.8281462, 0.8281472]; the best LIP parameter is a* ≈ 2.1013 (0.82939);
 * **every fixed-menu (swap-dictatorial / increasing-price) mechanism is at most 5/6-competitive,
   and 5/6 is attained** by an explicit menu (Theorems A, C);

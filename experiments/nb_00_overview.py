@@ -37,7 +37,7 @@ price schedule $f(t)=at+b$, and gives the loser what is left.
 | LIP(2) | $\ge0.828$, $\le0.829$ | $\alpha(2)\in[0.8281462,0.8281472]$ (adaptive certified bracket) |
 | best LIP(a) | — | $a^\star=2.1013$, $\alpha^\star=0.82939$; $\alpha(a)=\min\{\theta(a),\beta(a)\}$ with $\beta$ in closed form |
 | any fixed-menu (swap-dictatorial, incl. all increasing-price) mechanism | — | **exactly $5/6=0.8333$**: four-line upper bound (Theorem A), attained by an explicit closed-form menu (Theorem C) |
-| any strategy-proof mechanism | $\le0.841$ (LP, $N=50$) | the LP value *decreases* with $N$: $\le0.8368$ ($N=150$), extrapolating to $\approx0.8346$; small explicit certificates |
+| any strategy-proof mechanism | $\le0.841$ (LP, $N=50$) | the LP value *decreases* with $N$: $\le0.8363$ ($N=200$), extrapolating to $\approx0.8345$; small explicit certificates |
 
 So the hierarchy is pinned down to within a percent: LIP $0.8294 <$ menus $= 0.8333 \le$ all SP $\lesssim 0.835$.
 
@@ -103,7 +103,7 @@ nb.md(r"""
 1. A strategy-proof mechanism approaching the SP-LP bound for $0<\varepsilon<1$: SMD closes
    part of the gap (0.900 vs 0.951 at $\varepsilon=\tfrac12$); the LP-optimal mechanisms use smooth,
    type-dependent pooling probabilities whose off-grid incentive compatibility is delicate.
-2. The limit of the Theorem-1 LP as $N\to\infty$ ($\approx0.8346$) in closed form, and whether a
+2. The limit of the Theorem-1 LP as $N\to\infty$ ($\approx0.8345$) in closed form, and whether a
    non-dictatorial mechanism beats $5/6$ in the additive model.
 3. Proving that LIP's worst case always lies on the edge or the anti-diagonal.
 4. Substitutes with free disposal (notebook 06 is only a sketch); three or more items with $\varepsilon$.

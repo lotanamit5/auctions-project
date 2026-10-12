@@ -56,5 +56,5 @@ of ∂S/∂y away from the lines; plausible but not done).
 ## The LP upper bound depends on the grid
 
 The LP of Theorem 1 restricts types to {j/N}. Its value is an upper bound for every N and
-decreases with N (0.8429 at N = 40, 0.8412 at 50, 0.8380 at 100, 0.8374 at 120, ...). The
+decreases with N (0.8429 at N = 40, 0.8412 at 50, 0.8380 at 100, 0.8368 at 150, 0.8363 at 200; extrapolating to ≈ 0.8345). The
 paper's 0.841 is therefore just the N = 50 instance; see notebook 01 for the extrapolation.

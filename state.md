@@ -12,7 +12,7 @@ Start reading at `notebooks/00_overview.ipynb`; all headline numbers with their 
 
 Additive model (eps = 0)
 - Replication: LP N=50 → 0.841225 (paper 0.841); LIP(2) ∈ [0.8281462, 0.8281472]; Figure 1.
-- The LP bound decreases with N (0.8368 at N=150, →≈0.8346): 0.841 is an N=50 artefact.
+- The LP bound decreases with N (0.8363 at N=200, →≈0.8345): 0.841 is an N=50 artefact.
 - a = 2 is not optimal: a* = 2.1013, alpha* = 0.82939; alpha(a) = min(theta(a), beta(a)),
   beta in closed form (theory/01).
 - **Theorem A**: any fixed-menu (swap-dictatorial, incl. all increasing-price) mechanism — in
@@ -38,7 +38,7 @@ Complementarity model (eps > 0), theory/02–04
 ## Open
 1. Closed-form SP mechanism approaching the LP bound for 0 < eps < 1 (gap 0.90 vs 0.95 at ½).
 2. Analytic proof that LIP's worst case lies on the edge or anti-diagonal.
-3. Limit of the Theorem-1 LP as N → ∞ (≈ 0.8346) in closed form.
+3. Limit of the Theorem-1 LP as N → ∞ (≈ 0.8345) in closed form.
 
 ## Code map
 `core/lip.py` (LIP, brackets), `core/lp.py` (SP-LP, SD-LP, split-menu LP), `core/eps.py`
