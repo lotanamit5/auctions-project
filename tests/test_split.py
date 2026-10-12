@@ -21,3 +21,9 @@ def test_smd_beats_menus_for_large_eps():
 def test_values():
     assert abs(float(split.ratio_closed_form(0.5)) - 0.9) < 1e-12
     assert abs(float(split.ratio_closed_form(0.5, s=0.0)) - 2 * 1.5 / 3.5) < 1e-12
+
+
+def test_ic_for_all_s():
+    for e in (0.2, 0.5, 0.8):
+        for s in (0.0, 0.5, 1.0):
+            assert split.ic_violation(e, s=s, n=41) < 1e-12
