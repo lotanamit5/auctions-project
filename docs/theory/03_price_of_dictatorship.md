@@ -44,9 +44,9 @@ on the type set {0, ½, 1}, e.g. by the menu {(1,0), (½,½), (0,1)}.
   ≈ 0.8346), strictly above 5/6. So the LP-optimal mechanisms must genuinely use both reports
   jointly; any further improvement over LIP of more than 0.004 has to come from non-dictatorial
   designs.
-- Whether 5/6 is attained on the continuous type space is open; the grid-optimal menus of the
-  SD-LP only achieve 0.826 when used for all types, and a direct optimiser over finite menus
-  (`experiments/menu_opt.py`) is used to search for better continuum menus.
+- 5/6 *is* attained on the continuous type space: see Theorem C below (closed-form menu). The
+  grid-optimal menus of the SD-LP approach it from below (0.8197, 0.8264, 0.8299, 0.8310,
+  0.8316, 0.8322 for N = 50 … 600) and beat LIP from N = 200 on.
 
 ## With complementarities
 
@@ -95,8 +95,9 @@ two-item menu {(s*, 0), (0, s*)} ("the dictator takes s* of her preferred item, 
 to the other agent") attains ρ_B on the whole continuum: same-side profiles have |x−y| ≤ ½ ≤ ε
 so the first best is 1+ε there, and on opposite sides the ratio decreases in x − y. For
 ε < ½ that menu fails near (1, ½⁺) (first best 3/2 but both take item 1), and the grid-optimal
-menus add a balanced pooling lottery for middle types; their exact continuum value is
-computed in notebook 04. Between ε = 0.02 and 0.2 the grid value lies slightly below
+menus add a balanced pooling lottery for middle types. Their exact continuum values: at
+ε = 0.4 the N = 200 grid menu (25 items) attains ρ_B = 35/41 exactly; at ε = ¼ the N = 200
+menu gives 0.8661 against ρ_B = 20/23 = 0.8696 (notebook 04, `results/data/sd_continuum.csv`). Between ε = 0.02 and 0.2 the grid value lies slightly below
 min{ρ_A, ρ_B} (e.g. 0.86545 vs 0.86667 at ε = 0.1), so finer type sets matter there.
 
 **Interpretation.** With complementarities the optimal dictator is *modest*: she takes only a
