@@ -204,22 +204,29 @@ class FiniteMenuMechanism:
         return m2 + self.eps * m12, m1 - m2
 
     def _envelope(self, tol=1e-12):
-        """Intervals [breaks[i], breaks[i+1]] with the index of the chosen item on each."""
+        """Upper envelope of the K utility lines on [0, 1]: at most K segments.
+        Walk from x = 0: the current best line is overtaken first by the line (with larger
+        slope) whose crossing point is smallest."""
         c, s = self._utility_lines()
-        xs = [0.0, 1.0]
-        n = len(c)
-        for i in range(n):
-            for j in range(i + 1, n):
-                if abs(s[i] - s[j]) > tol:
-                    x = (c[j] - c[i]) / (s[i] - s[j])
-                    if 0 < x < 1:
-                        xs.append(float(x))
-        xs = np.unique(np.round(xs, 12))
-        choice = []
-        for a, b in zip(xs[:-1], xs[1:]):
-            mid = 0.5 * (a + b)
-            choice.append(int(np.argmax(c + mid * s)))
-        return xs, np.array(choice)
+        x = 0.0
+        cur = int(np.argmax(c + 0.0 * s + 1e-15 * s))      # best at 0 (ties -> larger slope below)
+        best0 = c + 0.0 * s
+        cand = np.flatnonzero(best0 >= best0.max() - tol)
+        cur = int(cand[np.argmax(s[cand])])
+        xs, choice = [0.0], []
+        while True:
+            choice.append(cur)
+            with np.errstate(divide="ignore", invalid="ignore"):
+                xc = (c[cur] - c) / (s - s[cur])            # where line i overtakes cur
+            mask = (s > s[cur] + tol) & (xc > x + tol) & (xc < 1 - tol)
+            if not mask.any():
+                xs.append(1.0); break
+            i = int(np.flatnonzero(mask)[np.argmin(xc[mask])])
+            x = float(xc[i]); xs.append(x)
+            # among lines crossing at (almost) the same point take the largest slope
+            near = np.flatnonzero(mask & (np.abs(xc - x) < 1e-9))
+            cur = int(near[np.argmax(s[near])])
+        return np.array(xs), np.array(choice)
 
     def chosen(self, x):
         x = np.asarray(x, float)

@@ -58,3 +58,49 @@ the continuum (exact evaluation, `core.menu.FiniteMenuMechanism`). The gap to th
 (≈ 0.95 at ε = ½) shows that with complementarities dictatorship is far more costly than in
 the additive model: pooling when agents agree and splitting when they disagree needs both
 reports.
+
+## Theorem B (complementarities): closed-form bounds on fixed-menu mechanisms
+
+Branch welfare when the dictator of type x picks the lottery with moments m = (m1, m2, m12)
+and the other agent has type y:
+
+    B(x, y, m) = (1+ε) + (x − y − ε) m1 + (y − x − ε) m2 + 2ε m12,   m12 ≤ min(m1, m2).
+
+**(i) Extreme profiles.** For any menus, using only the profiles (1,1), (0,0) (first best
+1+ε) and (1,0) (first best 2): write m(1) = (a1, a2, a12), m(0) = (c1, c2, c12).
+W(1,1) = (1+ε) − ε(a1 + a2) + 2ε a12 ≤ (1+ε) − ε|a1 − a2|, similarly W(0,0), and
+W(1,0) = ½[B(1,0,m(1)) + B(0,1,m(0))] = (1+ε) + ½(1−ε)(a1 + c2) − ½(1+ε)(a2 + c1) + ε(a12 + c12).
+With s := the dictator's net share of her preferred item, the best trade-off between
+W(1,1) = (1+ε) − εs and W(1,0) = (1+ε) + (1−ε)s is at
+
+    s* = (1 − ε²)/(1 + 2ε − ε²),      ratio  ρ_B(ε) = (1+ε)/(1 + 2ε − ε²).
+
+(A short LP-dual check: the weights on the three profiles are λ(0,0) = λ(1,1) = ε s*/..., no
+incentive constraint is used; `lp.solve_sd_lp(types=[0,1/2,1])` returns exactly ρ_B for
+ε ≥ 0.3.)  Values: 20/23 (ε = ¼), 6/7 (½), 28/31 (¾).
+
+**(ii) Middle type.** The four-profile argument of Theorem A with the ε terms: the middle
+type's two branches sum to 2(1+ε) − 2ε(r1 + r2) + 4ε r12 ≤ 2(1+ε), and each extreme type's
+cross branch is at most (1+ε) + max(0, ½ − ε). With first best 3/2 on all four profiles
+(ε ≤ ½):
+
+    ρ_A(ε) = (5 + 2ε)/6.
+
+**Theorem B.** Every swap-dictatorial mechanism (any menus, lotteries allowed, no IC needed)
+is at most min{ρ_A(ε), ρ_B(ε)}-competitive. ρ_A binds for ε ≲ 0.17, ρ_B for ε ≳ 0.17.
+
+**Tightness.** The SD-LP on grids up to N = 200 equals ρ_B(ε) for all ε ≥ 0.3. For ε ≥ ½ the
+two-item menu {(s*, 0), (0, s*)} ("the dictator takes s* of her preferred item, the rest goes
+to the other agent") attains ρ_B on the whole continuum: same-side profiles have |x−y| ≤ ½ ≤ ε
+so the first best is 1+ε there, and on opposite sides the ratio decreases in x − y. For
+ε < ½ that menu fails near (1, ½⁺) (first best 3/2 but both take item 1), and the grid-optimal
+menus add a balanced pooling lottery for middle types; their exact continuum value is
+computed in notebook 04. Between ε = 0.02 and 0.2 the grid value lies slightly below
+min{ρ_A, ρ_B} (e.g. 0.86545 vs 0.86667 at ε = 0.1), so finer type sets matter there.
+
+**Interpretation.** With complementarities the optimal dictator is *modest*: she takes only a
+fraction s* < 1 of her favourite item (3/7 at ε = ½, 7/31 at ε = ¾), because the other agent's
+complementarity gain from keeping both items is worth more than her own extra share. As ε → 1,
+s* → 0 and the mechanism becomes equal split... yet take-all is first best at ε = 1: the
+fixed-menu class is discontinuous at ε = 1 (ρ_B(1) = 1 is attained by s* = 0 only as a limit;
+at ε = 1 the balanced pooling lottery, which is in the menu class, gives ratio 1 directly).
