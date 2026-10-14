@@ -63,24 +63,45 @@ $m$ (about $5.0$ at $m=3$, $9.4$ at $m=100$).}
 
 \subsection{Theorem 1: the LP upper bound}
 
-\emph{Reminder.} Types restricted to $\{j/N\}$, $N=50$; the best strategy-proof mechanism on that grid
-is a linear program in the shares $p^r_{jk}$, maximising $\alpha$.
+\emph{Reminder.} The argument of Theorem~1 has three steps. (i) Restrict the type space to the
+grid $\{j/N\}$: a mechanism only has to serve fewer types, so the best achievable ratio on the
+grid is at least the best achievable ratio in general, and any upper bound proved on the grid is
+valid in general. (ii) On the grid a mechanism is a finite table: for every report profile
+$(j,k)$ the shares $p^1_{jk},p^2_{jk}$ of the two items given to agent~1. (iii) Strategy-proofness
+and $\alpha$-competitiveness are linear inequalities in the table entries, so the best mechanism
+on the grid is a linear program maximising $\alpha$; the paper solves it for $N=50$.
 
-\paragraph{What we did.} We built the same LP for arbitrary $N$ (\texttt{lp.solve\_sp\_lp}). Two
-implementation choices are not in the paper and deserve a justification:
-\begin{enumerate}
-\item \emph{Local incentive constraints.} The paper's formulation has $O(N^3)$ constraints (every
-  type against every misreport). Because a type's utility $x\,p^1+(1-x)\,p^2$ is \emph{affine}
-  in the one-dimensional type $x$, incentive compatibility for all pairs is equivalent to the
-  $O(N^2)$ constraints between \emph{adjacent} types: adding the two adjacent constraints for
-  $x_j,x_{j+1}$ yields monotonicity of $p^1-p^2$ in the report, and monotonicity plus adjacent
-  constraints imply every non-adjacent one by a telescoping argument. We verified on
-  $N\le20$ that the full and the reduced LP have identical values (to $10^{-7}$), then used the
-  reduced form, which is what makes $N=200$ feasible.
-\item \emph{Symmetry.} We optionally impose the agent and item symmetries of Definition~2 as
-  equalities. By the paper's Claim~1 this does not change the optimum (verified numerically),
-  and it makes the solver several times faster and the solutions more structured.
-\end{enumerate}
+\paragraph{What we did.} We built the same LP for arbitrary $N$ (\texttt{lp.solve\_sp\_lp}).
+The costly part is strategy-proofness: ``no type gains from any misreport against any opponent
+report'' is one inequality per triple (true type, misreport, opponent), i.e.\ $(N+1)^3$
+inequalities per agent, about $8\cdot10^6$ at $N=200$. We reduce this to $O(N^2)$ by keeping only
+the inequalities between \emph{adjacent} types: type $j$ does not want to report $j+1$, and type
+$j+1$ does not want to report $j$. This is not an approximation, for the following reason.
+
+Fix the opponent's report $k$. A type $x$ that reports $j'$ obtains
+$U(x;j')=x\,p^1_{j'k}+(1-x)\,p^2_{j'k}$, which is \emph{affine in the type} $x$ with slope
+$d_{j'}=p^1_{j'k}-p^2_{j'k}$. Two facts follow. First, adding the two adjacent inequalities for
+the pair $(j,j+1)$ gives $(x_{j+1}-x_j)(d_{j+1}-d_j)\ge0$: the slopes are non-decreasing in the
+report, i.e.\ a higher report yields more of item~1 relative to item~2 (this is implied, not
+assumed). Second, with non-decreasing slopes a type that does not gain from moving one step in
+some direction does not gain from moving further in that direction either: for $j<j''$,
+\[
+U(x_j;j'')=U(x_{j+1};j'')+(x_j-x_{j+1})\,d_{j''}
+\le U(x_{j+1};j+1)+(x_j-x_{j+1})\,d_{j+1}=U(x_j;j+1)\le U(x_j;j),
+\]
+using, in order, the (inductively established) truthfulness of $x_{j+1}$ against $j''$, the facts
+$x_j-x_{j+1}<0$ and $d_{j''}\ge d_{j+1}$, and the adjacent inequality for $x_j$. The symmetric
+chain covers $j''<j$. This is the single-crossing argument familiar from Myerson's lemma:
+with utilities linear in a one-dimensional type, strategy-proofness is equivalent to
+monotonicity plus local constraints. The same holds in the complementarity model of Part~B,
+where utilities remain affine in the type.
+
+We kept the paper's full formulation behind a flag (\texttt{full\_ic=True}) and checked on
+grids up to $N=20$ (with and without $\varepsilon$) that both formulations return the same value
+to $10^{-7}$; a further test takes the mechanism returned by the reduced LP and verifies
+truthfulness against \emph{every} misreport, not only adjacent ones. A second, minor choice is to
+impose the agent and item symmetries of the paper's Definition~2 as equalities; by Claim~1 this
+does not change the optimum (also verified) and it speeds up the solver several-fold.
 With $N=50$ the LP returns $\alpha=0.841225$, the paper's $0.841$.
 
 \paragraph{Beyond the paper: the bound depends on the grid.} Restricting the type space only
