@@ -43,7 +43,18 @@ not say which $N$ was used, so we cannot tell whether its own computation was le
 merely rounded for presentation; the refinement is a computational convenience, not a
 correction.) We also reproduced Example~2 ($0.717$), the regime thresholds of Claim~5
 ($0.119$, $0.881$) and Figure~1 for $m=3,\ldots,100$ items (Theorem~3; intrinsic value $\theta(a)$
-bracketed on a grid of $2000$ points, $a$ scanned on $0.01,\ldots,20$ as in the paper).
+bracketed on a grid of $2000$ points, $a$ scanned on $0.01,\ldots,20$ as in the paper); our
+version is Figure~\ref{fig:paper_fig1}.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.8\linewidth]{../results/figures/01_figure1_m_items.png}
+\caption{Reproduction of the paper's Figure~1 (Theorem~3): for each $m=3,\ldots,100$ the LIP
+parameter $a$ that maximises the lower bound $\frac{a+b}{a+2mb}\,\underline{\theta}(a)$ is chosen
+from $\{0.01,\ldots,20\}$; the lower curve is that bound (an achieved competitive ratio), the
+upper curve the intrinsic value $\overline{\theta}(a)$ at the same $a$. The best $a$ grows with
+$m$ (about $5.0$ at $m=3$, $9.4$ at $m=100$).}
+\label{fig:paper_fig1}
+\end{figure}
 
 \subsection{Theorem 1: the LP upper bound}
 
