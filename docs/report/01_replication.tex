@@ -1,0 +1,131 @@
+% Section 1 of the Part B report: replication of Guo & Conitzer (2010).
+% Paste into main.tex after the Part A sections.  Figure: results/figures/01_alpha_of_a.png.
+
+\section{Replication of the paper's results}
+
+\subsection{Why replicate}
+
+Both headline numbers of the paper are computational. Theorem~1 ($\alpha\le0.841$ for every
+strategy-proof mechanism) is the value of a linear program that the authors solved for one grid
+size ($N=50$) without a dual certificate, and Theorem~2 ($0.828\le\alpha(\mathrm{LIP}(2))\le0.829$)
+is a numerical sandwich evaluated ``for sufficiently large $N$'' whose $N$ is not reported. Neither
+the code nor the intermediate quantities are available. Before extending the model we therefore
+re-implemented every computation from the paper's formulas, checked that the stated numbers are
+reproduced, and then asked the two questions the paper leaves open: how the LP bound depends on
+the grid, and whether the price parameter $a=2$ is a good choice. All code is in the repository
+(\texttt{core/lip.py}, \texttt{core/lp.py}), every number below is produced by
+\texttt{notebooks/01\_replication.ipynb} and guarded by automated tests (\texttt{tests/}).
+
+\subsection{Tools}
+
+Python~3.14 with NumPy~2.5 and SciPy~1.18. Linear programs are solved with the HiGHS dual
+simplex solver through \texttt{scipy.optimize.linprog} (sparse constraint matrices, default
+tolerances $10^{-7}$), which also returns the dual multipliers we use in Section~2. The
+one-dimensional optimisation over $a$ uses bounded Brent search
+(\texttt{scipy.optimize.minimize\_scalar}). Everything else is vectorised NumPy; no Monte Carlo
+sampling is used anywhere.
+
+\subsection{Theorem 2: the competitive ratio of LIP(2)}
+
+\paragraph{What the paper does.} With $f(t)=at+b$, $b=a/(e^a-1)$ and $Q(t)=\ln(1+at/b)/a$, Claim~5
+gives the dictator's purchases in closed form, and $\alpha(a)=\min_{1\ge x\ge y\ge0}S(x,y)/(x+1-y)$.
+The paper brackets this minimum on a uniform grid of step $h=1/N$: an upper bound from the exact
+ratio at grid points, and a lower bound by replacing each of the four non-negative terms of
+$S$ by its value at the worst corner of each cell (using that $p_1$ is increasing in $x$ and
+decreasing in $y$, $p_2$ the reverse) and the denominator by its cell maximum.
+
+\paragraph{What we did.} We implemented exactly this bracket (\texttt{lip.sandwich}) and
+verified that a uniform grid reproduces the stated numbers only slowly: the upper bound is
+$0.82815$ already at $N=50$, but the lower bound reaches $0.828$ only for $N\gtrsim 2\cdot10^4$,
+i.e. $\sim4\cdot10^8$ cells. We therefore added \emph{adaptive refinement}
+(\texttt{lip.sandwich\_adaptive}, \texttt{core/bracket.py}): starting from a $64\times64$ grid, a
+cell is split into four only while its lower bound is below the best exact value found so far
+minus a tolerance. Since every point of the triangle always lies in some leaf cell, the minimum
+of the leaf lower bounds is a valid bound over the whole domain, exactly as in the paper's
+argument. With tolerance $10^{-6}$ this needs about $2\cdot10^4$ cells and 30\,ms, and gives
+\[
+0.8281462\;\le\;\alpha(2)\;\le\;0.8281472,
+\]
+with the worst profile at $(x,y)\approx(0.4074,0)$: agent~2 wants only item~2, agent~1 mildly
+prefers item~2 and, as dictator, buys most of it. The paper's $[0.828,0.829]$ is confirmed and
+sharpened. We also reproduced Example~2 ($0.717$), the regime thresholds of Claim~5
+($0.119$, $0.881$) and Figure~1 for $m=3,\ldots,100$ items (Theorem~3; intrinsic value $\theta(a)$
+bracketed on a grid of $2000$ points, $a$ scanned on $0.01,\ldots,20$ as in the paper).
+
+\subsection{Theorem 1: the LP upper bound}
+
+\paragraph{What the paper does.} Types are restricted to $\{j/N\}$, $N=50$; variables
+$p^r_{jk}\in[0,1]$ are agent~1's share of item $r$ at report profile $(j,k)$; strategy-proofness
+and $\alpha$-competitiveness are linear constraints; the LP maximises $\alpha$.
+
+\paragraph{What we did.} We built the same LP for arbitrary $N$ (\texttt{lp.solve\_sp\_lp}). Two
+implementation choices are not in the paper and deserve a justification:
+\begin{enumerate}
+\item \emph{Local incentive constraints.} The paper's formulation has $O(N^3)$ constraints (every
+  type against every misreport). Because a type's utility $x\,p^1+(1-x)\,p^2$ is \emph{affine}
+  in the one-dimensional type $x$, incentive compatibility for all pairs is equivalent to the
+  $O(N^2)$ constraints between \emph{adjacent} types: adding the two adjacent constraints for
+  $x_j,x_{j+1}$ yields monotonicity of $p^1-p^2$ in the report, and monotonicity plus adjacent
+  constraints imply every non-adjacent one by a telescoping argument. We verified on
+  $N\le20$ that the full and the reduced LP have identical values (to $10^{-7}$), then used the
+  reduced form, which is what makes $N=200$ feasible.
+\item \emph{Symmetry.} We optionally impose the agent and item symmetries of Definition~2 as
+  equalities. By the paper's Claim~1 this does not change the optimum (verified numerically),
+  and it makes the solver several times faster and the solutions more structured.
+\end{enumerate}
+With $N=50$ the LP returns $\alpha=0.841225$, the paper's $0.841$.
+
+\paragraph{New finding: the bound depends on the grid.} Restricting the type space only
+removes constraints, so the LP value is a valid upper bound for \emph{every} $N$, and the
+smallest value over $N$ is the one to quote. It decreases monotonically:
+$0.8429$ ($N=40$), $0.8412$ ($50$), $0.8388$ ($80$), $0.8380$ ($100$), $0.8368$ ($150$),
+$0.8363$ ($200$). A least-squares fit $\alpha_N\approx\alpha_\infty+c_1/N+c_2/N^2$ over $N\ge50$
+gives $\alpha_\infty\approx0.8345$ (an extrapolation, not a bound). The paper's $0.841$ is thus
+an artefact of $N=50$; the true gap between LIP and the best strategy-proof mechanism is less
+than half of what the paper states.
+
+\subsection{New finding: $a=2$ is not the best LIP mechanism}
+
+The paper evaluates LIP only at $a=2$ and does not motivate the choice. Scanning $a$ with the
+certified bracket (step $0.1$ on $[0.5,6]$, then Brent search on $[2.0,2.2]$) gives
+\[
+a^\star\approx2.1013,\qquad \alpha(a^\star)\approx0.82939\;>\;0.82815=\alpha(2).
+\]
+Figure~\ref{fig:alpha_a} explains the shape. Two restrictions of the minimisation give
+rigorous upper bounds on $\alpha(a)$: along the anti-diagonal $x+y=1$ the ratio is the paper's
+own intrinsic value $\theta(a)$ (Claim~8), and along the edge $y=0$ Lemma~2 gives
+$Q(t)-Q(1-t)=\ln(\tfrac{x}{1-x})/a$, hence the closed form
+\[
+\beta(a)=\min_{b/(a+2b)\le x\le(a+b)/(a+2b)}\frac{1+\tfrac x2\big(1+\tfrac1a\ln\tfrac{x}{1-x}\big)}{1+x}.
+\]
+Numerically $\alpha(a)=\min\{\theta(a),\beta(a)\}$ to $10^{-6}$ on the whole scan: the edge
+branch binds for $a<a^\star$, the anti-diagonal for $a>a^\star$, and the optimum is where the
+two cross. Steeper prices (larger $a$) make the dictator buy a more balanced bundle, which helps
+on the edge and hurts on the anti-diagonal.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{../results/figures/01_alpha_of_a.png}
+\caption{Competitive ratio of LIP($a$) for additive valuations (certified brackets of width
+$\le10^{-6}$, black) and the paper's intrinsic value $\theta(a)$ (dashed). The paper's $a=2$ (grey)
+and the optimum $a^\star=2.1013$ (red). Right: zoom on the crossing of the two worst-case
+branches.}
+\label{fig:alpha_a}
+\end{figure}
+
+\subsection{Assumptions and caveats}
+
+\begin{itemize}
+\item \emph{Rigour of ``certified''.} The brackets are rigorous as mathematical inequalities but
+  are evaluated in IEEE double precision, not interval arithmetic; rounding errors are of order
+  $10^{-15}$, far below the reported $10^{-6}$ widths.
+\item \emph{Grid parity.} LP values for small $N$ depend on whether particular rationals lie on
+  the grid; we only draw conclusions from the monotone trend over $N\ge40$.
+\item \emph{Extrapolation.} $\alpha_\infty\approx0.8345$ is a curve fit; the only proven
+  statement is $\alpha\le0.8363$ ($N=200$).
+\item \emph{Two worst-case lines.} That the minimiser of $S/(x+1-y)$ always lies on the edge or
+  the anti-diagonal is verified numerically for $a\in[0.5,6]$, not proved; the values
+  $\alpha(a)$ themselves do not depend on this.
+\item \emph{Replication of Figure~1.} The paper's figure is read off visually; our curves agree
+  with it qualitatively (ratios between $0.60$ and $0.73$, decreasing in $m$) but we could not
+  compare individual values.
+\end{itemize}
