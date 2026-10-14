@@ -36,7 +36,7 @@ decreasing in $y$, $p_2$ the reverse) and the denominator by its cell maximum.
 
 \paragraph{What we did.} We implemented exactly this bracket (\texttt{lip.sandwich}) and
 verified that a uniform grid reproduces the stated numbers only slowly: the upper bound is
-$0.82815$ already at $N=50$, but the lower bound reaches $0.828$ only for $N\gtrsim 2\cdot10^4$,
+$0.82818$ at $N=50$ and $0.82815$ from $N=100$ on, but the lower bound reaches $0.828$ only for $N\gtrsim 2\cdot10^4$,
 i.e. $\sim4\cdot10^8$ cells. We therefore added \emph{adaptive refinement}
 (\texttt{lip.sandwich\_adaptive}, \texttt{core/bracket.py}): starting from a $64\times64$ grid, a
 cell is split into four only while its lower bound is below the best exact value found so far
