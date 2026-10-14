@@ -1,0 +1,17 @@
+% Appendix: software used for Part B.  \appendix must appear before this in main.tex.
+\section{Software and solvers}
+\label{app:tools}
+
+Python~3.14 with NumPy~2.5 and SciPy~1.18. Linear programs are solved with the HiGHS dual
+simplex solver through \texttt{scipy.optimize.linprog} (sparse constraint matrices, default
+tolerances $10^{-7}$), which also returns the dual multipliers used in the LP-structure analysis. The
+one-dimensional optimisation over $a$ uses bounded Brent search
+(\texttt{scipy.optimize.minimize\_scalar}). Everything else is vectorised NumPy; no Monte Carlo
+sampling is used anywhere.
+
+Linear programs for the best fixed-menu mechanism (Section on the price of dictatorship) and for the
+split-or-menu mechanisms use the same solver. Certified brackets are evaluated in IEEE double
+precision (not interval arithmetic); rounding errors are of order $10^{-15}$. All experiments are
+scripts in \texttt{experiments/}; each notebook in \texttt{notebooks/} is generated and executed by
+one of them, so every figure and table can be regenerated with a single command. Repository:
+\texttt{github.com/lotanamit5/auctions-project}.

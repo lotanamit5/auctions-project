@@ -15,25 +15,14 @@ reproduced, recorded the unrounded values and grid sizes the paper omits, and th
 two questions the paper leaves open: how the LP bound depends on
 the grid, and whether the price parameter $a=2$ is a good choice. All code is in the repository
 (\texttt{core/lip.py}, \texttt{core/lp.py}), every number below is produced by
-\texttt{notebooks/01\_replication.ipynb} and guarded by automated tests (\texttt{tests/}).
-
-\subsection{Tools}
-
-Python~3.14 with NumPy~2.5 and SciPy~1.18. Linear programs are solved with the HiGHS dual
-simplex solver through \texttt{scipy.optimize.linprog} (sparse constraint matrices, default
-tolerances $10^{-7}$), which also returns the dual multipliers we use in Section~2. The
-one-dimensional optimisation over $a$ uses bounded Brent search
-(\texttt{scipy.optimize.minimize\_scalar}). Everything else is vectorised NumPy; no Monte Carlo
-sampling is used anywhere.
+\texttt{notebooks/01\_replication.ipynb} and guarded by automated tests (\texttt{tests/});
+software and solvers are listed in Appendix~\ref{app:tools}.
 
 \subsection{Theorem 2: the competitive ratio of LIP(2)}
 
-\paragraph{What the paper does.} With $f(t)=at+b$, $b=a/(e^a-1)$ and $Q(t)=\ln(1+at/b)/a$, Claim~5
-gives the dictator's purchases in closed form, and $\alpha(a)=\min_{1\ge x\ge y\ge0}S(x,y)/(x+1-y)$.
-The paper brackets this minimum on a uniform grid of step $h=1/N$: an upper bound from the exact
-ratio at grid points, and a lower bound by replacing each of the four non-negative terms of
-$S$ by its value at the worst corner of each cell (using that $p_1$ is increasing in $x$ and
-decreasing in $y$, $p_2$ the reverse) and the denominator by its cell maximum.
+\emph{Reminder.} $\alpha(a)=\min_{1\ge x\ge y\ge0}S(x,y)/(x+1-y)$; the paper brackets it on a uniform grid of
+step $1/N$ (exact ratio at grid points from above, worst cell corner of each term of $S$ from below,
+using the monotonicity of $p_1,p_2$).
 
 \paragraph{What we did.} We implemented exactly this bracket (\texttt{lip.sandwich}) and
 verified that a uniform grid reproduces the stated numbers only slowly: the upper bound is
@@ -58,9 +47,8 @@ bracketed on a grid of $2000$ points, $a$ scanned on $0.01,\ldots,20$ as in the 
 
 \subsection{Theorem 1: the LP upper bound}
 
-\paragraph{What the paper does.} Types are restricted to $\{j/N\}$, $N=50$; variables
-$p^r_{jk}\in[0,1]$ are agent~1's share of item $r$ at report profile $(j,k)$; strategy-proofness
-and $\alpha$-competitiveness are linear constraints; the LP maximises $\alpha$.
+\emph{Reminder.} Types restricted to $\{j/N\}$, $N=50$; the best strategy-proof mechanism on that grid
+is a linear program in the shares $p^r_{jk}$, maximising $\alpha$.
 
 \paragraph{What we did.} We built the same LP for arbitrary $N$ (\texttt{lp.solve\_sp\_lp}). Two
 implementation choices are not in the paper and deserve a justification:
@@ -79,16 +67,16 @@ implementation choices are not in the paper and deserve a justification:
 \end{enumerate}
 With $N=50$ the LP returns $\alpha=0.841225$, the paper's $0.841$.
 
-\paragraph{New finding: the bound depends on the grid.} Restricting the type space only
+\paragraph{Beyond the paper: the bound depends on the grid.} Restricting the type space only
 removes constraints, so the LP value is a valid upper bound for \emph{every} $N$, and the
 smallest value over $N$ is the one to quote. It decreases monotonically:
 $0.8429$ ($N=40$), $0.8412$ ($50$), $0.8388$ ($80$), $0.8380$ ($100$), $0.8368$ ($150$),
 $0.8363$ ($200$). A least-squares fit $\alpha_N\approx\alpha_\infty+c_1/N+c_2/N^2$ over $N\ge50$
-gives $\alpha_\infty\approx0.8345$ (an extrapolation, not a bound). The paper's $0.841$ is thus
-an artefact of $N=50$; the true gap between LIP and the best strategy-proof mechanism is less
-than half of what the paper states.
+gives $\alpha_\infty\approx0.8345$ (an extrapolation, not a bound). The paper's $0.841$ is the
+$N=50$ value and is correct as a bound; finer grids simply give smaller valid bounds, so the gap
+between LIP and the best strategy-proof mechanism is less than half of what $0.841$ suggests.
 
-\subsection{New finding: $a=2$ is not the best LIP mechanism}
+\subsection{Beyond the paper: $a=2$ is not the best LIP mechanism}
 
 The paper evaluates LIP only at $a=2$ and does not motivate the choice. Scanning $a$ with the
 certified bracket (step $0.1$ on $[0.5,6]$, then Brent search on $[2.0,2.2]$) gives
