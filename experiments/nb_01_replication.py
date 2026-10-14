@@ -20,7 +20,7 @@ first-best welfare at every type profile.
 | Claim in the paper | Our result |
 |---|---|
 | Thm 1: no strategy-proof mechanism beats **0.841** (LP, $N=50$) | reproduced: $0.841225$ — but the value *decreases* with $N$ |
-| Thm 2: LIP(2) is between **0.828 and 0.829** | reproduced and sharpened: $\alpha(2)\in[0.8281462,\,0.8281472]$ |
+| Thm 2: LIP(2) is between **0.828 and 0.829** | reproduced; to seven digits: $\alpha(2)\in[0.8281462,\,0.8281472]$ |
 | Fig. 1: bounds for $m=3\ldots100$ items | reproduced |
 | (implicit) $a=2$ is a good choice | **not optimal**: $a^\star\approx 2.1013$ gives $\alpha^\star\approx 0.82939$ |
 
@@ -206,7 +206,7 @@ best $a$ grows with $m$ — with more items the dictator should face steeper pri
 
 ## Summary
 
-* Every number in the paper is reproduced. The Theorem-2 bracket is tightened to $10^{-6}$ with
+* Every number in the paper is reproduced. The Theorem-2 bracket is stated to $10^{-6}$ with
   adaptive refinement.
 * $a=2$ is slightly sub-optimal; the optimum $a^\star\approx2.1013$ is where the paper's own
   "intrinsic value" curve $\theta(a)$ meets the edge branch $\beta(a)$.

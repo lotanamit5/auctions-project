@@ -5,8 +5,8 @@ Course project (Auction Theory) on
 > M. Guo and V. Conitzer, *Strategy-proof Allocation of Multiple Items between Two Agents
 > without Payments or Priors*, AAMAS 2010. (`reference/paper.pdf`)
 
-Part A (reading report) lives in `proposal/`. Part B — this repository — replicates and sharpens
-the paper's numbers and extends the model to utilities `v z1 + (1-v) z2 + eps z1 z2` with a
+Part A (reading report) lives in `proposal/`. Part B — this repository — replicates the paper's
+numbers (to higher precision) and extends the model to utilities `v z1 + (1-v) z2 + eps z1 z2` with a
 common complementarity parameter `eps`.
 
 **Start with `notebooks/00_overview.ipynb`**, then 01–06. A one-page status is in `state.md`.

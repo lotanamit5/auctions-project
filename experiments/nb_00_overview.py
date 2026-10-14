@@ -12,7 +12,7 @@ nb.md(r"""
 
 Course project (Auction Theory) on **Guo & Conitzer, AAMAS 2010**, *Strategy-proof Allocation of
 Multiple Items between Two Agents without Payments or Priors*. Part A (the reading report) is in
-`proposal/`. Part B — this repository — (i) replicates and sharpens the paper's numbers and
+`proposal/`. Part B — this repository — (i) replicates the paper's numbers (and states them to higher precision) and
 (ii) extends the model with a complementarity term $\varepsilon z_1z_2$ between the two goods.
 
 Everything is reproducible: `core/` holds the code, `tests/` the regression tests, each

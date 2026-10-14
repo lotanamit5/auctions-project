@@ -11,7 +11,8 @@ size ($N=50$) without a dual certificate, and Theorem~2 ($0.828\le\alpha(\mathrm
 is a numerical sandwich evaluated ``for sufficiently large $N$'' whose $N$ is not reported. Neither
 the code nor the intermediate quantities are available. Before extending the model we therefore
 re-implemented every computation from the paper's formulas, checked that the stated numbers are
-reproduced, and then asked the two questions the paper leaves open: how the LP bound depends on
+reproduced, recorded the unrounded values and grid sizes the paper omits, and then asked the
+two questions the paper leaves open: how the LP bound depends on
 the grid, and whether the price parameter $a=2$ is a good choice. All code is in the repository
 (\texttt{core/lip.py}, \texttt{core/lp.py}), every number below is produced by
 \texttt{notebooks/01\_replication.ipynb} and guarded by automated tests (\texttt{tests/}).
@@ -47,8 +48,11 @@ argument. With tolerance $10^{-6}$ this needs about $2\cdot10^4$ cells and 30\,m
 0.8281462\;\le\;\alpha(2)\;\le\;0.8281472,
 \]
 with the worst profile at $(x,y)\approx(0.4074,0)$: agent~2 wants only item~2, agent~1 mildly
-prefers item~2 and, as dictator, buys most of it. The paper's $[0.828,0.829]$ is confirmed and
-sharpened. We also reproduced Example~2 ($0.717$), the regime thresholds of Claim~5
+prefers item~2 and, as dictator, buys most of it. This confirms the paper's $[0.828,0.829]$ and
+states the same quantity to seven digits. (The paper reports only the rounded bracket and does
+not say which $N$ was used, so we cannot tell whether its own computation was less precise or
+merely rounded for presentation; the refinement is a computational convenience, not a
+correction.) We also reproduced Example~2 ($0.717$), the regime thresholds of Claim~5
 ($0.119$, $0.881$) and Figure~1 for $m=3,\ldots,100$ items (Theorem~3; intrinsic value $\theta(a)$
 bracketed on a grid of $2000$ points, $a$ scanned on $0.01,\ldots,20$ as in the paper).
 
