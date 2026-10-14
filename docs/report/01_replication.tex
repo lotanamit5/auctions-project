@@ -41,8 +41,11 @@ prefers item~2 and, as dictator, buys most of it. This confirms the paper's $[0.
 states the same quantity to seven digits. (The paper reports only the rounded bracket and does
 not say which $N$ was used, so we cannot tell whether its own computation was less precise or
 merely rounded for presentation; the refinement is a computational convenience, not a
-correction.) We also reproduced Example~2 ($0.717$), the regime thresholds of Claim~5
-($0.119$, $0.881$) and Figure~1 for $m=3,\ldots,100$ items (Theorem~3; intrinsic value $\theta(a)$
+correction.) As sanity checks of the dictator rule on which everything else rests, we verified
+our implementation against Claim~5 (regime switches at $b/(a+2b)\approx0.119$ and
+$(a+b)/(a+2b)\approx0.881$ for $a=2$; the three regimes are the single expression
+$t=\operatorname{clip}((x(a+2b)-b)/a,0,1)$), against Lemma~2 (final prices proportional to the
+type) and against Example~2 ($0.717$). We also reproduced Figure~1 for $m=3,\ldots,100$ items (Theorem~3; intrinsic value $\theta(a)$
 bracketed on a grid of $2000$ points, $a$ scanned on $0.01,\ldots,20$ as in the paper); our
 version is Figure~\ref{fig:paper_fig1}.
 
