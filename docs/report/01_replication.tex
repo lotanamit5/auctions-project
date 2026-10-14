@@ -20,7 +20,9 @@ software and solvers are listed in Appendix~\ref{app:tools}.
 
 \subsection{Theorem 2: the competitive ratio of LIP(2)}
 
-\emph{Reminder.} $\alpha(a)=\min_{1\ge x\ge y\ge0}S(x,y)/(x+1-y)$; the paper brackets it on a uniform grid of
+\emph{Reminder.} Spending $t$ units of currency on an item buys the proportion
+$Q(t)=\int_0^t\frac{ds}{as+b}=\frac1a\ln\!\big(1+\tfrac{at}{b}\big)$ of it, with $b=a/(e^a-1)$ so that $Q(1)=1$;
+$\alpha(a)=\min_{1\ge x\ge y\ge0}S(x,y)/(x+1-y)$; the paper brackets it on a uniform grid of
 step $1/N$ (exact ratio at grid points from above, worst cell corner of each term of $S$ from below,
 using the monotonicity of $p_1,p_2$).
 
