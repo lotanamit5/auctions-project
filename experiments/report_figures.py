@@ -43,7 +43,7 @@ def optimal_menu_vs_lip():
 
 
 def smd_vs_bounds():
-    """Section 4: SMD against the menu bound (Theorem thm:B) and the LP bound on all SP mechanisms."""
+    """Section 4: SMD against the menu bound (fixed-menu bound) and the LP bound on all SP mechanisms."""
     import pandas as pd
     from core import split
 

@@ -5,7 +5,7 @@
 \section{Beyond dictatorship: a mechanism that reacts to agreement}
 \label{sec:smd}
 
-Theorem~\ref{thm:B} caps every fixed-menu mechanism well below the LP bound, because a dictator
+Theorem~\ref{thm:menu_bound} caps every fixed-menu mechanism well below the LP bound, because a dictator
 choosing from a fixed menu cannot tell whether the other agent wants the same item (where the
 first best pools) or the other one (where it splits). The simplest rule that conditions on
 agreement is the following. Let $\tau=(1+\varepsilon)/2$ and $s\in[0,1]$.
@@ -16,7 +16,7 @@ item in full. Otherwise a fair coin picks a dictator, who receives a share $s$ o
 item; the other agent receives the rest.
 \end{definition}
 
-\begin{proposition}[strategy-proofness]\label{prop:D}
+\begin{proposition}[strategy-proofness]\label{prop:smd_sp}
 SMD is strategy-proof for every $s\in[0,1]$ and $\varepsilon\in[0,1]$.
 \end{proposition}
 \noindent The report matters only against a strongly opposed opponent; there, the split is worth
@@ -29,13 +29,13 @@ which is what truthful reporting gives each of them (Appendix~\ref{app:smd}).
 \vspace{-1ex}
 \includegraphics[width=\linewidth]{figures/04_smd.png}
 \caption{SMD with the optimal share $s^\star$ against the closed-form bound on fixed-menu mechanisms
-(Theorem~\ref{thm:B}, dashed), nested LIP with optimised $a$, and the LP bound on all
+(Theorem~\ref{thm:menu_bound}, dashed), nested LIP with optimised $a$, and the LP bound on all
 strategy-proof mechanisms ($N\le80$).}
 \label{fig:smd}
 \vspace{-2ex}
 \end{wrapfigure}
 
-\begin{proposition}[competitive ratio]\label{prop:E}
+\begin{proposition}[competitive ratio]\label{prop:smd_ratio}
 With the optimal share $s^\star$, SMD is exactly $\rho_{\mathrm{SMD}}$-competitive, where
 \[
 \rho_{\mathrm{SMD}}(\varepsilon)=\frac{2(1+\varepsilon)^2}{3+3\varepsilon+2\varepsilon^2}\ \ (\varepsilon\le\tfrac12),
