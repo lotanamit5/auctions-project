@@ -148,7 +148,9 @@ Numerically (`core.menu.optimal_sd_menu`, exact evaluation of the discretised me
 discretisation only: off-grid types pick a neighbouring item). The worst case sits at
 (x, y) = (2/3, 1/3), a gap of 1/3 where h(1/3) = 2/3 is tight.
 
-Interpretation: the optimal dictator is *less greedy than LIP* at the balanced type (she takes
-(0.70, 0.70) instead of LIP(a*)'s (0.72, 0.72)) and her net share d moves at exactly the rate
-needed so that two types s apart differ in net share by 5/3 − 1/(3s). The additive price
-mechanism LIP(a*) is within 0.004 of this optimum.
+Interpretation (corrected 2026-10-26): at the balanced type the Theorem-C dictator takes
+almost the same as LIP(a*) — (0.718, 0.718) vs (0.725, 0.725). The visible difference is near
+the extremes: for x < 0.12 LIP takes none of the less-preferred item while the Theorem-C menu
+still takes a little (0.07 of item 1 at x = 0.1), and around x = 0.2 it takes much less of it
+than LIP (0.15 vs 0.29). The Theorem-C menu is *one* optimal menu, not the unique one, so its
+shape should not be over-interpreted. LIP(a*) is within 0.004 of the optimum.

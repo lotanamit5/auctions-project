@@ -143,3 +143,11 @@ session ended: the SP-LP at N=80 for eps >= 0.8 (marginal; notebooks fall back t
 Open questions are listed in state.md. Biggest lessons: (i) compute before claiming (two
 hand-waved mechanism ratios were wrong), (ii) grid-optimal objects need exact continuum
 evaluation (SD menus, split-menu LP), (iii) keep foreground jobs small and chunk memory.
+
+### 2026-10-26 — correction
+
+- Earlier text (theory/03, notebook 04) said the Theorem-C dictator takes (0.70, 0.70) at the
+  balanced type and is "more decisive near the extremes". Wrong on both counts: (0.718, 0.718)
+  vs LIP(a*)'s (0.725, 0.725), and near the extremes it is *less* decisive (takes some of the
+  less-preferred item where LIP takes none). Caught while making the compact report figure;
+  both places corrected. Lesson: re-derive descriptive claims from the plotted numbers.

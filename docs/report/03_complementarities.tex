@@ -1,13 +1,14 @@
-% Section 2 of the Part B report: the complementarity model.
+% Section 3 of the Part B report: the complementarity model.
 % Depends on: notation of Part A and Section 1 (Q, b, p_j, S); figures/03_eps_overview.png.
-% Proofs are in appendix_eps_proofs.tex (label app:eps).
+% Proofs are in appendix_eps_proofs.tex (label app:eps).  Section 4 (label sec:smd) is still to be written.
 
 \section{Complementarities between the items}
+\label{sec:eps}
 
 \subsection{Motivation}
 
 The paper assumes additive valuations and names ``complementary/substitutable preferences over
-the items'' as a direction for future work (Section~7). The simplest departure is a single
+the items'' as a direction for future work (its Section~7). The simplest departure is a single
 complementarity term: agent $i$ with type $(v,1-v)$ values the bundle $(z_1,z_2)$ at
 \[
 u_v(z_1,z_2)=v\,z_1+(1-v)\,z_2+\varepsilon\,z_1z_2,\qquad \varepsilon\ge0\ \text{common knowledge},\ v\ \text{private}.
@@ -37,7 +38,7 @@ strategy-proof for every utility function, in particular for every $\varepsilon$
 \end{proposition}
 This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the LIP budget set, and the
 mechanism computes the dictator's $\varepsilon$-optimal point on it from her report and the public
-$\varepsilon$. Three facts make it analysable exactly as in Section~1
+$\varepsilon$. Three facts make it analysable exactly as LIP in Section~\ref{sec:replication}
 (Appendix~\ref{app:eps}, P3--P5):
 \begin{itemize}[nosep]
 \item the dictator's objective $F_v(t)=vQ(t)+(1-v)Q(1-t)+\varepsilon Q(t)Q(1-t)$ is strictly concave
@@ -83,7 +84,7 @@ share $s^\star=(1-\varepsilon^2)/(1+2\varepsilon-\varepsilon^2)$ of her preferre
 and $\rho_B=6/7$ at $\varepsilon=\tfrac12$).
 \end{theorem}
 The proof uses only three or four type profiles and no incentive constraint (the same
-bookkeeping as Theorem~A of Section~3 with the $\varepsilon$ terms). Two features are worth noting:
+bookkeeping as Theorem~\ref{thm:A} with the $\varepsilon$ terms). Two features are worth noting:
 the optimal dictator is \emph{modest} --- she leaves more than half of everything to the other
 agent, because the other agent's complementarity gain is worth more than her own extra share ---
 and nested LIP with the best $a$ tracks $\rho_B$ almost exactly for $\varepsilon\ge\tfrac12$, so
@@ -101,9 +102,9 @@ LIP(2); green: best mixture of nested LIP with take-all; grey: take-all, $(1+\va
 
 Figure~\ref{fig:eps_overview} summarises the section. Three things stand out. (i) The gap between
 the dashed and the black curve --- the \emph{price of dictatorship} --- is about $0.1$ at
-$\varepsilon=\tfrac12$ ($0.857$ vs $0.951$), far larger than in the additive model, where it is below
-$0.002$ (Section~3). (ii) The worst case has moved: in the additive model identical types were the
+$\varepsilon=\tfrac12$ ($0.857$ vs $0.951$), far larger than in the additive model, where it is at most
+$0.003$ (Section~\ref{sec:dictatorship}). (ii) The worst case has moved: in the additive model identical types were the
 easy case (ratio~1); with complementarities they become the hard one, since the first best pools
 and a dictator splits. (iii) For $\varepsilon\ge1$ everything collapses to the trivial take-all. The
 natural next question is whether a mechanism that reacts to agreement between the two reports
-can close the gap; Section~4 gives one.
+can close the gap; Section~\ref{sec:smd} gives one.

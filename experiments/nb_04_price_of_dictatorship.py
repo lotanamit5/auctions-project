@@ -116,8 +116,10 @@ pd.DataFrame(rows).assign(**{"5/6": 5/6}).round(6)
 
 nb.md(r"""
 The discretised menus converge to $5/6$ (8001 items: 0.83328; the only loss is that off-grid
-types pick a neighbouring item). The optimal dictator is *less* greedy than LIP at the balanced
-type — $(0.70,0.70)$ instead of $(0.72,0.72)$ — and more decisive near the extremes.
+types pick a neighbouring item). At the balanced type this dictator takes almost exactly what
+LIP's does, $(0.718,0.718)$ vs $(0.725,0.725)$; the difference is near the extremes, where LIP
+takes none of the less-preferred item for $x<0.12$ while this menu still takes a little. It is
+one optimal menu, not the unique one.
 """)
 
 nb.md(r"""
