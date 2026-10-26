@@ -21,13 +21,13 @@ plt.rcParams.update({"axes.grid": True, "grid.alpha": 0.3})
 
 
 def optimal_menu_vs_lip():
-    """What the dictator of type x receives: Theorem-C menu vs LIP(a*)."""
+    """What the dictator of type x receives: optimal menu vs LIP(a*)."""
     a_star = json.loads((ROOT / "results/data/lip_alpha_opt.json").read_text())["a_star"]
     x = np.linspace(0, 1, 2001)
     m1, m2 = optimal_sd_choice(x)
     q1, q2 = lip.bundle_additive(x, a_star)
     fig, ax = plt.subplots(figsize=(4.6, 3.4))
-    ax.plot(x, m1, c="C0", lw=1.6, label="Theorem C menu")
+    ax.plot(x, m1, c="C0", lw=1.6, label="optimal menu")
     ax.plot(x, m2, c="C1", lw=1.6)
     ax.plot(x, q1, c="C0", lw=1.1, ls="--", label=r"LIP($a^\star$)")
     ax.plot(x, q2, c="C1", lw=1.1, ls="--")
@@ -43,7 +43,7 @@ def optimal_menu_vs_lip():
 
 
 def smd_vs_bounds():
-    """Section 4: SMD against the menu bound (Theorem B) and the LP bound on all SP mechanisms."""
+    """Section 4: SMD against the menu bound (Theorem thm:B) and the LP bound on all SP mechanisms."""
     import pandas as pd
     from core import split
 
@@ -56,7 +56,7 @@ def smd_vs_bounds():
     menu = np.minimum(np.where(e <= 0.5, (5 + 2 * e) / 6, np.inf), (1 + e) / (1 + 2 * e - e * e))
     fig, ax = plt.subplots(figsize=(4.6, 3.4))
     ax.plot(lp_best.eps, lp_best.alpha, "k-", lw=1.6, label="all SP (LP bound)")
-    ax.plot(e, menu, "--", c="C3", lw=1.4, label="fixed menus (Thm B bound)")
+    ax.plot(e, menu, "--", c="C3", lw=1.4, label="fixed menus (upper bound)")
     ax.plot(e, split.ratio_closed_form(e), c="C2", lw=1.6, label="SMD")
     ax.plot(nes.eps, nes.lower, "s", c="C1", ms=3.5, label=r"nested LIP($a^\star$)")
     ax.set(xlabel=r"$\varepsilon$", ylabel="competitive ratio", xlim=(0, 1), ylim=(0.70, 1.01))

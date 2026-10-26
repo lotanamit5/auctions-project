@@ -43,7 +43,7 @@ $\varepsilon$. Three facts make it analysable exactly as LIP in Section~\ref{sec
 \begin{itemize}[nosep]
 \item the dictator's objective $F_v(t)=vQ(t)+(1-v)Q(1-t)+\varepsilon Q(t)Q(1-t)$ is strictly concave
   with increasing differences in $(t,v)$, so her choice is unique and monotone in her type, and
-  the grid sandwich of Theorem~2 carries over (with the $\varepsilon$ terms bounded cell-wise);
+  the grid sandwich of the paper's Theorem~2 carries over (with the $\varepsilon$ terms bounded cell-wise);
 \item keeping the paper's additive report-to-bundle rule while $\varepsilon>0$ is \emph{not}
   strategy-proof (misreport gains up to $\varepsilon Q(\tfrac12)^2/2\approx0.26\,\varepsilon$), but a
   best-responding agent ends up exactly at the $\varepsilon$-aware mechanism's outcome, because
@@ -60,7 +60,7 @@ $\varepsilon$. Three facts make it analysable exactly as LIP in Section~\ref{sec
 \subsection{Extending the bounds}
 
 \paragraph{Upper bound on every strategy-proof mechanism.} With lotteries, utilities are no
-longer linear in the expected bundle, so the LP of Theorem~1 does not apply verbatim. But because
+longer linear in the expected bundle, so the LP of the paper's Theorem~1 does not apply verbatim. But because
 $u_v$ is bilinear, each agent's utility from a lottery depends only on the moments
 $(m_1,m_2,m_{12})=(\mathbb E z_1,\mathbb E z_2,\mathbb E z_1z_2)$, and the attainable triples are
 exactly the McCormick envelope $\{m_{12}\ge0,\ m_{12}\ge m_1+m_2-1,\ m_{12}\le m_1,\ m_{12}\le m_2\}$
@@ -72,7 +72,7 @@ $0.951$ ($0.5$), $0.984$ ($0.8$), $1$ ($\varepsilon\ge1$) (grid $N=80$).
 \paragraph{Upper bound on fixed-menu mechanisms.} The best fixed-menu mechanism on a grid is also
 an LP (the menu items are the variables; incentive and welfare constraints are linear in them),
 and its value has a closed form:
-\begin{theorem}[B]\label{thm:B}
+\begin{theorem}[fixed-menu bound]\label{thm:B}
 Every fixed-menu mechanism is at most
 $\min\{\rho_A(\varepsilon),\rho_B(\varepsilon)\}$-competitive, where
 \[
