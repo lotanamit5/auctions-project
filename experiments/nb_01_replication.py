@@ -134,6 +134,7 @@ ax.plot(scan.a, scan.theta_upper, "--", c="C0", lw=1.4, label=r"$\theta(a)$ (int
 ax.axvline(2.0, c="gray", lw=0.9, ls=":", label=r"$a=2$ (paper)")
 ax.axvline(opt["a_star"], c="C3", lw=0.9, label=rf"$a^\star={opt['a_star']:.2f}$")
 ax.set(xlabel=r"price slope $a$", ylabel="competitive ratio", xlim=(0.5, 6), ylim=(0.70, 0.95))
+ax.set_title(r"LIP($a$): competitive ratio vs. $a$", fontsize=10)
 ax.legend(fontsize=8, loc="upper right", framealpha=0.95)
 plt.tight_layout(); plt.savefig(FIG / "01_alpha_of_a.png", dpi=220); plt.show()
 scan[["a", "alpha_lower", "alpha_upper", "x_worst", "y_worst", "theta_upper"]].query("1.5 <= a <= 3").round(6)

@@ -60,6 +60,7 @@ def smd_vs_bounds():
     ax.plot(e, split.ratio_closed_form(e), c="C2", lw=1.6, label="SMD")
     ax.plot(nes.eps, nes.lower, "s", c="C1", ms=3.5, label=r"nested LIP($a^\star$)")
     ax.set(xlabel=r"$\varepsilon$", ylabel="competitive ratio", xlim=(0, 1), ylim=(0.70, 1.01))
+    ax.set_title(r"Competitive ratio vs. $\varepsilon$", fontsize=10)
     ax.legend(fontsize=8, loc="lower right", framealpha=0.95)
     plt.tight_layout()
     name = "04_smd.png"
