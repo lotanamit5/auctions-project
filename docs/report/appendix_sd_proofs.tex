@@ -1,8 +1,18 @@
-% Appendix: proof of Theorem C (Section 2).  Requires \appendix before inclusion.
-\section{Proof of Theorem C}
+% Appendix: proofs of Theorems A and C (Section 2).  Requires \appendix before inclusion.
+\section{Proofs of Theorems A and C}
 \label{app:sd}
 
-\paragraph{Reduction to one function.} Consider a symmetric swap-dictatorial mechanism in which
+\paragraph{Theorem A.} Let $a(x)$ be agent~1's expected share of item~1 minus item~2 under $A(x)$, and $b(y)$ likewise
+under $B(y)$; both lie in $[-1,1]$. With additive valuations an allocation with net share $d$
+for agent~1 yields welfare $1+(x-y)d$, so $W(x,y)=1+(x-y)[\lambda a(x)+(1-\lambda)b(y)]$. On the four
+profiles $(\tfrac12,0),(1,\tfrac12),(0,\tfrac12),(\tfrac12,1)$, each with first-best welfare $\tfrac32$,
+the terms of the middle type cancel and
+\[
+\textstyle\sum W=4+\tfrac12\lambda\,[a(1)-a(0)]+\tfrac12(1-\lambda)\,[b(1)-b(0)]\le5 ,
+\]
+so some profile has $W\le\tfrac54=\tfrac56\cdot\tfrac32$. \qed
+
+\paragraph{Theorem C: reduction to one function.} Consider a symmetric swap-dictatorial mechanism in which
 the dictator of type $x$ receives $(m_1(x),m_2(x))$ and write $d(x)=m_1(x)-m_2(x)$. If agent~1 is
 the dictator, welfare is $xm_1+(1-x)m_2+y(1-m_1)+(1-y)(1-m_2)=1+(x-y)d(x)$; if agent~2 (type $y$) is,
 it is $1+(y-x)d(y)$. Averaging, for $x>y$,
