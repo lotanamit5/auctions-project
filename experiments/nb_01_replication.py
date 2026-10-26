@@ -136,7 +136,7 @@ ax.axvline(opt["a_star"], c="C3", lw=0.9, label=rf"$a^\star={opt['a_star']:.2f}$
 ax.set(xlabel=r"price slope $a$", ylabel="competitive ratio", xlim=(0.5, 6), ylim=(0.70, 0.95))
 ax.set_title(r"LIP($a$): competitive ratio vs. $a$", fontsize=10)
 ax.legend(fontsize=8, loc="upper right", framealpha=0.95)
-plt.tight_layout(); plt.savefig(FIG / "01_alpha_of_a.png", dpi=220); plt.show()
+plt.tight_layout(); plt.savefig(FIG / "01_alpha_of_a.png", dpi=220); plt.savefig(FIG / "01_alpha_of_a.pdf"); plt.show()
 scan[["a", "alpha_lower", "alpha_upper", "x_worst", "y_worst", "theta_upper"]].query("1.5 <= a <= 3").round(6)
 """)
 
@@ -196,7 +196,7 @@ for m in ms:
 fig, ax = plt.subplots(figsize=(7, 4))
 ax.plot(ms, lower_best, label="lower bound (achieved ratio of best LIP(a))"); ax.plot(ms, upper_at_best, label="upper bound (intrinsic value at that a)")
 ax.set(xlabel="number of items m", ylabel="competitive ratio", ylim=(0.55, 0.75), title="Figure 1 of the paper, reproduced"); ax.legend()
-plt.tight_layout(); plt.savefig(FIG / "01_figure1_m_items.png"); plt.show()
+plt.tight_layout(); plt.savefig(FIG / "01_figure1_m_items.png"); plt.savefig(FIG / "01_figure1_m_items.pdf"); plt.show()
 pd.DataFrame({"m": ms, "best a": a_best, "lower": lower_best, "upper": upper_at_best}).iloc[[0, 1, 2, 7, 17, 47, 97]].round(4)
 """)
 

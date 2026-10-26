@@ -129,7 +129,7 @@ ax.plot(det.eps, det.lip2_grid, ":", c="C0", label="eps-aware LIP(2)")
 ax.plot(det.eps, np.maximum(det.mix_lower, nes.mix_lower.values if len(nes) == len(det) else det.mix_lower), "^-", ms=4, label="best mixture with take-all")
 ax.plot(det.eps, det.takeall, "-", c="gray", label="take-all")
 ax.set(xlabel=r"$\varepsilon$", ylabel="competitive ratio", xlim=(0, 1.5), ylim=(0.45, 1.02), title="Complementarity model: bounds and mechanisms")
-ax.legend(loc="lower right", fontsize=8); plt.tight_layout(); plt.savefig(FIG / "03_eps_overview.png"); plt.show()
+ax.legend(loc="lower right", fontsize=8); plt.tight_layout(); plt.savefig(FIG / "03_eps_overview.png"); plt.savefig(FIG / "03_eps_overview.pdf"); plt.show()
 """)
 
 nb.code(r"""

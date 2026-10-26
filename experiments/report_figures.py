@@ -36,8 +36,9 @@ def optimal_menu_vs_lip():
     ax.set(xlabel=r"dictator's type $x$", ylabel="share received", xlim=(0, 1), ylim=(0, 1.02))
     ax.legend(fontsize=8, loc="upper left", bbox_to_anchor=(0.01, 0.66), framealpha=0.95)
     plt.tight_layout()
-    name = "02_optimal_menu.png"
-    plt.savefig(FIG / name, dpi=220)
+    name = "02_optimal_menu"
+    plt.savefig(FIG / f"{name}.png", dpi=220)
+    plt.savefig(FIG / f"{name}.pdf")
     plt.close(fig)
     return name
 
@@ -63,8 +64,9 @@ def smd_vs_bounds():
     ax.set_title(r"Competitive ratio vs. $\varepsilon$", fontsize=10)
     ax.legend(fontsize=8, loc="lower right", framealpha=0.95)
     plt.tight_layout()
-    name = "04_smd.png"
-    plt.savefig(FIG / name, dpi=220)
+    name = "04_smd"
+    plt.savefig(FIG / f"{name}.png", dpi=220)
+    plt.savefig(FIG / f"{name}.pdf")
     plt.close(fig)
     return name
 
@@ -72,5 +74,5 @@ def smd_vs_bounds():
 if __name__ == "__main__":
     REPORT_FIG.mkdir(parents=True, exist_ok=True)
     for name in (optimal_menu_vs_lip(), smd_vs_bounds()):
-        shutil.copy(FIG / name, REPORT_FIG / name)
+        shutil.copy(FIG / f"{name}.pdf", REPORT_FIG / f"{name}.pdf")
         print("wrote", name)
