@@ -1,5 +1,6 @@
 % Section 1 of the Part B report: replication of Guo & Conitzer (2010), condensed.
-% Details, the reproduced Figure 1 and the caveats are in appendix_replication.tex (app:repl);
+% Requires \usepackage{wrapfig}.  Details, the reproduced Figure 1 and the caveats are in
+% appendix_replication.tex (app:repl);
 % software in appendix_tools.tex (app:tools).  Figure: figures/01_alpha_of_a.png.
 
 \section{Replication of the paper's results}
@@ -15,6 +16,18 @@ $[0.828,0.829]$ to seven digits. For Theorem~1, the LP value is a valid upper bo
 \emph{every} grid size and decreases with it --- $0.8412$ at $N=50$, $0.8363$ at $N=200$,
 extrapolating to $\approx0.8345$ --- so the gap between LIP and the best strategy-proof mechanism
 is less than half of what $0.841$ suggests.
+
+\begin{wrapfigure}{r}{0.45\linewidth}
+\centering
+\vspace{-1ex}
+\includegraphics[width=\linewidth]{figures/01_alpha_of_a.png}
+\caption{Competitive ratio of LIP($a$) for additive valuations: certified value $\alpha(a)$
+(solid, bracket width $\le10^{-6}$) and the paper's intrinsic value $\theta(a)$ (dashed), which
+coincides with $\alpha(a)$ for $a>a^\star$. The paper's $a=2$ (dotted) and the optimum
+$a^\star\approx2.10$ (red).}
+\label{fig:alpha_a}
+\vspace{-2ex}
+\end{wrapfigure}
 
 \paragraph{Beyond the paper: $a=2$ is not the best LIP mechanism.} The paper evaluates LIP only
 at $a=2$ and does not motivate the choice. Scanning $a$ with the certified bracket gives
@@ -34,11 +47,3 @@ two cross. Steeper prices (larger $a$) make the dictator buy a more balanced bun
 on the edge and hurts on the anti-diagonal. Together with the sharper Theorem-1 bound this
 places LIP within $0.006$ of the best strategy-proof mechanism; Section~3 narrows the gap further.
 
-\begin{figure}[H]\centering
-\includegraphics[width=0.95\linewidth]{figures/01_alpha_of_a.png}
-\caption{Competitive ratio of LIP($a$) for additive valuations (certified brackets of width
-$\le10^{-6}$, black) and the paper's intrinsic value $\theta(a)$ (dashed). The paper's $a=2$ (grey)
-and the optimum $a^\star=2.1013$ (red). Right: zoom on the crossing of the two worst-case
-branches.}
-\label{fig:alpha_a}
-\end{figure}

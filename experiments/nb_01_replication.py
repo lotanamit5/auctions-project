@@ -128,15 +128,14 @@ gain, but it tells us *why* the optimum is where it is.
 nb.code(r"""
 import json
 scan = pd.read_csv(DATA / "lip_alpha_scan.csv"); opt = json.loads((DATA / "lip_alpha_opt.json").read_text())
-fig, ax = plt.subplots(1, 2, figsize=(12, 4))
-ax[0].plot(scan.a, scan.alpha_upper, "k-", label=r"$\alpha(a)$ (certified, width ≤ 1e-6)")
-ax[0].plot(scan.a, scan.theta_upper, "--", label=r"$\theta(a)$ intrinsic value (Claim 8 profiles)")
-ax[0].axvline(opt["a_star"], c="r", lw=0.8); ax[0].axvline(2.0, c="gray", lw=0.8)
-ax[0].set(xlabel="a", ylabel="competitive ratio", title="LIP(a), additive valuations"); ax[0].legend()
-ax[1].plot(scan.a, scan.alpha_upper, "k-"); ax[1].plot(scan.a, scan.theta_upper, "--")
-ax[1].set(xlim=(1.8, 2.5), ylim=(0.82, 0.836), xlabel="a", title=f"zoom: a* = {opt['a_star']:.4f}, alpha* = {opt['alpha_upper']:.5f}")
-ax[1].axvline(opt["a_star"], c="r", lw=0.8); ax[1].axvline(2.0, c="gray", lw=0.8)
-plt.tight_layout(); plt.savefig(FIG / "01_alpha_of_a.png"); plt.show()
+fig, ax = plt.subplots(figsize=(4.6, 3.4))
+ax.plot(scan.a, scan.alpha_upper, "k-", lw=1.6, label=r"$\alpha(a)$ (certified)")
+ax.plot(scan.a, scan.theta_upper, "--", c="C0", lw=1.4, label=r"$\theta(a)$ (intrinsic value)")
+ax.axvline(2.0, c="gray", lw=0.9, ls=":", label=r"$a=2$ (paper)")
+ax.axvline(opt["a_star"], c="C3", lw=0.9, label=rf"$a^\star={opt['a_star']:.2f}$")
+ax.set(xlabel=r"price slope $a$", ylabel="competitive ratio", xlim=(0.5, 6), ylim=(0.70, 0.95))
+ax.legend(fontsize=8, loc="upper right", framealpha=0.95)
+plt.tight_layout(); plt.savefig(FIG / "01_alpha_of_a.png", dpi=220); plt.show()
 scan[["a", "alpha_lower", "alpha_upper", "x_worst", "y_worst", "theta_upper"]].query("1.5 <= a <= 3").round(6)
 """)
 
