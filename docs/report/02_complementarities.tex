@@ -14,8 +14,8 @@ complementarity term: agent $i$ with type $(v,1-v)$ values the bundle $(z_1,z_2)
 u_v(z_1,z_2)=v\,z_1+(1-v)\,z_2+\varepsilon\,z_1z_2,\qquad \varepsilon\ge0\ \text{common knowledge},\ v\ \text{private}.
 \]
 (The proposal's example: production and distribution capacity are each worth more when the firm
-also holds the other.) The question is whether the paper's construction --- a dictator buying
-from a fixed price schedule --- survives, and what the best strategy-proof mechanism can now
+also holds the other.) The question is whether the paper's construction - a dictator buying
+from a fixed price schedule - survives, and what the best strategy-proof mechanism can now
 achieve. All statements below are proved in Appendix~\ref{app:eps}; the numbers are from
 \texttt{notebooks/03\_eps\_model.ipynb}.
 
@@ -25,7 +25,7 @@ achieve. All statements below are proved in Appendix~\ref{app:eps}; the numbers 
 $\mathrm{OPT}(x,y)=1+\max\{\varepsilon,\,|x-y|\}$.
 \end{proposition}
 Welfare is bilinear in agent~1's bundle, so a corner of $[0,1]^2$ is optimal: either the additive
-split ($1+|x-y|$) or \emph{pooling} --- both items to one agent ($1+\varepsilon$). Two consequences
+split ($1+|x-y|$) or \emph{pooling} - both items to one agent ($1+\varepsilon$). Two consequences
 frame everything that follows. For $\varepsilon\ge1$ the report-free mechanism ``fair coin, the
 winner takes both items'' (\emph{take-all}) is first best at every profile, so the interesting
 regime is $0<\varepsilon<1$. And the efficient rule now depends on \emph{agreement}: it pools when
@@ -85,8 +85,8 @@ and $\rho_B=6/7$ at $\varepsilon=\tfrac12$).
 \end{theorem}
 The proof uses only three or four type profiles and no incentive constraint (the same
 bookkeeping as Theorem~\ref{thm:A} with the $\varepsilon$ terms). Two features are worth noting:
-the optimal dictator is \emph{modest} --- she leaves more than half of everything to the other
-agent, because the other agent's complementarity gain is worth more than her own extra share ---
+the optimal dictator is \emph{modest} - she leaves more than half of everything to the other
+agent, because the other agent's complementarity gain is worth more than her own extra share -
 and nested LIP with the best $a$ tracks $\rho_B$ almost exactly for $\varepsilon\ge\tfrac12$, so
 within the menu class the paper's construction remains essentially optimal.
 
@@ -101,7 +101,7 @@ LIP(2); green: best mixture of nested LIP with take-all; grey: take-all, $(1+\va
 \end{figure}
 
 Figure~\ref{fig:eps_overview} summarises the section. Three things stand out. (i) The gap between
-the dashed and the black curve --- the \emph{price of dictatorship} --- is about $0.1$ at
+the dashed and the black curve - the \emph{price of dictatorship} - is about $0.1$ at
 $\varepsilon=\tfrac12$ ($0.857$ vs $0.951$), far larger than in the additive model, where it is at most
 $0.003$ (Section~\ref{sec:dictatorship}). (ii) The worst case has moved: in the additive model identical types were the
 easy case (ratio~1); with complementarities they become the hard one, since the first best pools

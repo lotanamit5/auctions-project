@@ -6,16 +6,16 @@
 \section{Replication of the paper's results}
 \label{sec:replication}
 
-Both headline numbers of the paper are computational --- Theorem~1 is the value of a linear
+Both headline numbers of the paper are computational - Theorem~1 is the value of a linear
 program solved for one grid size ($N=50$) without a dual certificate, Theorem~2 a numerical
-sandwich whose grid size is not reported --- and no code is available, so before extending the
+sandwich whose grid size is not reported - and no code is available, so before extending the
 model we re-implemented every computation from the paper's formulas
 (Appendix~\ref{app:repl}; software in Appendix~\ref{app:tools}). All stated numbers are
 reproduced, and we record what the paper leaves unstated. For Theorem~2, an adaptive version of
 the paper's grid bracket gives $0.8281462\le\alpha(\mathrm{LIP}(2))\le0.8281472$, the paper's
 $[0.828,0.829]$ to seven digits. For Theorem~1, the LP value is a valid upper bound for
-\emph{every} grid size and decreases with it --- $0.8412$ at $N=50$, $0.8363$ at $N=200$,
-extrapolating to $\approx0.8345$ --- so the gap between LIP and the best strategy-proof mechanism
+\emph{every} grid size and decreases with it - $0.8412$ at $N=50$, $0.8363$ at $N=200$,
+extrapolating to $\approx0.8345$ - so the gap between LIP and the best strategy-proof mechanism
 is less than half of what $0.841$ suggests.
 
 \begin{wrapfigure}{r}{0.45\linewidth}
