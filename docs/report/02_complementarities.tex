@@ -1,6 +1,6 @@
-% Report section "Complementarities between the items" (file 02; label sec:eps).  In main.tex input it AFTER 03_dictatorship.
-% Depends on: notation of Part A and Section 1 (Q, b, p_j, S); figures/03_eps_overview.pdf.
-% Proofs are in appendix_eps_proofs.tex (label app:eps).  Section 4 (label sec:smd) is still to be written.
+% Report section "Complementarities between the items" (file 02; label sec:eps).  Input after 01_replication.
+% Depends on: notation of Section 1 (Q, b); figures/03_eps_overview.pdf.
+% Theorem proof and moment LP (P7) are in appendix_eps_proofs.tex (label app:eps).
 
 \section{Complementarities between the items}
 \label{sec:eps}
@@ -347,7 +347,7 @@ $0.951$ ($0.5$), $0.984$ ($0.8$), $1$ ($\varepsilon\ge1$) (grid $N=80$).
 
 \paragraph{Upper bound on fixed-menu mechanisms.} The best fixed-menu mechanism on a grid is also
 an LP (the menu items are the variables; incentive and welfare constraints are linear in them),
-and its value has a closed form:
+and the following theorem bounds it in closed form:
 \begin{theorem}[fixed-menu bound]\label{thm:menu_bound}
 Every fixed-menu mechanism is at most
 $\min\{\rho_A(\varepsilon),\rho_B(\varepsilon)\}$-competitive, where
@@ -360,7 +360,9 @@ share $s^\star=(1-\varepsilon^2)/(1+2\varepsilon-\varepsilon^2)$ of her preferre
 and $\rho_B=6/7$ at $\varepsilon=\tfrac12$).
 \end{theorem}
 The proof (Appendix~\ref{app:eps}) uses only three or four type profiles and no incentive
-constraint. At $\varepsilon=0$ the bound is $5/6$; it holds for every mixture of two one-sided rules,
+constraint. The menu LP, itself an upper bound, coincides with it at $\varepsilon=0$ and for
+$\varepsilon\ge0.24$, and is lower by up to $0.018$ in between (at $\varepsilon\approx0.17$, where
+$\rho_A$ and $\rho_B$ cross), so there the theorem is not the binding bound. At $\varepsilon=0$ the bound is $5/6$; it holds for every mixture of two one-sided rules,
 not only for menus, and an explicit menu attains it (Appendix~\ref{app:sd}). For additive
 valuations, then, LIP($a^\star$) is within $0.004$ of the best dictatorial mechanism, which is in turn
 within $0.003$ of the LP bound: restricting to dictatorial mechanisms costs almost nothing.
@@ -378,8 +380,8 @@ within the menu class the paper's construction remains essentially optimal.
     \end{minipage}
     \hfill
     \begin{minipage}[c]{0.45\textwidth}
-    \caption{Complementarity model: bounds and mechanisms as functions of $\varepsilon$. Black: LP upper bound on all strategy-proof mechanisms ($N\le80$). Dashed: upper bound on fixed-menu
-mechanisms (Theorem~\ref{thm:menu_bound}, computed by the menu LP at $N=200$). Blue/orange: certified
+    \caption{Complementarity model: bounds and mechanisms as functions of $\varepsilon$. Black: LP upper bound on all strategy-proof mechanisms ($N\le80$). Dashed: menu LP ($N=200$), an upper bound on fixed-menu
+mechanisms that equals Theorem~\ref{thm:menu_bound} at $\varepsilon=0$ and for $\varepsilon\ge0.24$. Blue/orange: certified
 ratios of $\varepsilon$-aware and nested LIP with $a$ optimised per $\varepsilon$; dotted: $\varepsilon$-aware LIP(2); green: best mixture of nested LIP with take-all; grey: take-all, $(1+\varepsilon)/2$.}
 \label{fig:eps_overview}
  \end{minipage}
