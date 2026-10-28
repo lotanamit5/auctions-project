@@ -1,0 +1,151 @@
+# עריכות לסקשן 2 (המשלימים) בגרסה של השותפה ב-Overleaf
+
+נכתב ב-2026-10-28. הבסיס הוא הגרסה של השותפה ב-Overleaf.
+ב-repo, הקובץ `02_complementarities.tex` הוא הגרסה שלה, ועוד עריכות 1 עד 3 בלבד.
+
+כל עריכה מסומנת:
+- **[כבר ב-repo]**: בוצעה בעותק ב-repo, ונשאר להחיל אותה ב-Overleaf.
+- **[לא בוצעה]**: המלצה, שלא בוצעה באף עותק.
+
+בגרסה של השותפה הכול נכון מבחינה עובדתית, חוץ מעריכות 1 עד 3. שאר העריכות הן כפילויות ודיוקים קטנים.
+
+---
+
+## חובה: תיקונים עובדתיים
+
+הרקע: הבדיקה של גרף ה-SMD הראתה שהנוסחה הסגורה min{ρ_A, ρ_B} איננה הדוקה עבור ε בין 0 ל-0.24.
+ה-LP של התפריטים, שגם הוא חסם עליון, נמוך ממנה עד 0.018, ב-ε≈0.17.
+
+### 1. ניסוח המשפט [כבר ב-repo]
+
+להחליף את:
+```latex
+and its value has a closed form:
+```
+ב-:
+```latex
+and the following theorem bounds it in closed form:
+```
+
+### 2. משפט על ההדיקות [כבר ב-repo]
+
+אחרי "...uses only three or four type profiles and no incentive constraint." להוסיף:
+```latex
+The menu LP, itself an upper bound, coincides with it at $\varepsilon=0$ and for
+$\varepsilon\ge0.24$, and is lower by up to $0.018$ in between (at $\varepsilon\approx0.17$, where
+$\rho_A$ and $\rho_B$ cross), so there the theorem is not the binding bound.
+```
+
+### 3. ה-caption של גרף 03_eps_overview [כבר ב-repo]
+
+בגרסה של השותפה יש שלושה עותקים של ה-caption. רק הראשון פעיל, זה שבתוך ה-minipage, ושני האחרים בהערה. צריך לשנות רק את הפעיל.
+
+להחליף את:
+```latex
+Dashed: upper bound on fixed-menu
+mechanisms (Theorem~\ref{thm:menu_bound}, computed by the menu LP at $N=200$).
+```
+ב-:
+```latex
+Dashed: menu LP ($N=200$), an upper bound on fixed-menu
+mechanisms that equals Theorem~\ref{thm:menu_bound} at $\varepsilon=0$ and for $\varepsilon\ge0.24$.
+```
+
+---
+
+## כפילויות
+
+### 4. מחיקת הבלוק הכפול [לא בוצעה]
+
+הבלוק מתחיל ב-"This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the LIP budget set",
+ונגמר ב-`\end{itemize}` שלפני `\subsection{Extending the bounds}`. הוא חוזר על טענות 3 עד 5 ועל פסקת ה-certificates. גם הפסקה שפותחת אותו מופיעה פעמיים.
+
+המידע היחיד שנעלם במחיקה הוא "≈0.26ε". לכן קודם צריך להעביר אותו לטענה 4.
+
+להחליף את:
+```latex
+$\Delta U\leq \frac{\varepsilon Q(1/2)^2}{2}.$
+```
+ב-:
+```latex
+$\Delta U\leq \varepsilon Q(\tfrac12)^2/2$ ($\approx0.26\,\varepsilon$ for $a=2$).
+```
+
+### 5. סוף פסקת ה-certificates [לא בוצעה]
+
+להחליף את כל המשפטים מ-"These constructions explain the certification approach;" ועד סוף הפסקה ב-:
+```latex
+For $\varepsilon$-aware LIP(2) the certified ratios (to $10^{-4}$) at
+$\varepsilon=0.01,0.1,0.5,1,2$ are $0.8308,\ 0.8403,\ 0.8100,\ 0.7652,\ 0.7153$.
+```
+
+הסיבות:
+- המשפט הנוכחי מסתייג מדיוק שכן אושר.
+- המספרים אושרו בסבולת 10⁻⁴, במחברת 03, דרך `bracket_lip(2.0, eps, tol=1e-4)`.
+- המילה "previously reported" מפנה לטיוטה שהקורא לא מכיר.
+
+---
+
+## דיוקים קטנים בטענות
+
+### 6. טענה 1 (first best) [לא בוצעה]
+
+להחליף "For reports $x, y \in [0, 1],$" ב-"For types $x, y \in [0, 1],$".
+ה-first best מוגדר על הטיפוסים האמיתיים, לא על הדיווחים.
+
+### 7. ההוכחה של טענה 2 (fixed menus) [לא בוצעה]
+
+ההוכחה הפעילה לא אומרת שהדיווח של מי שאינו הדיקטטור לא משפיע על התוצאה.
+ההוכחה שבהערה מתחתיה, שמתחילה ב-"Let $M$ be the dictator's report-independent menu", שלמה יותר.
+אפשר להחזיר אותה במקום הפעילה.
+
+### 8. טענה 4 (manipulability) [לא בוצעה]
+
+הטענה אומרת "not strategy-proof in general", אבל ההוכחה לא מראה טיפוס שבאמת מרוויח משקר.
+המשפט שבהערה אחרי "strictly improves utility" עושה את זה, וכדאי להחזיר אותו:
+```latex
+For example, for an interior type $v$ whose additive optimizer
+$t_0(v)$ is neither $1/2$ nor a boundary point, the derivative of the
+complementarity contribution is $\varepsilon P'(t_0(v))$, which is
+nonzero whenever $P'(t_0(v))\ne0$.
+```
+המשפט נכון: P סימטרית וקעורה ממש, ולכן P'(t)=0 רק ב-t=½.
+מכאן שכל טיפוס שהבחירה שלו פנימית ושונה מ-½ מרוויח משקר.
+
+### 9. סימון [לא בוצעה]
+
+בטענה 4 ובהוכחה שלה כתוב `F_v^\epsilon`, ובכל שאר הדוח `\varepsilon`. כדאי לאחד ל-`\varepsilon`.
+
+---
+
+## מבנה
+
+### 10. ההגדרה של Q ו-b [לא בוצעה]
+
+Q ו-b מוגדרים רק בסקשן 2, בפסקה "From Guo--Conitzer's artificial-currency mechanism to the LIP frontier".
+אבל סקשן 1 כבר משתמש בהם, ב-β(a) וב-Lemma 2.
+אם אין ב-`main.tex` רקע שמגדיר אותם קודם, צריך להעביר את ההגדרה לסקשן 1 או למבוא.
+
+### 11. הציטוט [לא בוצעה]
+
+`\citet{GuoConitzer2010}` דורש natbib ורשומה בשם הזה בקובץ ה-bib.
+בשאר הדוח כתוב "the paper". כדאי לוודא שהציטוט מתקמפל, או לאחד את הסגנון.
+
+### 12. הנספח של המשלימים, appendix_eps_proofs.tex [לא בוצעה]
+
+הקובץ הזה שלנו ב-repo, לא של השותפה.
+- P1, P2, P3, P5 ו-P6 חוזרים על ההוכחות שבגוף הדוח, ו-P4 חוזר על פסקת ה-certificates.
+- P6 אומר שהטענה על ε≥1 נבדקה "numerically". טענה 5 של השותפה מוכיחה אותה אנליטית, כלומר הנספח מתאר תוצאה חלשה מזו שבגוף הדוח.
+- כדאי לצמצם את הנספח להוכחת משפט חסם התפריטים ול-P7, ה-LP על המומנטים. לשני אלה בלבד יש הפניות מגוף הדוח.
+
+---
+
+## מה נבדק ונמצא תקין בגרסה של השותפה
+
+- **דוגמת הפירמות:** המספרים 1.8, 1.5 ו-1.
+- **ההגדרה של Q ושל b:** כולל Q(0)=0 ו-Q(1)=1.
+- **ההוכחה של טענה 3:** קעירות ממש, הפרשים עולים ו-Topkis.
+- **החסם בטענה 4:** εQ(½)²/2, דרך P(t)≤P(½), וחצי מהגרלת הדיקטטור.
+- **ההוכחה של טענה 5:** אי-השוויונות על G'(t) בשני הצדדים של ½, עבור ε≥1.
+- **מספרים:** 0.004 ו-0.003 בסיכום המקרה האדיטיבי, ו-0.857 מול 0.951 ב"מחיר הדיקטטורה".
+- **הדיקטטור הצנוע:** s\*<½.
