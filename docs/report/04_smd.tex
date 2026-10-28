@@ -28,9 +28,10 @@ which is what truthful reporting gives each of them (Appendix~\ref{app:smd}).
 \centering
 \vspace{-1ex}
 \includegraphics[width=\linewidth]{figures/04_smd.pdf}
-\caption{SMD with the optimal share $s^\star$ against the closed-form bound on fixed-menu mechanisms
-(Theorem~\ref{thm:menu_bound}, dashed), nested LIP with optimised $a$, and the LP bound on all
-strategy-proof mechanisms ($N\le80$).}
+\caption{SMD with the optimal share $s^\star$ against nested LIP (Section~\ref{sec:eps}) with $a$
+optimised per $\varepsilon$, the menu LP bound on fixed-menu mechanisms (dashed, $N=100$), and the LP
+bound on all strategy-proof mechanisms ($N\le80$; at $\varepsilon=0$ the finer grid of
+Section~\ref{sec:replication} gives $0.836$).}
 \label{fig:smd}
 \vspace{-2ex}
 \end{wrapfigure}
@@ -43,15 +44,17 @@ With the optimal share $s^\star$, SMD is exactly $\rho_{\mathrm{SMD}}$-competiti
 \rho_{\mathrm{SMD}}(\varepsilon)=\frac{(1+\varepsilon)^2}{1+3\varepsilon}\ \ (\varepsilon\ge\tfrac12).
 \]
 \end{proposition}
-\noindent Two profiles bind: identical preferences, where the first best pools and a larger $s$
-hurts, and the edge of the split region ($x=1$, $y=(1-\varepsilon)/2$), where the coin flip
-should give more and a larger $s$ helps; $s^\star$ equalises them ($s^\star=0.3$ at $\varepsilon=\tfrac12$).
+\noindent Two kinds of profiles bind: agents who prefer the same item (identical types if
+$\varepsilon\ge\tfrac12$, types $1$ and $\tfrac12$ if $\varepsilon<\tfrac12$), where a larger $s$ hurts, and the
+edge of the split region ($x=1$, $y$ just above $(1-\varepsilon)/2$), where the coin flip should give
+more and a larger $s$ helps; $s^\star$ equalises them ($s^\star=0.3$ at $\varepsilon=\tfrac12$).
 
 SMD gives $0.867$, $0.900$ and $0.942$ at $\varepsilon=0.4$, $0.5$ and $0.75$, against $6/7\approx0.857$
-and $28/31\approx0.903$ for the best fixed menu at $\varepsilon=0.5$ and $0.75$. It exceeds every
-fixed-menu mechanism for $\varepsilon>0.366$ (Figure~\ref{fig:smd}), so with complementarities a
-mechanism that uses both reports jointly beats the paper's entire class. Below $\varepsilon\approx0.37$
-the menus (and nested LIP) remain the best mechanisms we have.
+and $28/31\approx0.903$ for the best fixed menu at $\varepsilon=0.5$ and $0.75$. It exceeds
+$\rho_B$, and hence every fixed-menu mechanism, for $\varepsilon>(\sqrt3-1)/2\approx0.366$
+(Figure~\ref{fig:smd}), so with complementarities a mechanism that uses both reports jointly
+beats the paper's entire class. It overtakes nested LIP, our best menu, already at
+$\varepsilon\approx0.35$; below that, nested LIP remains the best mechanism we have.
 
 The rule is rigid: a larger threshold, a probabilistic split for moderately opposed agents,
 or nested LIP as the fallback all break strategy-proofness, and optimising the fallback menu by

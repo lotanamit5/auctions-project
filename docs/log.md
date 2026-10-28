@@ -151,3 +151,15 @@ evaluation (SD menus, split-menu LP), (iii) keep foreground jobs small and chunk
   vs LIP(a*)'s (0.725, 0.725), and near the extremes it is *less* decisive (takes some of the
   less-preferred item where LIP takes none). Caught while making the compact report figure;
   both places corrected. Lesson: re-derive descriptive claims from the plotted numbers.
+
+## 2026-10-28 - SMD figure audit
+- The closed-form fixed-menu bound min{rho_A, rho_B} is not tight for 0 < eps < 0.24: the menu LP
+  (N=100, dense eps grid, results/data/sd_lp_dense.csv) is lower by up to 0.018 at eps=0.17. The
+  report text claimed the LP value "has a closed form"; corrected. The SMD figure now plots the
+  menu LP instead of the closed form (the kink at 0.17 was an artefact of the proof).
+- SMD overtakes nested LIP (best a) already at eps ~0.35 (experiments/smd_crossover.py); it beats
+  every fixed menu for eps > (sqrt3-1)/2 = 0.366 (root of 2e^3 - 3e + 1 = 0). The text said "below
+  0.37 the menus remain best", corrected.
+- Proposition (SMD ratio) body text said identical types bind; for eps < 1/2 the binding same-side
+  profile is (1, 1/2) (as the appendix proof already says). Corrected.
+- Legend "nested LIP(a*)" clashed with a* = 2.10 of section 1; now "nested LIP (best a)".

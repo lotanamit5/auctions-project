@@ -44,22 +44,25 @@ def optimal_menu_vs_lip():
 
 
 def smd_vs_bounds():
-    """Section 4: SMD against the menu bound (fixed-menu bound) and the LP bound on all SP mechanisms."""
+    """Section 4: SMD against the menu LP (upper bound on fixed-menu mechanisms), nested LIP with
+    the best a per eps, and the LP bound on all SP mechanisms."""
     import pandas as pd
     from core import split
 
     lpc = pd.read_csv(ROOT / "results/data/lp_eps_curve.csv")
     lp_best = lpc.sort_values("N").groupby("eps", as_index=False).last().sort_values("eps")
     lp_best = lp_best[lp_best.eps <= 1]
-    nes = pd.read_csv(ROOT / "results/data/eps_lip_best_nested.csv").drop_duplicates("eps", keep="last")
+    nes = pd.read_csv(ROOT / "results/data/eps_lip_best_nested.csv")[["eps", "lower"]]
+    cross = pd.read_csv(ROOT / "results/data/smd_crossover.csv").rename(columns={"nested_lower": "lower"})
+    nes = pd.concat([nes, cross[["eps", "lower"]]]).drop_duplicates("eps", keep="last")
     nes = nes[nes.eps <= 1].sort_values("eps")
+    sd = pd.read_csv(ROOT / "results/data/sd_lp_dense.csv").sort_values("eps")
     e = np.linspace(0.001, 1, 400)
-    menu = np.minimum(np.where(e <= 0.5, (5 + 2 * e) / 6, np.inf), (1 + e) / (1 + 2 * e - e * e))
     fig, ax = plt.subplots(figsize=(4.6, 3.4))
     ax.plot(lp_best.eps, lp_best.alpha, "k-", lw=1.6, label="all SP (LP bound)")
-    ax.plot(e, menu, "--", c="C3", lw=1.4, label="fixed menus (upper bound)")
+    ax.plot(sd.eps, sd.alpha_sd, "--", c="C3", lw=1.4, label="fixed menus (LP bound)")
     ax.plot(e, split.ratio_closed_form(e), c="C2", lw=1.6, label="SMD")
-    ax.plot(nes.eps, nes.lower, "s", c="C1", ms=3.5, label=r"nested LIP($a^\star$)")
+    ax.plot(nes.eps, nes.lower, "s", c="C1", ms=3.5, label=r"nested LIP (best $a$)")
     ax.set(xlabel=r"$\varepsilon$", ylabel="competitive ratio", xlim=(0, 1), ylim=(0.70, 1.01))
     ax.set_title(r"Competitive ratio vs. $\varepsilon$", fontsize=10)
     ax.legend(fontsize=8, loc="lower right", framealpha=0.95)
