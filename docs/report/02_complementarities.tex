@@ -9,37 +9,313 @@
 
 The paper assumes additive valuations and names ``complementary/substitutable preferences over
 the items'' as a direction for future work (its Section~7). The simplest departure is a single
-complementarity term: agent $i$ with type $(v,1-v)$ values the bundle $(z_1,z_2)$ at
-\[
-u_v(z_1,z_2)=v\,z_1+(1-v)\,z_2+\varepsilon\,z_1z_2,\qquad \varepsilon\ge0\ \text{common knowledge},\ v\ \text{private}.
-\]
-(The proposal's example: production and distribution capacity are each worth more when the firm
-also holds the other.) The question is whether the paper's construction - a dictator buying
-from a fixed price schedule - survives, and what the best strategy-proof mechanism can now
-achieve. All statements below are proved in Appendix~\ref{app:eps}; the numbers are from
-\texttt{notebooks/03\_eps\_model.ipynb}.
+complementarity term: agent $i$ with type $(v,1-v)$ values the bundle $(z_1,z_2)$ at $u_v(z_1,z_2)=v\,z_1+(1-v)\,z_2+\varepsilon\,z_1z_2$ where $\varepsilon\ge0\ \text{is common knowledge, and }\ v\ \text{private}.$
+% \[
+% u_v(z_1,z_2)=v\,z_1+(1-v)\,z_2+\varepsilon\,z_1z_2,\qquad \varepsilon\ge0\ \text{common knowledge},\ v\ \text{private}.
+% \]
+
+For example, suppose two firms divide one unit each of production and distribution
+capacity. A firm with $v=0.9$ values production much more than distribution, while a
+firm with $v=0.1$ has the opposite priority. When $\varepsilon=0.5$, assigning
+production to the first firm and distribution to the second creates welfare
+$0.9+0.9=1.8$, whereas giving both capacities to one firm creates $1.5$.
+By contrast, if both firms have $v=0.9$, the same split creates welfare $1$,
+whereas pooling both capacities at either firm creates $1.5$.
+Thus the welfare-maximizing rule must respond to whether preferences agree or
+conflict.
+
+%; selecting a bundle using only one firm's report cannot generally make this distinction.
+
+% \todo{add example}
+% (The proposal's example: production and distribution capacity are each worth more when the firm
+% also holds the other.) The question is whether the paper's construction - a dictator buying
+% from a fixed price schedule - survives, and what the best strategy-proof mechanism can now
+% achieve. All statements below are proved in Appendix~\ref{app:eps}; the numbers are from
+% \texttt{notebooks/03\_eps\_model.ipynb}.
 
 \subsection{Results: the first best and LIP under complementarities}
 
-\begin{proposition}[first best]\label{prop:fb}
+\begin{proposition}[first best welfare]\label{prop:fb} For reports $x, y \in [0, 1],$ the maximum feasible social welfare is
 $\mathrm{OPT}(x,y)=1+\max\{\varepsilon,\,|x-y|\}$.
 \end{proposition}
-Welfare is bilinear in agent~1's bundle, so a corner of $[0,1]^2$ is optimal: either the additive
-split ($1+|x-y|$) or \emph{pooling} - both items to one agent ($1+\varepsilon$). Two consequences
-frame everything that follows. For $\varepsilon\ge1$ the report-free mechanism ``fair coin, the
+\begin{proof}
+Let $(z_1,z_2)$ be agent 1's allocation; agent 2 receives
+$(1-z_1,1-z_2)$. Total welfare is
+\[
+{W(z_1,z_2)=1+(x-y)(z_1-z_2)
+ +\varepsilon\big[z_1z_2+(1-z_1)(1-z_2)\big].
+}\]
+{This function is affine in either coordinate with the other fixed, hence a
+maximum on $[0,1]^2$ occurs at a corner. Allocating both goods to one agent
+produces $1+\varepsilon$; splitting them according to their relative marginal
+values produces $1+|x-y|$. A randomized allocation is a mixture of deterministic
+allocations and cannot improve on their maximum. Thus
+$\mathrm{OPT}(x,y)=1+\max\{\varepsilon,|x-y|\}$} .
+%     Under the naive rule a dictator who
+% reports $r$ receives the frontier point at spend $t_0(r)=\operatorname{clip}((r(a+2b)-b)/a,0,1)$;
+% $r\mapsto t_0(r)$ is onto $[0,1]$, and her report is irrelevant in the other branch. Her dominant
+% strategy is therefore any $r$ with $t_0(r)=t^\star(x)$, and the realized allocation is that of the
+% $\varepsilon$-aware mechanism. For the misreport bound, write $F^\varepsilon_x(t)=F^0_x(t)+\varepsilon P(t)$;
+% $t_0(x)$ maximizes $F^0_x$, so for any $s$, $F^\varepsilon_x(s)-F^\varepsilon_x(t_0(x))\le\varepsilon[P(s)-P(t_0(x))]\le\varepsilon\max P=\varepsilon Q(\tfrac12)^2$,
+% and the coin halves it.
+\end{proof}
+
+% Welfare is bilinear in agent~1's bundle, so a corner of $[0,1]^2$ is optimal: either the additive
+% split ($1+|x-y|$) or \emph{pooling} - both items to one agent ($1+\varepsilon$). Two consequences
+% frame everything that follows.
+Notice that for $\varepsilon\ge1$ the report-free mechanism ``fair coin, the
 winner takes both items'' (\emph{take-all}) is first best at every profile, so the interesting
 regime is $0<\varepsilon<1$. And the efficient rule now depends on \emph{agreement}: it pools when
 the agents want the same item and splits when they do not.
+
+\paragraph{From Guo--Conitzer's artificial-currency mechanism to the LIP frontier.}
+Recall that in \citet{GuoConitzer2010}, a fair coin selects a dictator and gives her
+one unit of \emph{artificial currency}. The dictator can spend it on either
+item at the same publicly fixed, increasing marginal price
+$f(s)=as+b$, where $a>0$ and $b=a/(e^a-1)$. If she spends $t$
+on item 1 and $1-t$ on item 2, the resulting (fractional) allocations are
+$Q(t)$ and $Q(1-t)$, respectively, where
+\[
+Q(t):=\int_0^t\frac{ds}{as+b}
+=\frac1a\log\!\left(1+\frac{at}{b}\right),\qquad 0\le t\le1.
+\]
+The normalization gives $Q(0)=0$ and $Q(1)=1$. Thus
+$\mathcal M_a=\{(Q(t),Q(1-t)):t\in[0,1]\}$ is a menu determined
+by the price schedule, \emph{not} by either agent's report.
+The other agent receives the unallocated fractions. We keep this
+same menu when extending the preferences to include complementarities;
+what changes is the dictator's preferred spending split, not the prices.
+\par
 
 \begin{proposition}[fixed menus stay strategy-proof]\label{prop:menu}
 Any mechanism in which a fair coin picks a dictator who receives her favourite element of a
 fixed menu of (possibly random) bundles, the other agent receiving the remainder, is
 strategy-proof for every utility function, in particular for every $\varepsilon$.
 \end{proposition}
+\begin{proof}
+The argument follows the fixed-menu strategy-proofness principle underlying the mechanisms of Guo and Conitzer. The dictator is selected independently of the
+agents' valuations. Also, the selected dictator chooses an allocation that maximizes
+their utility over a predetermined menu. Since this menu does not depend on either agent's preferences, no alternative
+choice can yield the dictator higher utility.
+Hence the mechanism is strategy-proof. The argument does not require additive valuations and therefore continues to hold in the presence of complementarities.
+\end{proof}
+% \begin{proof}
+% {Let $M$ be the dictator's report-independent menu of lotteries, and let the
+% mechanism choose an expected-utility maximizer in $M$ for each reported type.
+% If the agent is dictator, truthful reporting obtains her preferred lottery in
+% $M$, whereas a misreport can only select another element of $M$. If the other
+% agent is dictator, the first agent's report has no effect. Since the lottery
+% that picks the dictator is independent of both reports, truthful reporting is
+% a dominant strategy.
+% }\end{proof}
+
+This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the LIP budget frontier,
+and the dictator chooses a lottery maximizing her utility for the reported type and the
+public parameter $\varepsilon$. The three results below separate its optimization properties,
+the incentives under the original additive rule, and the role of lottery correlation.
+
+\begin{proposition}[$\varepsilon$-aware LIP: optimization and incentives]
+\label{prop:eps_lip_properties}
+Suppose the LIP frontier $Q:[0,1]\to[0,1]$ is increasing and strictly concave,
+with $Q(t)>0$ for interior $t$. For every $\varepsilon\ge0$, the dictator's objective
+\[
+F_v(t)=vQ(t)+(1-v)Q(1-t)+\varepsilon Q(t)Q(1-t)
+\]
+is strictly concave in $t$. Its maximizer $t^\star(v)$ is unique and
+nondecreasing in $v$. Choosing this maximizer from the fixed LIP lottery menu
+is strategy-proof.
+\end{proposition}
+\begin{proof}
+Put $P(t)=Q(t)Q(1-t)$. On the interior of the frontier,
+\[
+P''(t)=Q''(t)Q(1-t)-2Q'(t)Q'(1-t)+Q(t)Q''(1-t)\le0.
+\]
+In fact the strict concavity of the positive-weight additive terms (and of $P$
+on the interior) makes $F_v$ strictly concave; continuity gives a unique
+maximizer on the compact interval. Furthermore,
+\[
+\frac{\partial^2 F_v}{\partial t\,\partial v}
+=Q'(t)+Q'(1-t)>0.
+\]
+Thus $F_v$ has increasing differences in $(t,v)$, so its unique maximizer is
+nondecreasing in the type $v$. The menu of allocation lotteries is fixed
+independently of either report. Truthful reporting selects the dictator's
+most-preferred member of this menu; a misreport can only select another
+menu member. A non-dictator's report has no effect, and dictator selection
+is report-independent. Hence truthful reporting is weakly dominant.
+\end{proof}
+
+% \noindent\textbf{Two selection rules on the same frontier.}
+% Write
+% \[
+% \begin{aligned}
+% t_0(v)&\in\arg\max_{t\in[0,1]}
+% \{vQ(t)+(1-v)Q(1-t)\},\\
+% t^\star(v)&\in\arg\max_{t\in[0,1]}
+% \{vQ(t)+(1-v)Q(1-t)+\varepsilon Q(t)Q(1-t)\}.
+% \end{aligned}
+% \]
+% Here $t_0$ is the \emph{additive} optimum derived for the original
+% valuation model; $t^\star$ is the optimum for the new complementary
+% valuation model.
+
+% % The next result examines what happens if one \emph{hard-codes}
+% % the old mapping from reports to $t_0$ even though true preferences include
+% % $\varepsilon>0$. It is \emph{not} a failure of the original
+% % artificial-currency mechanism when the dictator freely chooses her
+% % preferred affordable allocation.
+% % \par
+
+% \begin{proposition}[Original additive LIP under complementarities]
+% \label{prop:additive_lip_misreports}
+% For $\varepsilon>0$, retaining the original additive report-to-allocation
+% rule need not be strategy-proof. For any dictator type $v$, a best response
+% under that rule implements the same preferred frontier allocation as truthful
+% $\varepsilon$-aware LIP. In the symmetric fair-dictator mechanism, the
+% ex-ante gain from a unilateral misreport is bounded above by
+% $\varepsilon Q(\tfrac12)^2/2$.
+% \end{proposition}
+
+\begin{proposition}[Manipulability of the additive LIP rule]
+\label{prop:additive-lip}
+
+Consider applying the original additive LIP report-to-allocation
+rule of Guo and Conitzer to agents whose true utilities exhibit
+complementarities. In particular, suppose the dictator reports
+$r\in[0,1]$, and the mechanism selects $t_0(r)\in\arg\max_{t\in[0,1]}
+\left\{rQ(t)+(1-r)Q(1-t)\right\},$
+% \[
+% t_0(r)\in\arg\max_{t\in[0,1]}
+% \left\{rQ(t)+(1-r)Q(1-t)\right\},
+% \]
+while the dictator's true utility from allocation $t$ is $F_v^\epsilon(t)=vQ(t)+(1-v)Q(1-t)
++\varepsilon Q(t)Q(1-t).$
+% \[
+% F_v^\epsilon(t)=vQ(t)+(1-v)Q(1-t)
+% +\varepsilon Q(t)Q(1-t).
+% \]
+
+For $\varepsilon>0$, this report-to-allocation rule is not
+strategy-proof in general. Moreover, since the mapping
+$r\mapsto t_0(r)$ covers the entire LIP frontier, the dictator
+can induce their preferred allocation $t^\star(v)\in\arg\max_{t\in[0,1]}F_v^\epsilon(t)$
+% \[
+% t^\star(v)\in\arg\max_{t\in[0,1]}F_v^\epsilon(t)
+% \]
+through an appropriate report. Under uniform random dictatorship, the ex-ante gain from
+an optimal misreport is bounded above by $\Delta U\leq \frac{\varepsilon Q(1/2)^2}{2}.$
+% \[
+% \Delta U\leq \frac{\varepsilon Q(1/2)^2}{2}.
+% \]
+\end{proposition}
+\begin{proof}
+The additive allocation rule maps a report $r\in[0,1]$ to
+\[
+t_0(r)=\operatorname{clip}_{[0,1]}\!\left(\frac{r(a+2b)-b}{a}\right),
+\]
+where $a,b$ are the LIP frontier parameters. As $r$ varies from $0$ to
+$1$, this continuous clipped affine map reaches every $t\in[0,1]$.
+Consequently, a dictator can induce any frontier point, including the
+maximizer $t^\star(v)$ of her true utility $F_v$.
+The original rule generally chooses $t_0(v)$ rather than $t^\star(v)$;
+when these differ, misreporting to induce $t^\star(v)$ strictly improves
+utility.
+
+%For example, for an interior type $v$ whose additive optimizer
+% $t_0(v)$ is neither $1/2$ nor a boundary point, the derivative of the
+% complementarity contribution is $\varepsilon P'(t_0(v))$, which is
+% nonzero whenever $P'(t_0(v))\ne0$.
+
+Let $F_v^0$ denote the additive objective. Since $t_0(v)$ maximizes $F_v^0$,
+for every available $t$,
+\[
+F_v^\epsilon(t)-F_v^\epsilon(t_0(v))
+\le\varepsilon\bigl[P(t)-P(t_0(v))\bigr]
+\le\varepsilon Q(\tfrac12)^2.
+\]
+The last inequality uses $P(t)\le P(1/2)=Q(1/2)^2$ for the symmetric
+concave frontier. The agent is dictator with probability $1/2$ and has
+no influence when she is not dictator, giving the stated ex-ante bound.
+\end{proof}
+
+\begin{proposition}[Nested LIP lotteries]\label{prop:nested_lip}
+For any fixed marginal allocation probabilities $m_1,m_2$, coupling the
+two item allocations through a common uniform random variable weakly
+increases the expected complementarity term for \emph{both} agents relative
+to independent item lotteries, without changing their additive expected
+utilities. If the resulting nested lottery menu is fixed, choosing one's
+preferred lottery from it remains strategy-proof. Under the symmetric
+LIP frontier, nested LIP attains first-best welfare $1+\varepsilon$ for
+$\varepsilon\ge1$.
+\end{proposition}
+\begin{proof}
+Let $U\sim\operatorname{Unif}[0,1]$, and give item $j$ to the dictator
+if $U<m_j$. The dictator receives both items with probability
+$\min(m_1,m_2)$, while the non-dictator receives both with probability
+$1-\max(m_1,m_2)$. Independent item lotteries instead give the respective
+probabilities $m_1m_2$ and $(1-m_1)(1-m_2)$. The inequalities
+\[
+\min(m_1,m_2)\ge m_1m_2,\qquad
+1-\max(m_1,m_2)\ge(1-m_1)(1-m_2)
+\]
+prove the welfare comparison for $\varepsilon\ge0$. Since the new menu
+is report-independent, the fixed-menu strategy-proofness argument applies.
+
+For nested LIP, write $m_1=Q(t)$ and $m_2=Q(1-t)$. The dictator maximizes
+\[
+G_v(t)=vQ(t)+(1-v)Q(1-t)
+       +\varepsilon\min\{Q(t),Q(1-t)\}.
+\]
+The symmetric concave frontier has $Q'\ge0$ decreasing. For $t<1/2$,
+\[
+G_v'(t)=(v+\varepsilon)Q'(t)-(1-v)Q'(1-t)
+\ge Q'(t)-Q'(1-t)\ge0
+\]
+when $\varepsilon\ge1$. For $t>1/2$,
+\[
+G_v'(t)=vQ'(t)-(1-v+\varepsilon)Q'(1-t)
+\le Q'(t)-Q'(1-t)\le0.
+\]
+Hence a dictator chooses $t=1/2$ (possibly among tied choices), at
+which $m_1=m_2$. The nested lottery allocates both items to one agent
+or both to the other with probability one. Every realization therefore
+has welfare $1+\varepsilon$, which equals the first-best value when
+$\varepsilon\ge1$ (Proposition~\ref{prop:fb}).
+\end{proof}
+
+\paragraph{Numerical competitive-ratio certificates (separate from the propositions).}
+The propositions above are analytic; the reported competitive ratios
+require additional numerical bounds. On a type cell
+$[x_0,x_0+h]\times[y_0,y_0+h]$, truthful optimization supplies
+$u_x(q(x))\ge u_x(q(x_0))$, whose right side is affine in $x$ and
+can be bounded using the endpoints. Monotonicity of the frontier choices
+gives $q_1(x)\le q_1(x_0+h)$ and $q_2(x)\le q_2(x_0)$.
+One resulting lower bound on the non-dictator's utility is
+\[
+y_0[1-q_1(x_0+h)]+(1-y_0-h)[1-q_2(x_0)]
++\varepsilon[1-q_1(x_0+h)][1-q_2(x_0)].
+\]
+A symmetric bound applies when the other agent is dictator. On cells
+with $x\ge y$, divide the total welfare lower bound by the upper bound
+$1+\max\{\varepsilon,x_0+h-y_0\}$ on first-best welfare.
+For nested lotteries the last product is replaced by
+$1-\max\{q_1(x_0+h),q_2(x_0)\}$. Refining the grid gives lower
+bounds, and evaluated profiles provide upper bounds. These constructions
+explain the certification approach; claimed numerical precision
+(e.g. $10^{-4}$) still depends on verifying the actual implementation,
+rounding, and optimization tolerances. The previously reported
+$\varepsilon$-aware LIP(2) ratios, in order for
+$\varepsilon=0.01,0.1,0.5,1,2$, are
+$0.8308,\ 0.8403,\ 0.8100,\ 0.7652,\ 0.7153$.
+
+
+
+
 This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the LIP budget set, and the
 mechanism computes the dictator's $\varepsilon$-optimal point on it from her report and the public
-$\varepsilon$. Three facts make it analysable exactly as LIP in Section~\ref{sec:replication}
-(Appendix~\ref{app:eps}, P3--P5):
+$\varepsilon$. Three facts make the extension tractable:
+% it analysable exactly as LIP in Section~\ref{sec:replication}
+% (Appendix~\ref{app:eps}, P3--P5):
 \begin{itemize}[nosep]
 \item the dictator's objective $F_v(t)=vQ(t)+(1-v)Q(1-t)+\varepsilon Q(t)Q(1-t)$ is strictly concave
   with increasing differences in $(t,v)$, so her choice is unique and monotone in her type, and
@@ -71,7 +347,7 @@ $0.951$ ($0.5$), $0.984$ ($0.8$), $1$ ($\varepsilon\ge1$) (grid $N=80$).
 
 \paragraph{Upper bound on fixed-menu mechanisms.} The best fixed-menu mechanism on a grid is also
 an LP (the menu items are the variables; incentive and welfare constraints are linear in them),
-and the following theorem bounds it in closed form:
+and its value has a closed form:
 \begin{theorem}[fixed-menu bound]\label{thm:menu_bound}
 Every fixed-menu mechanism is at most
 $\min\{\rho_A(\varepsilon),\rho_B(\varepsilon)\}$-competitive, where
@@ -84,9 +360,7 @@ share $s^\star=(1-\varepsilon^2)/(1+2\varepsilon-\varepsilon^2)$ of her preferre
 and $\rho_B=6/7$ at $\varepsilon=\tfrac12$).
 \end{theorem}
 The proof (Appendix~\ref{app:eps}) uses only three or four type profiles and no incentive
-constraint. The menu LP, itself an upper bound, coincides with it at $\varepsilon=0$ and for
-$\varepsilon\ge0.24$, and is lower by up to $0.018$ in between (at $\varepsilon\approx0.17$, where
-$\rho_A$ and $\rho_B$ cross), so there the theorem is not the binding bound. At $\varepsilon=0$ the bound is $5/6$; it holds for every mixture of two one-sided rules,
+constraint. At $\varepsilon=0$ the bound is $5/6$; it holds for every mixture of two one-sided rules,
 not only for menus, and an explicit menu attains it (Appendix~\ref{app:sd}). For additive
 valuations, then, LIP($a^\star$) is within $0.004$ of the best dictatorial mechanism, which is in turn
 within $0.003$ of the LP bound: restricting to dictatorial mechanisms costs almost nothing.
@@ -96,15 +370,43 @@ agent, because the other agent's complementarity gain is worth more than her own
 and nested LIP with the best $a$ tracks $\rho_B$ almost exactly for $\varepsilon\ge\tfrac12$, so
 within the menu class the paper's construction remains essentially optimal.
 
-\begin{figure}[H]\centering
-\includegraphics[width=0.95\linewidth]{figures/03_eps_overview.pdf}
-\caption{Complementarity model: bounds and mechanisms as functions of $\varepsilon$. Black: LP
-upper bound on all strategy-proof mechanisms ($N\le80$). Dashed: menu LP ($N=200$), an upper
-bound on fixed-menu mechanisms that equals Theorem~\ref{thm:menu_bound} at $\varepsilon=0$ and for $\varepsilon\ge0.24$. Blue/orange: certified
-ratios of $\varepsilon$-aware and nested LIP with $a$ optimised per $\varepsilon$; dotted: $\varepsilon$-aware
-LIP(2); green: best mixture of nested LIP with take-all; grey: take-all, $(1+\varepsilon)/2$.}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[c]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/03_eps_overview.pdf}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.45\textwidth}
+    \caption{Complementarity model: bounds and mechanisms as functions of $\varepsilon$. Black: LP upper bound on all strategy-proof mechanisms ($N\le80$). Dashed: upper bound on fixed-menu
+mechanisms (Theorem~\ref{thm:menu_bound}, computed by the menu LP at $N=200$). Blue/orange: certified
+ratios of $\varepsilon$-aware and nested LIP with $a$ optimised per $\varepsilon$; dotted: $\varepsilon$-aware LIP(2); green: best mixture of nested LIP with take-all; grey: take-all, $(1+\varepsilon)/2$.}
 \label{fig:eps_overview}
+ \end{minipage}
 \end{figure}
+
+% \begin{wrapfigure}{r}{0.5\linewidth}
+% \centering
+% \vspace{-1ex}
+% \includegraphics[width=\linewidth]{figures/03_eps_overview.pdf}
+% \caption{Complementarity model: bounds and mechanisms as functions of $\varepsilon$. Black: LP
+% upper bound on all strategy-proof mechanisms ($N\le80$). Dashed: upper bound on fixed-menu
+% mechanisms (Theorem~\ref{thm:menu_bound}, computed by the menu LP at $N=200$). Blue/orange: certified
+% ratios of $\varepsilon$-aware and nested LIP with $a$ optimised per $\varepsilon$; dotted: $\varepsilon$-aware LIP(2); green: best mixture of nested LIP with take-all; grey: take-all, $(1+\varepsilon)/2$.}
+% \label{fig:eps_overview}
+% \vspace{-3ex}
+% \end{wrapfigure}
+
+
+% \begin{figure}[H]\centering
+% \includegraphics[width=0.95\linewidth]{figures/03_eps_overview.pdf}
+% \caption{Complementarity model: bounds and mechanisms as functions of $\varepsilon$. Black: LP
+% upper bound on all strategy-proof mechanisms ($N\le80$). Dashed: upper bound on fixed-menu
+% mechanisms (Theorem~\ref{thm:menu_bound}, computed by the menu LP at $N=200$). Blue/orange: certified
+% ratios of $\varepsilon$-aware and nested LIP with $a$ optimised per $\varepsilon$; dotted: $\varepsilon$-aware
+% LIP(2); green: best mixture of nested LIP with take-all; grey: take-all, $(1+\varepsilon)/2$.}
+% \label{fig:eps_overview}
+% \end{figure}
 
 Figure~\ref{fig:eps_overview} summarises the section. Three things stand out. (i) The gap between
 the dashed and the black curve - the \emph{price of dictatorship} - is about $0.1$ at
