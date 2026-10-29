@@ -125,16 +125,22 @@ nonzero whenever $P'(t_0(v))\ne0$.
 
 ## מבנה
 
-### 10. ההגדרה של Q ו-b [דורש החלטה]
+### 10. ההגדרה של Q ו-b [כבר ב-repo]
 
 Q ו-b מוגדרים רק בסקשן 2, בפסקה "From Guo--Conitzer's artificial-currency mechanism to the LIP frontier".
 אבל סקשן 1 כבר משתמש בהם, ב-β(a) וב-Lemma 2.
 אם אין ב-`main.tex` רקע שמגדיר אותם קודם, צריך להעביר את ההגדרה לסקשן 1 או למבוא.
+הוחלט ובוצע (2026-10-29): המבוא (`part_A_summary.tex`, לא עורכים אותו) מגדיר את a ו-b אבל לא את Q.
+לכן: (א) בסקשן 1 נוסף "where $Q(t)=\tfrac1a\ln(1+at/b)$ is the share of an item bought with $t$ units of currency";
+(ב) בסקשן 2 נמחקה כל הפסקה "From Guo--Conitzer's artificial-currency mechanism to the LIP frontier",
+והמשפט שאחרי טענה 2 הורחב ל-"the menu is the paper's LIP frontier $\{(Q(t),Q(1-t)):t\in[0,1]\}$, fixed by the
+price schedule and not by the reports".
 
-### 11. הציטוט [דורש החלטה]
+### 11. הציטוט [כבר ב-repo]
 
 `\citet{GuoConitzer2010}` דורש natbib ורשומה בשם הזה בקובץ ה-bib.
 בשאר הדוח כתוב "the paper". כדאי לוודא שהציטוט מתקמפל, או לאחד את הסגנון.
+נסגר (2026-10-29): הציטוט נמחק יחד עם הפסקה (עריכה 10). המאמר מצוטט במבוא.
 
 ### 12. הנספח של המשלימים, appendix_eps_proofs.tex [דורש החלטה]
 
@@ -216,6 +222,7 @@ public parameter $\varepsilon$.
 and the dictator chooses a bundle maximizing her utility for the reported type and the
 public parameter $\varepsilon$.
 ```
+(סעיף 1 בוצע ב-2026-10-29 במסגרת עריכה 10, במשפט המורחב.)
 2. באותה פסקה, להחליף "and the role of lottery correlation." ב-"and the role of randomisation."
 3. בניסוח טענה 3, להחליף "Choosing this maximizer from the fixed LIP lottery menu" ב-"Choosing this maximizer from the fixed LIP menu".
 4. בהוכחת טענה 3, להחליף "The menu of allocation lotteries is fixed" ב-"The menu of bundles is fixed".
