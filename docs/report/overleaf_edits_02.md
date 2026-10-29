@@ -1,11 +1,14 @@
 # עריכות לסקשן 2 (המשלימים) בגרסה של השותפה ב-Overleaf
 
-נכתב ב-2026-10-28. הבסיס הוא הגרסה של השותפה ב-Overleaf.
+נכתב ב-2026-10-28, עודכן ב-2026-10-29. הבסיס הוא הגרסה של השותפה ב-Overleaf.
 ב-repo, הקובץ `02_complementarities.tex` הוא הגרסה שלה, ועוד עריכות 1 עד 3 בלבד.
 
 כל עריכה מסומנת:
 - **[כבר ב-repo]**: בוצעה בעותק ב-repo, ונשאר להחיל אותה ב-Overleaf.
 - **[לא בוצעה]**: המלצה, שלא בוצעה באף עותק.
+- **[דורש החלטה]**: תלוי במה שיש ב-`main.tex` או בבחירה של המחבר. להכריע בסשן הבא.
+
+דרך העבודה המומלצת: להחיל את כל העריכות על העותק ב-repo, ואז להחליף את הקובץ כולו ב-Overleaf.
 
 בגרסה של השותפה הכול נכון מבחינה עובדתית, חוץ מעריכות 1 עד 3. שאר העריכות הן כפילויות ודיוקים קטנים.
 
@@ -120,18 +123,18 @@ nonzero whenever $P'(t_0(v))\ne0$.
 
 ## מבנה
 
-### 10. ההגדרה של Q ו-b [לא בוצעה]
+### 10. ההגדרה של Q ו-b [דורש החלטה]
 
 Q ו-b מוגדרים רק בסקשן 2, בפסקה "From Guo--Conitzer's artificial-currency mechanism to the LIP frontier".
 אבל סקשן 1 כבר משתמש בהם, ב-β(a) וב-Lemma 2.
 אם אין ב-`main.tex` רקע שמגדיר אותם קודם, צריך להעביר את ההגדרה לסקשן 1 או למבוא.
 
-### 11. הציטוט [לא בוצעה]
+### 11. הציטוט [דורש החלטה]
 
 `\citet{GuoConitzer2010}` דורש natbib ורשומה בשם הזה בקובץ ה-bib.
 בשאר הדוח כתוב "the paper". כדאי לוודא שהציטוט מתקמפל, או לאחד את הסגנון.
 
-### 12. הנספח של המשלימים, appendix_eps_proofs.tex [לא בוצעה]
+### 12. הנספח של המשלימים, appendix_eps_proofs.tex [דורש החלטה]
 
 הקובץ הזה שלנו ב-repo, לא של השותפה.
 - P1, P2, P3, P5 ו-P6 חוזרים על ההוכחות שבגוף הדוח, ו-P4 חוזר על פסקת ה-certificates.
@@ -155,14 +158,15 @@ nested נותן min(m1,m2), ה-first best וחסם ה-LP זהים בשתי הק�
 הקמור של גרף z1·z2 על הריבוע, וגם של ארבע הפינות). SMD לא מושפע, כי אצלו תמיד קואורדינטה אחת
 שווה 1, ואז המכפלה והמינימום מתלכדים.
 
+הוחלט (2026-10-29): הבסיס החלוק בכל הפרויקט, כמו במאמר. דוגמת הפירמות תקפה בו כמו שהיא
+(קיבולות חלוקות, הדוגמה משתמשת רק בהקצאות שלמות, שהן פינות של המודל).
+
 ### 13. להצהיר על הבסיס פעם אחת, בפסקת המוטיבציה [לא בוצעה]
 
 אחרי המשפט שמגדיר את u_v (זה שמסתיים ב-"and $v$ private.") להוסיף:
 ```latex
-As in the paper, the items are divisible, $(z_1,z_2)$ are fractions, mechanisms may randomise and
-agents are risk neutral. Unlike the additive case, the paper's alternative reading of $z_j$ as the
-probability of winning an indivisible item $j$ is no longer equivalent, because
-$\mathbb E[z_1z_2]$ then depends on how the two draws are coupled; we keep the divisible reading.
+As in the paper, the items are divisible and $(z_1,z_2)$ are fractions; mechanisms may
+randomise over bundles, and agents are risk neutral.
 ```
 
 ### 14. טענה 5 בשפה של פריטים חלוקים [לא בוצעה]
@@ -194,6 +198,38 @@ terms $m_1m_2$ and $(1-m_1)(1-m_2)$.
 ```
 
 בנספח שלנו ב-repo (P6) הניסוח כבר תוקן באותו אופן.
+
+### 15. "lottery" הופך ל-"bundle" בחלק של ε-aware LIP [לא בוצעה]
+
+בבסיס החלוק ε-aware LIP נותן צרור דטרמיניסטי. המילה "lottery" נשארת רק עבור nested LIP ועבור
+המחלקה הכללית. ארבע החלפות:
+
+1. בפסקה שאחרי טענה 2, להחליף:
+```latex
+and the dictator chooses a lottery maximizing her utility for the reported type and the
+public parameter $\varepsilon$.
+```
+ב-:
+```latex
+and the dictator chooses a bundle maximizing her utility for the reported type and the
+public parameter $\varepsilon$.
+```
+2. באותה פסקה, להחליף "and the role of lottery correlation." ב-"and the role of randomisation."
+3. בניסוח טענה 3, להחליף "Choosing this maximizer from the fixed LIP lottery menu" ב-"Choosing this maximizer from the fixed LIP menu".
+4. בהוכחת טענה 3, להחליף "The menu of allocation lotteries is fixed" ב-"The menu of bundles is fixed".
+
+### 16. הגדרת המחלקה לפני משפט חסם התפריטים [לא בוצעה]
+
+nested LIP נמצא מחוץ למרחב התוצאות של המאמר, כי התפריט שלו מכיל הגרלות ולא רק צרורות.
+לכן המשפט צריך לומר על איזו מחלקה הוא חל. בתחילת הפסקה
+`\paragraph{Upper bound on fixed-menu mechanisms.}`, לפני "The best fixed-menu mechanism on a grid",
+להוסיף:
+```latex
+A \emph{fixed-menu mechanism} lets a fair coin pick a dictator who chooses from a fixed menu of
+lotteries over bundles; the class contains the paper's swap-dictatorial mechanisms (deterministic
+menus) and both LIP variants above.
+```
+ובמשפט עצמו להחליף "by the two-item menu" ב-"by the deterministic two-item menu".
 
 ---
 
