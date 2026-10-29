@@ -74,7 +74,7 @@ $\Delta U\leq \frac{\varepsilon Q(1/2)^2}{2}.$
 $\Delta U\leq \varepsilon Q(\tfrac12)^2/2$ ($\approx0.26\,\varepsilon$ for $a=2$).
 ```
 
-### 5. סוף פסקת ה-certificates [לא בוצעה]
+### 5. סוף פסקת ה-certificates [כבר ב-repo]
 
 להחליף את כל המשפטים מ-"These constructions explain the certification approach;" ועד סוף הפסקה ב-:
 ```latex
