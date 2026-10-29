@@ -93,21 +93,15 @@ fixed menu of (possibly random) bundles, the other agent receiving the remainder
 strategy-proof for every utility function, in particular for every $\varepsilon$.
 \end{proposition}
 \begin{proof}
-The argument follows the fixed-menu strategy-proofness principle underlying the mechanisms of Guo and Conitzer. The dictator is selected independently of the
-agents' valuations. Also, the selected dictator chooses an allocation that maximizes
-their utility over a predetermined menu. Since this menu does not depend on either agent's preferences, no alternative
-choice can yield the dictator higher utility.
-Hence the mechanism is strategy-proof. The argument does not require additive valuations and therefore continues to hold in the presence of complementarities.
+Let $M$ be the dictator's report-independent menu of lotteries, and let the
+mechanism choose an expected-utility maximizer in $M$ for each reported type.
+If the agent is dictator, truthful reporting obtains her preferred lottery in
+$M$, whereas a misreport can only select another element of $M$. If the other
+agent is dictator, the first agent's report has no effect. Since the lottery
+that picks the dictator is independent of both reports, truthful reporting is
+a dominant strategy. The argument does not require additive valuations and
+therefore continues to hold in the presence of complementarities.
 \end{proof}
-% \begin{proof}
-% {Let $M$ be the dictator's report-independent menu of lotteries, and let the
-% mechanism choose an expected-utility maximizer in $M$ for each reported type.
-% If the agent is dictator, truthful reporting obtains her preferred lottery in
-% $M$, whereas a misreport can only select another element of $M$. If the other
-% agent is dictator, the first agent's report has no effect. Since the lottery
-% that picks the dictator is independent of both reports, truthful reporting is
-% a dominant strategy.
-% }\end{proof}
 
 This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the LIP budget frontier,
 and the dictator chooses a lottery maximizing her utility for the reported type and the
