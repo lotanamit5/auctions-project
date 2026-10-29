@@ -68,24 +68,6 @@ winner takes both items'' (\emph{take-all}) is first best at every profile, so t
 regime is $0<\varepsilon<1$. And the efficient rule now depends on \emph{agreement}: it pools when
 the agents want the same item and splits when they do not.
 
-\paragraph{From Guo--Conitzer's artificial-currency mechanism to the LIP frontier.}
-Recall that in \citet{GuoConitzer2010}, a fair coin selects a dictator and gives her
-one unit of \emph{artificial currency}. The dictator can spend it on either
-item at the same publicly fixed, increasing marginal price
-$f(s)=as+b$, where $a>0$ and $b=a/(e^a-1)$. If she spends $t$
-on item 1 and $1-t$ on item 2, the resulting (fractional) allocations are
-$Q(t)$ and $Q(1-t)$, respectively, where
-\[
-Q(t):=\int_0^t\frac{ds}{as+b}
-=\frac1a\log\!\left(1+\frac{at}{b}\right),\qquad 0\le t\le1.
-\]
-The normalization gives $Q(0)=0$ and $Q(1)=1$. Thus
-$\mathcal M_a=\{(Q(t),Q(1-t)):t\in[0,1]\}$ is a menu determined
-by the price schedule, \emph{not} by either agent's report.
-The other agent receives the unallocated fractions. We keep this
-same menu when extending the preferences to include complementarities;
-what changes is the dictator's preferred spending split, not the prices.
-\par
 
 \begin{proposition}[fixed menus stay strategy-proof]\label{prop:menu}
 Any mechanism in which a fair coin picks a dictator who receives her favourite element of a
@@ -103,9 +85,10 @@ a dominant strategy. The argument does not require additive valuations and
 therefore continues to hold in the presence of complementarities.
 \end{proof}
 
-This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the LIP budget frontier,
-and the dictator chooses a lottery maximizing her utility for the reported type and the
-public parameter $\varepsilon$. The three results below separate its optimization properties,
+This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the paper's LIP frontier
+$\{(Q(t),Q(1-t)):t\in[0,1]\}$, fixed by the price schedule and not by the reports, and the
+dictator chooses a bundle maximizing her utility for the reported type and the public
+parameter $\varepsilon$. The three results below separate its optimization properties,
 the incentives under the original additive rule, and the role of lottery correlation.
 
 \begin{proposition}[$\varepsilon$-aware LIP: optimization and incentives]
