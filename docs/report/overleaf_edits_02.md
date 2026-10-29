@@ -58,7 +58,7 @@ mechanisms that equals Theorem~\ref{thm:menu_bound} at $\varepsilon=0$ and for $
 
 ## כפילויות
 
-### 4. מחיקת הבלוק הכפול [לא בוצעה]
+### 4. מחיקת הבלוק הכפול [כבר ב-repo]
 
 הבלוק מתחיל ב-"This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the LIP budget set",
 ונגמר ב-`\end{itemize}` שלפני `\subsection{Extending the bounds}`. הוא חוזר על טענות 3 עד 5 ועל פסקת ה-certificates. גם הפסקה שפותחת אותו מופיעה פעמיים.

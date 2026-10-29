@@ -203,7 +203,7 @@ can induce their preferred allocation $t^\star(v)\in\arg\max_{t\in[0,1]}F_v^\eps
 % t^\star(v)\in\arg\max_{t\in[0,1]}F_v^\epsilon(t)
 % \]
 through an appropriate report. Under uniform random dictatorship, the ex-ante gain from
-an optimal misreport is bounded above by $\Delta U\leq \frac{\varepsilon Q(1/2)^2}{2}.$
+an optimal misreport is bounded above by $\Delta U\leq \varepsilon Q(\tfrac12)^2/2$ ($\approx0.26\,\varepsilon$ for $a=2$).
 % \[
 % \Delta U\leq \frac{\varepsilon Q(1/2)^2}{2}.
 % \]
@@ -307,31 +307,6 @@ rounding, and optimization tolerances. The previously reported
 $\varepsilon$-aware LIP(2) ratios, in order for
 $\varepsilon=0.01,0.1,0.5,1,2$, are
 $0.8308,\ 0.8403,\ 0.8100,\ 0.7652,\ 0.7153$.
-
-
-
-
-This gives the \emph{$\varepsilon$-aware LIP$(a)$}: the menu is the LIP budget set, and the
-mechanism computes the dictator's $\varepsilon$-optimal point on it from her report and the public
-$\varepsilon$. Three facts make the extension tractable:
-% it analysable exactly as LIP in Section~\ref{sec:replication}
-% (Appendix~\ref{app:eps}, P3--P5):
-\begin{itemize}[nosep]
-\item the dictator's objective $F_v(t)=vQ(t)+(1-v)Q(1-t)+\varepsilon Q(t)Q(1-t)$ is strictly concave
-  with increasing differences in $(t,v)$, so her choice is unique and monotone in her type, and
-  the grid sandwich of the paper's Theorem~2 carries over (with the $\varepsilon$ terms bounded cell-wise);
-\item keeping the paper's additive report-to-bundle rule while $\varepsilon>0$ is \emph{not}
-  strategy-proof (misreport gains up to $\varepsilon Q(\tfrac12)^2/2\approx0.26\,\varepsilon$), but a
-  best-responding agent ends up exactly at the $\varepsilon$-aware mechanism's outcome, because
-  the reachable set of the naive rule is the whole budget frontier. The ``strategic LIP'' column
-  of our earlier draft ($0.8308,\,0.8403,\,0.8100,\,0.7652,\,0.7153$ at $\varepsilon=0.01,0.1,0.5,1,2$)
-  is therefore the competitive ratio of $\varepsilon$-aware LIP(2), now certified to $10^{-4}$;
-\item \emph{nested lotteries}: offering the same marginal shares $(m_1,m_2)$ as a comonotone
-  lottery (one uniform draw $U$; item $j$ iff $U<m_j$) raises $\mathbb E[z_1z_2]$ from $m_1m_2$ to
-  $\min(m_1,m_2)$ for the dictator and symmetrically for the other agent, at no cost in incentives
-  (the menu is still fixed). \emph{Nested LIP} is first best for $\varepsilon\ge1$: every dictator
-  then picks the balanced lottery ``everything with probability $Q(\tfrac12)$''.
-\end{itemize}
 
 \subsection{Extending the bounds}
 
