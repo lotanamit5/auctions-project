@@ -117,7 +117,7 @@ nonzero whenever $P'(t_0(v))\ne0$.
 מכאן שכל טיפוס שהבחירה שלו פנימית ושונה מ-½ מרוויח משקר.
 בוצע (2026-10-29): המשפט הוחזר, וסופו שונה ל-"which is nonzero because $P$ is symmetric and strictly concave, so $P'(t)=0$ only at $t=1/2$."
 
-### 9. סימון [לא בוצעה]
+### 9. סימון [כבר ב-repo]
 
 בטענה 4 ובהוכחה שלה כתוב `F_v^\epsilon`, ובכל שאר הדוח `\varepsilon`. כדאי לאחד ל-`\varepsilon`.
 
