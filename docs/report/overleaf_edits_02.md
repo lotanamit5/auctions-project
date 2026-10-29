@@ -140,6 +140,63 @@ Q ו-b מוגדרים רק בסקשן 2, בפסקה "From Guo--Conitzer's artifi
 
 ---
 
+## בסיס המודל: פריטים חלוקים (divisible)
+
+הרקע: במאמר הפריטים חלוקים, ו-p_j הוא החלק מפריט j. הערת שוליים 5 במאמר אומרת שאפשר גם לקרוא
+את p_j כהסתברות לזכות בפריט בלתי-חלוק. במודל האדיטיבי שתי הקריאות שקולות, כי התועלת לינארית ב-p.
+אצלנו, עם ε·z1·z2, הן כבר לא שקולות: תוחלת המכפלה תלויה באיך שתי ההגרלות מצומדות.
+
+המודל שלנו, הדוגמה של הפירמות, ההצעה והקוד כולם בקריאה החלוקה: z הם חלקים, ו-ε-aware LIP נותן
+חלקים דטרמיניסטיים, בדיוק כמו LIP במאמר. רק טענה 5 (nested LIP) כתובה בשפה של פריטים
+בלתי-חלוקים ("marginal allocation probabilities", "independent item lotteries"). בקריאה החלוקה
+nested LIP הוא מנגנון מוגרל שנותן פריטים שלמים, וההשוואה הנכונה היא מול הצרור החלקי
+הדטרמיניסטי, לא מול "הגרלות בלתי-תלויות". המספרים לא משתנים: ε-aware LIP נותן m1·m2,
+nested נותן min(m1,m2), ה-first best וחסם ה-LP זהים בשתי הקריאות (ה-McCormick envelope הוא
+הקמור של גרף z1·z2 על הריבוע, וגם של ארבע הפינות). SMD לא מושפע, כי אצלו תמיד קואורדינטה אחת
+שווה 1, ואז המכפלה והמינימום מתלכדים.
+
+### 13. להצהיר על הבסיס פעם אחת, בפסקת המוטיבציה [לא בוצעה]
+
+אחרי המשפט שמגדיר את u_v (זה שמסתיים ב-"and $v$ private.") להוסיף:
+```latex
+As in the paper, the items are divisible, $(z_1,z_2)$ are fractions, mechanisms may randomise and
+agents are risk neutral. Unlike the additive case, the paper's alternative reading of $z_j$ as the
+probability of winning an indivisible item $j$ is no longer equivalent, because
+$\mathbb E[z_1z_2]$ then depends on how the two draws are coupled; we keep the divisible reading.
+```
+
+### 14. טענה 5 בשפה של פריטים חלוקים [לא בוצעה]
+
+להחליף את נוסח הטענה:
+```latex
+For any fixed marginal allocation probabilities $m_1,m_2$, coupling the
+two item allocations through a common uniform random variable weakly
+increases the expected complementarity term for \emph{both} agents relative
+to independent item lotteries, without changing their additive expected
+utilities. If the resulting nested lottery menu is fixed, choosing one's
+```
+ב-:
+```latex
+Replace the deterministic fractional bundle $(m_1,m_2)$ by the lottery over whole items
+``draw $U\sim\operatorname{Unif}[0,1]$; the dictator wins item $j$ iff $U<m_j$''. The expected
+shares, hence both agents' additive utilities, are unchanged, while the expected complementarity
+term weakly increases for \emph{both} agents. If the resulting menu of lotteries is fixed, choosing one's
+```
+ובהוכחה להחליף את:
+```latex
+Independent item lotteries instead give the respective
+probabilities $m_1m_2$ and $(1-m_1)(1-m_2)$.
+```
+ב-:
+```latex
+The deterministic fractional bundle instead gives the complementarity
+terms $m_1m_2$ and $(1-m_1)(1-m_2)$.
+```
+
+בנספח שלנו ב-repo (P6) הניסוח כבר תוקן באותו אופן.
+
+---
+
 ## מה נבדק ונמצא תקין בגרסה של השותפה
 
 - **דוגמת הפירמות:** המספרים 1.8, 1.5 ו-1.
