@@ -215,11 +215,10 @@ no influence when she is not dictator, giving the stated ex-ante bound.
 \end{proof}
 
 \begin{proposition}[Nested LIP lotteries]\label{prop:nested_lip}
-For any fixed marginal allocation probabilities $m_1,m_2$, coupling the
-two item allocations through a common uniform random variable weakly
-increases the expected complementarity term for \emph{both} agents relative
-to independent item lotteries, without changing their additive expected
-utilities. If the resulting nested lottery menu is fixed, choosing one's
+Replace the deterministic fractional bundle $(m_1,m_2)$ by the lottery over whole items
+``draw $U\sim\operatorname{Unif}[0,1]$; the dictator wins item $j$ iff $U<m_j$''. The expected
+shares, hence both agents' additive utilities, are unchanged, while the expected complementarity
+term weakly increases for \emph{both} agents. If the resulting menu of lotteries is fixed, choosing one's
 preferred lottery from it remains strategy-proof. Under the symmetric
 LIP frontier, nested LIP attains first-best welfare $1+\varepsilon$ for
 $\varepsilon\ge1$.
@@ -228,8 +227,8 @@ $\varepsilon\ge1$.
 Let $U\sim\operatorname{Unif}[0,1]$, and give item $j$ to the dictator
 if $U<m_j$. The dictator receives both items with probability
 $\min(m_1,m_2)$, while the non-dictator receives both with probability
-$1-\max(m_1,m_2)$. Independent item lotteries instead give the respective
-probabilities $m_1m_2$ and $(1-m_1)(1-m_2)$. The inequalities
+$1-\max(m_1,m_2)$. The deterministic fractional bundle instead gives the complementarity
+terms $m_1m_2$ and $(1-m_1)(1-m_2)$. The inequalities
 \[
 \min(m_1,m_2)\ge m_1m_2,\qquad
 1-\max(m_1,m_2)\ge(1-m_1)(1-m_2)

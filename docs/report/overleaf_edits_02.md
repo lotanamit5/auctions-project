@@ -180,7 +180,7 @@ As in the paper, the items are divisible and $(z_1,z_2)$ are fractions; mechanis
 randomise over bundles, and agents are risk neutral.
 ```
 
-### 14. טענה 5 בשפה של פריטים חלוקים [לא בוצעה]
+### 14. טענה 5 בשפה של פריטים חלוקים [כבר ב-repo]
 
 להחליף את נוסח הטענה:
 ```latex
