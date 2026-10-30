@@ -1,57 +1,11 @@
-% Appendix: proofs for Section 2 (complementarity model).  Requires \appendix before inclusion.
+% Appendix for Section 2 (complementarity model): the moment LP and the proof of the fixed-menu theorem.
+% Propositions 1-5 are proved in the body.  Requires \appendix before inclusion.
 \section{Proofs for the complementarity model}
 \label{app:eps}
 
 Throughout, agent~1 has type $(x,1-x)$, agent~2 has $(y,1-y)$, and $u_v(z_1,z_2)=vz_1+(1-v)z_2+\varepsilon z_1z_2$.
 
-\paragraph{P1 (first best).} Giving agent~1 the bundle $(z_1,z_2)$ yields total welfare
-$1+(x-y)(z_1-z_2)+\varepsilon[z_1z_2+(1-z_1)(1-z_2)]$, which is affine in each coordinate separately
-and hence maximised at a corner of $[0,1]^2$: both items to one agent gives $1+\varepsilon$, the
-valuation-based split gives $1+|x-y|$, the reverse split less. An average of allocations never
-exceeds the best of them, so randomisation does not help. \qed
-
-\paragraph{P2 (fixed menus).} The dictator's report only selects an element of the fixed menu
-$M$; any misreport replaces her favourite element of $M$ by another element of $M$. The other
-agent's report does not enter the dictator branch at all, and in the other branch the roles are
-reversed. Hence truth-telling is dominant for both agents, for any utility function. \qed
-
-\paragraph{P3 (dictator's problem).} Along the frontier $t\mapsto(Q(t),Q(1-t))$ the objective is
-$F_v(t)=vQ(t)+(1-v)Q(1-t)+\varepsilon P(t)$ with $P=Q(t)Q(1-t)$. $Q''<0$, and
-$P''=Q''(t)Q(1-t)-2Q'(t)Q'(1-t)+Q(t)Q''(1-t)<0$, so $F_v$ is strictly concave and the optimal spend
-$t^\star(v)$ is unique. $\partial^2F/\partial t\,\partial v=Q'(t)+Q'(1-t)>0$, so by Topkis' theorem
-$t^\star(v)$ is non-decreasing: the share of item~1 is non-decreasing in the type and that of
-item~2 non-increasing. For nested lotteries the objective is $vm_1+(1-v)\varphi(m_1)+\varepsilon\min(m_1,\varphi(m_1))$
-along a concave frontier $\varphi$; a minimum of concave functions is concave and the increasing
-differences persist, so the same conclusions hold. \qed
-
-\paragraph{P4 (certified brackets).} On a cell $[x_0,x_0+h]\times[y_0,y_0+h]$ the branch
-``agent~1 dictates'' is bounded below by (i) $u_x(q(x))\ge u_x(q(x_0))$, since $q(x_0)$ is on the
-menu, and the right side is affine in $x$ so it is at least its minimum over the two $x$-endpoints;
-(ii) $u_y(1-q(x))\ge y_0(1-q_1(x_0+h))+(1-y_0-h)(1-q_2(x_0))+\varepsilon(1-q_1(x_0+h))(1-q_2(x_0))$, by the
-monotonicity of $q$ and non-negativity of the coefficients (for nested lotteries replace the
-product by $1-\max(q_1(x_0+h),q_2(x_0))$). Symmetrically for the other branch; the denominator is
-at most $1+\max(\varepsilon,x_0+h-y_0)$. Exact ratios at cell corners bound the minimum from above,
-and the adaptive refinement of Appendix~\ref{app:repl} applies unchanged. \qed
-
-\paragraph{P5 (strategic play against the naive rule).} Under the naive rule a dictator who
-reports $r$ receives the frontier point at spend $t_0(r)=\operatorname{clip}((r(a+2b)-b)/a,0,1)$;
-$r\mapsto t_0(r)$ is onto $[0,1]$, and her report is irrelevant in the other branch. Her dominant
-strategy is therefore any $r$ with $t_0(r)=t^\star(x)$, and the realised allocation is that of the
-$\varepsilon$-aware mechanism. For the misreport bound, write $F^\varepsilon_x(t)=F^0_x(t)+\varepsilon P(t)$;
-$t_0(x)$ maximises $F^0_x$, so for any $s$, $F^\varepsilon_x(s)-F^\varepsilon_x(t_0(x))\le\varepsilon[P(s)-P(t_0(x))]\le\varepsilon\max P=\varepsilon Q(\tfrac12)^2$,
-and the coin halves it. \qed
-
-\paragraph{P6 (nested lotteries).} With one uniform draw $U$ and ``the dictator wins the whole of
-item $j$ iff $U<m_j$'', the expected shares are $m_1,m_2$, $\mathbb E[z_1z_2]=\min(m_1,m_2)$, and
-for the other agent $\mathbb E[(1-z_1)(1-z_2)]=1-\max(m_1,m_2)$; the deterministic fractional bundle
-$(m_1,m_2)$ gives $m_1m_2$ and $(1-m_1)(1-m_2)$ instead, which are smaller. Both agents' $\varepsilon$-terms weakly
-increase and the menu is still fixed, so P2 applies. As $\varepsilon\to\infty$ the dictator's
-objective is dominated by $\varepsilon\min(m_1,m_2)$, maximised at the balanced point
-$m_1=m_2=Q(\tfrac12)$: she receives everything with probability $Q(\tfrac12)$ and the other agent
-otherwise, welfare $1+\varepsilon=\mathrm{OPT}$; numerically this already holds for every
-$\varepsilon\ge1$. \qed
-
-\paragraph{P7 (moment LP).} For a lottery over bundles, agent~1's expected utility is
+\paragraph{The moment LP.} For a lottery over bundles, agent~1's expected utility is
 $x\,m_1+(1-x)\,m_2+\varepsilon\,m_{12}$ and agent~2's is
 $y(1-m_1)+(1-y)(1-m_2)+\varepsilon(1-m_1-m_2+m_{12})$, so only $(m_1,m_2,m_{12})$ matter. The set of
 attainable triples is the convex hull of $\{(z_1,z_2,z_1z_2):z\in[0,1]^2\}$, which is the McCormick
