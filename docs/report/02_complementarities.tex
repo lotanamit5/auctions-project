@@ -290,7 +290,9 @@ again an LP, in the three moments per profile, and its value bounds every random
 strategy-proof mechanism. The bound rises quickly with $\varepsilon$: $0.873$ ($\varepsilon=0.1$),
 $0.951$ ($0.5$), $0.984$ ($0.8$), $1$ ($\varepsilon\ge1$) (grid $N=80$).
 
-\paragraph{Upper bound on fixed-menu mechanisms.} The best fixed-menu mechanism on a grid is also
+\paragraph{Upper bound on fixed-menu mechanisms.} A \emph{fixed-menu mechanism} lets a fair coin pick a dictator who chooses from a fixed menu of
+lotteries over bundles; the class contains the paper's swap-dictatorial mechanisms (deterministic
+menus) and both LIP variants above. The best fixed-menu mechanism on a grid is also
 an LP (the menu items are the variables; incentive and welfare constraints are linear in them),
 and the following theorem bounds it in closed form:
 \begin{theorem}[fixed-menu bound]\label{thm:menu_bound}
@@ -300,7 +302,7 @@ $\min\{\rho_A(\varepsilon),\rho_B(\varepsilon)\}$-competitive, where
 \rho_A(\varepsilon)=\frac{5+2\varepsilon}{6}\ (\varepsilon\le\tfrac12),\qquad
 \rho_B(\varepsilon)=\frac{1+\varepsilon}{1+2\varepsilon-\varepsilon^2}.
 \]
-$\rho_B$ is attained for every $\varepsilon\ge\tfrac12$ by the two-item menu ``the dictator takes a
+$\rho_B$ is attained for every $\varepsilon\ge\tfrac12$ by the deterministic two-item menu ``the dictator takes a
 share $s^\star=(1-\varepsilon^2)/(1+2\varepsilon-\varepsilon^2)$ of her preferred item'' ($s^\star=3/7$
 and $\rho_B=6/7$ at $\varepsilon=\tfrac12$).
 \end{theorem}

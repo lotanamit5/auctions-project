@@ -230,7 +230,7 @@ public parameter $\varepsilon$.
 3. בניסוח טענה 3, להחליף "Choosing this maximizer from the fixed LIP lottery menu" ב-"Choosing this maximizer from the fixed LIP menu".
 4. בהוכחת טענה 3, להחליף "The menu of allocation lotteries is fixed" ב-"The menu of bundles is fixed".
 
-### 16. הגדרת המחלקה לפני משפט חסם התפריטים [לא בוצעה]
+### 16. הגדרת המחלקה לפני משפט חסם התפריטים [כבר ב-repo]
 
 nested LIP נמצא מחוץ למרחב התוצאות של המאמר, כי התפריט שלו מכיל הגרלות ולא רק צרורות.
 לכן המשפט צריך לומר על איזו מחלקה הוא חל. בתחילת הפסקה
